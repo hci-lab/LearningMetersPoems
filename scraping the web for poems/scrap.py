@@ -38,7 +38,19 @@ def getAllPoemsPathsInOnePage(baherPageLink):
     print("page > ", len(poemsLinks))
     return poemsLinks
 ###
-# END getAllPeomsLinksOfOneBaher()
+# END getAllPoemsPathsInOnePage()
 ###
 
 
+def getNumberOfPagesOfBaher(baherLink):
+    '''
+        * Parameter: The link of a Baher from aldiwan.net
+        * Returns:   return the number of pages of that baher
+    '''
+    beautifulSoupObject = getBeautifulSoupObjectOfPage(baherLink)
+    pages = beautifulSoupObject.findAll("a", {"class": "wp_page_numbers"})
+
+    return len(pages)
+###
+# END getNumberOfPagesOfBaher
+###
