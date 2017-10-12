@@ -87,3 +87,44 @@ def getAllBaherPoemsPaths(baherLink):
 ###
 # END getAllBaherPoemsPaths
 ###
+
+
+def pullPoem(poem_url):
+    '''
+        * Parameter: the poem url
+        * Function:  download the given poem and stores it in the database.
+    '''
+
+    # 1* Getting the shotor
+    beautifulSoupObject = getBeautifulSoupObjectOfPage(poem_url)
+    className = {"class": "bet-1"}
+    thePoem = beautifulSoupObject.findAll("div", className)
+    shotor = thePoem[0].findAll("h3")
+
+    print(len(shotor))
+
+    # 2* Building Abyat
+    counter = 0
+    abyat = []
+    while(counter < len(shotor)):
+        firstShatr = shotor[counter].text.strip()
+        secondShatr = shotor[counter+1].text.strip()
+        bayt = firstShatr + " " + secondShatr
+        abyat.append(bayt)
+        counter += 2
+
+
+    # 3* Get the Poet
+    authorTag = beautifulSoupObject.find("meta", {"name": "author"})
+    poet = authorTag.get("content").strip()
+    print (poet)
+
+
+    # testing
+    print(len(abyat))
+    for bayt in abyat:
+        print(bayt)
+###
+# END pullPoem
+###
+
