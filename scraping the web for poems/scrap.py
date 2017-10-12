@@ -3,6 +3,7 @@
     # This file contains tools to:
         * get urls of the poems of the x Baher
         * pull poems into the database
+    # Python 3 used unicode by default.
 '''
 from urllib.request import urlopen
 from bs4 import BeautifulSoup
