@@ -54,3 +54,30 @@ def getNumberOfPagesOfBaher(baherLink):
 ###
 # END getNumberOfPagesOfBaher
 ###
+
+
+
+def getAllBaherPoemsPaths(baherLink):
+    '''
+        * Parameter: The link of the Baher from aldiwan.net
+        * Returns:   A list of one page of the peoms links of the given baher.
+    '''
+
+    baherPoemsPaths = []
+
+    # 1* Getting the number of pages in that Baher
+    numberOfPages = getNumberOfPagesOfBaher(baherLink)
+
+    # 2* apply the links of poems, page by page
+    counter = 0
+    while(counter <= numberOfPages):
+        counter += 1
+        # buliding the current page ulr
+        currentPage = baherLink + "&Page=1"
+        list = getAllPoemsPathsInOnePage(currentPage)
+        baherPoemsPaths += list
+
+    return baherPoemsPaths
+###
+# END getAllBaherPoemsPaths
+###
