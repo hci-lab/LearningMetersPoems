@@ -186,6 +186,7 @@ def scrapBohor(file_nameCSV):
         # 2* pull the poems of that Bahr
         for poem in bahr_poems:
             poem_url = "https://www.aldiwan.net/" + poem
+            print("poem #", poem)
             pullPoem(poem_url, bahr_name, file_nameCSV)
     file.close()
 
