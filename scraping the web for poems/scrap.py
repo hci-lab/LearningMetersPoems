@@ -117,7 +117,6 @@ def pullPoem(poem_url, bahr_name, file_name):
     no3 = "لا يوجد"
     if no3Tag is None:
         print("no3Tag ", no3Tag)
-        no3 = no3Tag.string
     else:
         # no3 = no3Tag.text()
         print("no3Tag ", no3Tag.string)
@@ -192,6 +191,4 @@ def scrapBohor(file_nameCSV):
 
 
 # # #
-# scrapBohor("dataset.csv")
-
-pullPoem("https://www.aldiwan.net/poem5212.html", "بومبا", "file.csv")
+scrapBohor("dataset.csv")
