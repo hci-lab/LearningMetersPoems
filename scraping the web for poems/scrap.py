@@ -17,7 +17,7 @@ Word=%C7%E1%D8%E6%ED%E1&Find=meaning"
 def getBeautifulSoupObjectOfPage(link):
     '''
         * Parameter: A web link
-        * Returns:   A BeautifulSoup Object for the page
+        > Returns:   A BeautifulSoup Object for the page
     '''
     print("waiting for the server")
     time.sleep(1)
@@ -31,7 +31,7 @@ def getBeautifulSoupObjectOfPage(link):
 def getAllPoemsPathsInOnePage(baherPageLink):
     '''
         * Parameter: The link of a page of a Baher
-        * Returns:   A list of tha peoms links in that page
+        > Returns:   A list of tha peoms links in that page
     '''
 
     poemsLinks = []
@@ -54,7 +54,7 @@ def getAllPoemsPathsInOnePage(baherPageLink):
 def getNumberOfPagesOfBaher(baherLink):
     '''
         * Parameter: The link of a Baher from aldiwan.net
-        * Returns:   return the number of pages of that baher
+        > Returns:   return the number of pages of that baher
     '''
     beautifulSoupObject = getBeautifulSoupObjectOfPage(baherLink)
     pages = beautifulSoupObject.findAll("a", {"class": "wp_page_numbers"})
@@ -69,7 +69,7 @@ def getNumberOfPagesOfBaher(baherLink):
 def getAllBaherPoemsPaths(baherLink):
     '''
         * Parameter: The link of the Baher from aldiwan.net
-        * Returns:   A list of one page of the peoms links of the given baher.
+        > Returns:   A list of one page of the peoms links of the given baher.
     '''
 
     baherPoemsPaths = []
@@ -95,7 +95,7 @@ def getAllBaherPoemsPaths(baherLink):
 def pullPoem(poem_url, bahr_name, file_name):
     '''
         * Parameter: the poem url
-        * Function:  download the given poem and stores it in the {database}.
+        * effect:  download the given poem and stores it in the {database}.
     '''
 
     # 1* Getting the shotor
