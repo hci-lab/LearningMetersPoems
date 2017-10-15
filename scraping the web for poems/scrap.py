@@ -7,6 +7,7 @@
 '''
 from urllib.request import urlopen
 from bs4 import BeautifulSoup
+import time
 
 # For Testing
 tawel = "https://www.aldiwan.net/poem.html?\
@@ -18,6 +19,8 @@ def getBeautifulSoupObjectOfPage(link):
         * Parameter: A web link
         * Returns:   A BeautifulSoup Object for the page
     '''
+    print("waiting for the server")
+    time.sleep(1)
     htmlPage = urlopen(link)
     return BeautifulSoup(htmlPage.read(), "html5lib")
 ###
@@ -96,6 +99,7 @@ def pullPoem(poem_url, bahr_name, file_name):
     '''
 
     # 1* Getting the shotor
+
     beautifulSoupObject = getBeautifulSoupObjectOfPage(poem_url)
     className = {"class": "bet-1"}
     thePoem = beautifulSoupObject.findAll("div", className)
@@ -107,10 +111,9 @@ def pullPoem(poem_url, bahr_name, file_name):
     poet = authorTag.get("content").strip()
     print (poet)
 
-    # 3* Get el-no3 -> categories.html?Word=عامه&Find=wsf
+    # 3* Get el-no3
     href_value = "categories.html?Word=عامه&Find=wsf"
     no3Tag = beautifulSoupObject.find("a", {"href": href_value})
-
     no3 = "لا يوجد"
     if no3Tag is None:
         print("no3Tag ", no3Tag)
