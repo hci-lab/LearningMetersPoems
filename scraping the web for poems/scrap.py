@@ -101,12 +101,31 @@ def pullPoem(poem_url, bahr_name, file_name):
     thePoem = beautifulSoupObject.findAll("div", className)
     shotor = thePoem[0].findAll("h3")
 
-    print("Number of shotor ", len(shotor))
 
     # 2* Get the Poet
     authorTag = beautifulSoupObject.find("meta", {"name": "author"})
     poet = authorTag.get("content").strip()
     print (poet)
+
+    # 3* Get el-no3 -> categories.html?Word=عامه&Find=wsf
+    href_value = "categories.html?Word=عامه&Find=wsf"
+    no3Tag = beautifulSoupObject.find("a", {"href": href_value})
+
+    no3 = "لا يوجد"
+    if no3Tag is None:
+        print("no3Tag ", no3Tag)
+        no3 = no3Tag.string
+    else:
+        # no3 = no3Tag.text()
+        print("no3Tag ", no3Tag.string)
+        no3 = no3Tag.string
+        print("no3 ", no3)
+
+    # 4* Get el-3asr
+    # 5* Get era
+
+
+
 
     # 3* Building Abyat
     counter = 0
@@ -116,13 +135,14 @@ def pullPoem(poem_url, bahr_name, file_name):
         firstShatr = shotor[counter].text.strip()
         secondShatr = shotor[counter+1].text.strip()
         bayt = firstShatr + " " + secondShatr
-        line = bayt + "," + secondShatr + "," + firstShatr + "," + bahr_name + "," + poet + "\n"
+        line = bayt + "," + secondShatr + "," + firstShatr + "," + bahr_name + "," + poet + "," + no3 + "\n"
         file.write(line)
         abyat.append(bayt)
         counter += 2
     file.close()
 
     # testing
+    print("Number of shotor ", len(shotor))
     print("Number of abyat ", len(abyat))
     for bayt in abyat:
         print(bayt)
@@ -152,7 +172,9 @@ def scrapBohor(file_nameCSV):
     l = "الشطر الأيسر"
     h = "البحر"
     p = "الشاعر"
-    file.write(b + "," + l + "," + r + "," + h + "," + p + "\n")
+    n = "نوع القصيدة"
+
+    file.write(b + "," + l + "," + r + "," + h + "," + p + "," + n + "\n")
 
     for bahr_name, bahr_url in BohorURLs.items():
 
@@ -167,4 +189,6 @@ def scrapBohor(file_nameCSV):
 
 
 # # #
-scrapBohor("dataset.csv")
+# scrapBohor("dataset.csv")
+
+pullPoem("https://www.aldiwan.net/poem5212.html", "بومبا", "file.csv")
