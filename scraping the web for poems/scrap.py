@@ -8,7 +8,7 @@
 from urllib.request import urlopen
 from bs4 import BeautifulSoup
 from urllib.error import HTTPError
-import time
+#import time
 
 # For Testing
 tawel = "https://www.aldiwan.net/poem.html?\
@@ -20,8 +20,8 @@ def getBeautifulSoupObjectOfPage(link):
         * Parameter: A web link
         > Returns:   A BeautifulSoup Object for the page
     '''
-    print("waiting for the server")
-    time.sleep(0.5)
+#    print("waiting for the server")
+#    time.sleep(0.5)
     try:
         htmlPage = urlopen(link)
     except HTTPError:
@@ -110,17 +110,26 @@ def pullPoem(poem_url, bahr_name, file):
 
     # 1* Getting the shotor
     className = {"class": "bet-1"}
-    thePoem = beautifulSoupObject.findAll("div", className)
+    try:
+        thePoem = beautifulSoupObject.findAll("div", className)
+    except:
+        return None
     shotor = thePoem[0].findAll("h3")
 
     # 2* Get the Poet
-    authorTag = beautifulSoupObject.find("meta", {"name": "author"})
+    try:
+        authorTag = beautifulSoupObject.find("meta", {"name": "author"})
+    except:
+        return None
     poet = authorTag.get("content").strip()
     print (poet)
 
     # 3* Get el-no3
     href_value = "categories.html?Word=عامه&Find=wsf"
-    no3Tag = beautifulSoupObject.find("a", {"href": href_value})
+    try:
+        no3Tag = beautifulSoupObject.find("a", {"href": href_value})
+    except:
+        return None
     no3 = "لا يوجد"
     if no3Tag is None:
         print("no3Tag ", no3Tag)
