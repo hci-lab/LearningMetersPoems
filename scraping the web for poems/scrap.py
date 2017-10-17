@@ -144,7 +144,6 @@ def pullPoem(poem_url, bahr_name, file):
         file.write(line)
         abyat.append(bayt)
         counter += 2
-    file.close()
 
     # testing
     print("Number of shotor ", len(shotor))
@@ -173,7 +172,7 @@ def scrapBohor(file_nameCSV):
                 "المتدارك": "https://www.aldiwan.net/poem.html?Word=%C7%E1%E3%CA%CF%C7%D1%DF&Find=meaning",
     }
 
-    file = open(file_nameCSV, "a+")
+    fileCSV = open(file_nameCSV, "a+")
     b = "البيت"
     r = "الشطر الأيمن"
     l = "الشطر الأيسر"
@@ -182,7 +181,7 @@ def scrapBohor(file_nameCSV):
     n = "نوع القصيدة"
 
     # Saving ...
-    file.write(b + "," + l + "," + r + "," + h + "," + p + "," + n + "\n")
+    fileCSV.write(b + "," + l + "," + r + "," + h + "," + p + "," + n + "\n")
 
     for bahr_name, bahr_url in BohorURLs.items():
         # 1* get all the peoms of that Bahr
@@ -192,8 +191,8 @@ def scrapBohor(file_nameCSV):
         for poem in bahr_poems:
             print("poem #", poem)
             poem_url = "https://www.aldiwan.net/" + poem
-            pullPoem(poem_url, bahr_name, file)
-    file.close()
+            pullPoem(poem_url, bahr_name, fileCSV)
+    fileCSV.close()
 
 
 # # #
