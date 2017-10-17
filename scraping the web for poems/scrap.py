@@ -194,7 +194,7 @@ def scrapBohor(file_nameCSV):
         # 2* pull the poems of that Bahr
         for poem in bahr_poems:
             print("poem #", poem)
-            print("poem #{1}/{2})".format(poem_counter, length))
+            print("poem ", poem_counter, "/", length)
             poem_counter += 1
             print("Baher _> [*]", bahr_count, " ", bahr_name)
             poem_url = "https://www.aldiwan.net/" + poem
