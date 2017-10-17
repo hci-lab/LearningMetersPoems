@@ -151,7 +151,7 @@ def pullPoem(poem_url, bahr_name, file):
     for bayt in abyat:
         print(bayt)
 
-        return 1
+    return 1
 ###
 # END pullPoem
 ###
@@ -189,6 +189,7 @@ def scrapBohor(file_nameCSV):
         bahr_poems = getAllBaherPoemsPaths(bahr_url)
 
         poem_counter = 1
+        bahr_count += 1
         length = len(bahr_poems)
 
         # 2* pull the poems of that Bahr
