@@ -188,11 +188,14 @@ def scrapBohor(file_nameCSV):
         # 1* get all the peoms of that Bahr
         bahr_poems = getAllBaherPoemsPaths(bahr_url)
 
-        bahr_count += 1
+        poem_counter = 1
+        length = len(bahr_poems)
 
         # 2* pull the poems of that Bahr
         for poem in bahr_poems:
             print("poem #", poem)
+            print("poem #{1}/{2})".format(poem_counter, length))
+            poem_counter += 1
             print("Baher _> [*]", bahr_count, " ", bahr_name)
             poem_url = "https://www.aldiwan.net/" + poem
             pullPoem(poem_url, bahr_name, fileCSV)
