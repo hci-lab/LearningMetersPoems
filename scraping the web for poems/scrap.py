@@ -7,6 +7,7 @@
 '''
 from urllib.request import urlopen
 from bs4 import BeautifulSoup
+from urllib.error import HTTPError
 import time
 
 # For Testing
@@ -21,7 +22,10 @@ def getBeautifulSoupObjectOfPage(link):
     '''
     print("waiting for the server")
     time.sleep(1)
-    htmlPage = urlopen(link)
+    try:
+        htmlPage = urlopen(link)
+    except HTTPError:
+        return None
     return BeautifulSoup(htmlPage.read(), "html5lib")
 ###
 # END getBeautifulSoupObjectOfPage
@@ -65,7 +69,6 @@ def getNumberOfPagesOfBaher(baherLink):
 ###
 
 
-
 def getAllBaherPoemsPaths(baherLink):
     '''
         * Parameter: The link of the Baher from aldiwan.net
@@ -96,15 +99,19 @@ def pullPoem(poem_url, bahr_name, file_name):
     '''
         * Parameter: the poem url
         * effect:  download the given poem and stores it in the {database}.
+        * Returns: None in case of failure, 1 in case of success
     '''
 
-    # 1* Getting the shotor
-
     beautifulSoupObject = getBeautifulSoupObjectOfPage(poem_url)
+    if beautifulSoupObject is None:
+        return None
+
+    # *0 Check if the poem exists
+
+    # 1* Getting the shotor
     className = {"class": "bet-1"}
     thePoem = beautifulSoupObject.findAll("div", className)
     shotor = thePoem[0].findAll("h3")
-
 
     # 2* Get the Poet
     authorTag = beautifulSoupObject.find("meta", {"name": "author"})
@@ -126,14 +133,11 @@ def pullPoem(poem_url, bahr_name, file_name):
     # 4* Get el-3asr
     # 5* Get era
 
-
-
-
     # 3* Building Abyat
     counter = 0
     abyat = []
     file = open(file_name, "a")
-    while(counter < len(shotor) - 2):
+    while(counter < len(shotor) - 1):
         firstShatr = shotor[counter].text.strip()
         secondShatr = shotor[counter+1].text.strip()
         bayt = firstShatr + " " + secondShatr
@@ -148,6 +152,8 @@ def pullPoem(poem_url, bahr_name, file_name):
     print("Number of abyat ", len(abyat))
     for bayt in abyat:
         print(bayt)
+
+        return 1
 ###
 # END pullPoem
 ###
@@ -185,11 +191,13 @@ def scrapBohor(file_nameCSV):
 
         # 2* pull the poems of that Bahr
         for poem in bahr_poems:
-            poem_url = "https://www.aldiwan.net/" + poem
             print("poem #", poem)
+            poem_url = "https://www.aldiwan.net/" + poem
             pullPoem(poem_url, bahr_name, file_nameCSV)
     file.close()
 
 
 # # #
-scrapBohor("dataset.csv")
+# scrapBohor("dataset.csv")
+
+pullPoem("https://www.aldiwan.net/poem123.html", "بحر", "text.csv")
