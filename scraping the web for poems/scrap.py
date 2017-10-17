@@ -21,7 +21,7 @@ def getBeautifulSoupObjectOfPage(link):
         > Returns:   A BeautifulSoup Object for the page
     '''
     print("waiting for the server")
-    time.sleep(1)
+    time.sleep(0.5)
     try:
         htmlPage = urlopen(link)
     except HTTPError:
@@ -183,13 +183,17 @@ def scrapBohor(file_nameCSV):
     # Saving ...
     fileCSV.write(b + "," + l + "," + r + "," + h + "," + p + "," + n + "\n")
 
+    bahr_count = 0
     for bahr_name, bahr_url in BohorURLs.items():
         # 1* get all the peoms of that Bahr
         bahr_poems = getAllBaherPoemsPaths(bahr_url)
 
+        bahr_count += 1
+
         # 2* pull the poems of that Bahr
         for poem in bahr_poems:
             print("poem #", poem)
+            print("Baher _> [*]", bahr_count, " ", bahr_name)
             poem_url = "https://www.aldiwan.net/" + poem
             pullPoem(poem_url, bahr_name, fileCSV)
     fileCSV.close()
