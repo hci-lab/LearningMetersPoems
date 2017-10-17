@@ -95,7 +95,7 @@ def getAllBaherPoemsPaths(baherLink):
 ###
 
 
-def pullPoem(poem_url, bahr_name, file_name):
+def pullPoem(poem_url, bahr_name, file):
     '''
         * Parameter: the poem url
         * effect:  download the given poem and stores it in the {database}.
@@ -136,7 +136,6 @@ def pullPoem(poem_url, bahr_name, file_name):
     # 3* Building Abyat
     counter = 0
     abyat = []
-    file = open(file_name, "a")
     while(counter < len(shotor) - 1):
         firstShatr = shotor[counter].text.strip()
         secondShatr = shotor[counter+1].text.strip()
@@ -182,10 +181,10 @@ def scrapBohor(file_nameCSV):
     p = "الشاعر"
     n = "نوع القصيدة"
 
+    # Saving ...
     file.write(b + "," + l + "," + r + "," + h + "," + p + "," + n + "\n")
 
     for bahr_name, bahr_url in BohorURLs.items():
-
         # 1* get all the peoms of that Bahr
         bahr_poems = getAllBaherPoemsPaths(bahr_url)
 
@@ -193,11 +192,11 @@ def scrapBohor(file_nameCSV):
         for poem in bahr_poems:
             print("poem #", poem)
             poem_url = "https://www.aldiwan.net/" + poem
-            pullPoem(poem_url, bahr_name, file_nameCSV)
+            pullPoem(poem_url, bahr_name, file)
     file.close()
 
 
 # # #
-# scrapBohor("dataset.csv")
+scrapBohor("dataset.csv")
 
-pullPoem("https://www.aldiwan.net/poem123.html", "بحر", "text.csv")
+# pullPoem("https://www.aldiwan.net/poem123.html", "بحر", "text.csv")
