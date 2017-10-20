@@ -180,20 +180,10 @@ def pullPoem(poem_url, bahr_name, file):
 ###
 
 
-def scrapBohor(file_nameCSV):
-    BohorURLs = {"الطويل": "https://www.aldiwan.net/poem.html?Word=%C7%E1%D8%E6%ED%E1&Find=meaning",
-                "الوافر": "https://www.aldiwan.net/poem.html?Word=%C7%E1%E6%C7%DD%D1&Find=meaning",
-                "البسيط": "https://www.aldiwan.net/poem.html?Word=%C7%E1%C8%D3%ED%D8&Find=meaning",
-                "الكامل": "https://www.aldiwan.net/poem.html?Word=%C7%E1%DF%C7%E3%E1&Find=meaning",
-                "الرجز": "https://www.aldiwan.net/poem.html?Word=%C7%E1%D1%CC%D2&Find=meaning",
-                "الرمل": "https://www.aldiwan.net/poem.html?Word=%C7%E1%D1%E3%E1&Find=meaning",
-#                "السريع": "https://www.aldiwan.net/poem.html?Word=%C7%E1%D3%D1%ED%DA&Find=meaning",
-#                "المنسرح": "https://www.aldiwan.net/poem.html?Word=%C7%E1%E3%E4%D3%D1%CD&Find=meaning",
-                "الخفيف": "https://www.aldiwan.net/poem.html?Word=%C7%E1%CE%DD%ED%DD&Find=meaning",
-                "المجتث": "https://www.aldiwan.net/poem.html?Word=%C7%E1%E3%CC%CA%CB&Find=meaning",
-                "الخبب": "https://www.aldiwan.net/poem.html?Word=%C7%E1%CE%C8%C8&Find=meaning",
-                "المتدارك": "https://www.aldiwan.net/poem.html?Word=%C7%E1%E3%CA%CF%C7%D1%DF&Find=meaning",
-    }
+def scrapBohor(bohorLinks, file_nameCSV):
+    '''
+        * Parameter1: dictionary {"اسم البحر", "its url"}
+    '''
 
     fileCSV = open(file_nameCSV, "a+")
     b = "البيت"
@@ -207,7 +197,7 @@ def scrapBohor(file_nameCSV):
     fileCSV.write(b + "," + l + "," + r + "," + h + "," + p + "," + n + "\n")
 
     bahr_count = 0
-    for bahr_name, bahr_url in BohorURLs.items():
+    for bahr_name, bahr_url in bohorLinks.items():
         # 1* get all the peoms of that Bahr
         bahr_poems = getAllBaherPoemsPaths(bahr_url)
 
@@ -234,6 +224,6 @@ def scrapBohor(file_nameCSV):
 
 
 # # #
-scrapBohor("dataset.csv")
-
+# Testing
+#scrapBohor(bohorLinks, "dataset.csv")
 # pullPoem("https://www.aldiwan.net/poem123.html", "بحر", "text.csv")
