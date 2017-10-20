@@ -8,7 +8,6 @@
 from urllib.request import urlopen
 from bs4 import BeautifulSoup
 from urllib.error import HTTPError
-#import time
 
 # For Testing
 tawel = "https://www.aldiwan.net/poem.html?\
@@ -40,7 +39,10 @@ def getAllPoemsPathsInOnePage(baherPageLink):
 
     poemsLinks = []
 
-    beautifulSoupObject = getBeautifulSoupObjectOfPage(baherPageLink)
+    try:
+        beautifulSoupObject = getBeautifulSoupObjectOfPage(baherPageLink)
+    except:
+        return None
     poemsClassName = {"class": "record col-xs-12"}
     instanceList = beautifulSoupObject.findAll("div", poemsClassName)
 
@@ -60,8 +62,15 @@ def getNumberOfPagesOfBaher(baherLink):
         * Parameter: The link of a Baher from aldiwan.net
         > Returns:   return the number of pages of that baher
     '''
-    beautifulSoupObject = getBeautifulSoupObjectOfPage(baherLink)
-    pages = beautifulSoupObject.findAll("a", {"class": "wp_page_numbers"})
+    try:
+        beautifulSoupObject = getBeautifulSoupObjectOfPage(baherLink)
+    except:
+        return 0
+
+    try:
+        pages = beautifulSoupObject.findAll("a", {"class": "wp_page_numbers"})
+    except:
+        return 0
 
     return len(pages)
 ###
@@ -80,14 +89,18 @@ def getAllBaherPoemsPaths(baherLink):
     # 1* Getting the number of pages in that Baher
     numberOfPages = getNumberOfPagesOfBaher(baherLink)
 
-    # 2* apply the links of poems, page by page
-    counter = 0
-    while(counter <= numberOfPages):
-        counter += 1
-        # buliding the current page ulr
-        currentPage = baherLink + "&Page=1"
-        list = getAllPoemsPathsInOnePage(currentPage)
-        baherPoemsPaths += list
+    # In case there are no pages
+    if numberOfPages == 0:
+        return []
+    else:
+        # 2* apply the links of poems, page by page
+        counter = 0
+        while(counter <= numberOfPages):
+            counter += 1
+            # buliding the current page ulr
+            currentPage = baherLink + "&Page=1"
+            list = getAllPoemsPathsInOnePage(currentPage)
+            baherPoemsPaths += list
 
     return baherPoemsPaths
 ###
@@ -102,8 +115,9 @@ def pullPoem(poem_url, bahr_name, file):
         * Returns: None in case of failure, 1 in case of success
     '''
 
-    beautifulSoupObject = getBeautifulSoupObjectOfPage(poem_url)
-    if beautifulSoupObject is None:
+    try:
+        beautifulSoupObject = getBeautifulSoupObjectOfPage(poem_url)
+    except:
         return None
 
     # *0 Check if the poem exists
@@ -173,8 +187,8 @@ def scrapBohor(file_nameCSV):
                 "الكامل": "https://www.aldiwan.net/poem.html?Word=%C7%E1%DF%C7%E3%E1&Find=meaning",
                 "الرجز": "https://www.aldiwan.net/poem.html?Word=%C7%E1%D1%CC%D2&Find=meaning",
                 "الرمل": "https://www.aldiwan.net/poem.html?Word=%C7%E1%D1%E3%E1&Find=meaning",
-                "السريع": "https://www.aldiwan.net/poem.html?Word=%C7%E1%D3%D1%ED%DA&Find=meaning",
-                "المنسرح": "https://www.aldiwan.net/poem.html?Word=%C7%E1%E3%E4%D3%D1%CD&Find=meaning",
+#                "السريع": "https://www.aldiwan.net/poem.html?Word=%C7%E1%D3%D1%ED%DA&Find=meaning",
+#                "المنسرح": "https://www.aldiwan.net/poem.html?Word=%C7%E1%E3%E4%D3%D1%CD&Find=meaning",
                 "الخفيف": "https://www.aldiwan.net/poem.html?Word=%C7%E1%CE%DD%ED%DD&Find=meaning",
                 "المجتث": "https://www.aldiwan.net/poem.html?Word=%C7%E1%E3%CC%CA%CB&Find=meaning",
                 "الخبب": "https://www.aldiwan.net/poem.html?Word=%C7%E1%CE%C8%C8&Find=meaning",
@@ -197,18 +211,25 @@ def scrapBohor(file_nameCSV):
         # 1* get all the peoms of that Bahr
         bahr_poems = getAllBaherPoemsPaths(bahr_url)
 
-        poem_counter = 1
-        bahr_count += 1
         length = len(bahr_poems)
 
-        # 2* pull the poems of that Bahr
-        for poem in bahr_poems:
-            print("poem #", poem)
-            print("poem ", poem_counter, "/", length)
-            poem_counter += 1
-            print("Baher _> [*]", bahr_count, " ", bahr_name)
-            poem_url = "https://www.aldiwan.net/" + poem
-            pullPoem(poem_url, bahr_name, fileCSV)
+        # I case there is no poems paths returned
+        if length == 0:
+            continue
+        else:
+
+            poem_counter = 1
+            bahr_count += 1
+
+            # 2* pull the poems of that Bahr
+            for poem in bahr_poems:
+                print("poem #", poem)
+                print("poem ", poem_counter, "/", length)
+                poem_counter += 1
+                print("Baher _> [*]", bahr_count, " ", bahr_name)
+                poem_url = "https://www.aldiwan.net/" + poem
+                pullPoem(poem_url, bahr_name, fileCSV)
+
     fileCSV.close()
 
 
