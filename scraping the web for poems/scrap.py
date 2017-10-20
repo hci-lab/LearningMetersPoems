@@ -1,4 +1,3 @@
-#!/usr/local/bin/python3
 '''
     # This file contains tools to:
         * get urls of the poems of the x Baher
@@ -219,6 +218,7 @@ def scrapBohor(bohorLinks, file_nameCSV):
                 print("Baher _> [*]", bahr_count, " ", bahr_name)
                 poem_url = "https://www.aldiwan.net/" + poem
                 pullPoem(poem_url, bahr_name, fileCSV)
+                print("\n")
 
     fileCSV.close()
 
