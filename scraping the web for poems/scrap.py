@@ -185,12 +185,12 @@ def scrapBohor(bohorLinks, file_nameCSV):
     '''
 
     fileCSV = open(file_nameCSV, "a+")
-    b = "البيت"
-    r = "الشطر الأيمن"
-    l = "الشطر الأيسر"
-    h = "البحر"
-    p = "الشاعر"
-    n = "نوع القصيدة"
+    b = u"البيت"
+    r = u"الشطر الأيمن"
+    l = u"الشطر الأيسر"
+    h = u"البحر"
+    p = u"الشاعر"
+    n = u"نوع القصيدة"
 
     # Saving ...
     fileCSV.write(b + "," + l + "," + r + "," + h + "," + p + "," + n + "\n")
