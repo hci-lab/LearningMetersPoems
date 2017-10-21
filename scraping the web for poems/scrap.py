@@ -71,7 +71,10 @@ def getNumberOfPagesOfBaher(baherLink):
     except:
         return 0
 
-    return len(pages)
+    if len(pages) == 0:
+        return 1
+    else:
+        return len(pages)
 ###
 # END getNumberOfPagesOfBaher
 ###
@@ -215,5 +218,13 @@ def scrapBohor(bohorLinks, file_nameCSV):
 #x = getAllBaherPoemsPaths("https://www.aldiwan.net/poem.html?Word=%C7%E1%DF%C7%E3%E1&Find=meaning")
 #print("# Poems in Bahr Kamel ", len(x))
 
-#x = getAllBaherPoemsPaths("https://www.aldiwan.net/poem.html?Word=%C7%E1%E6%C7%DD%D1&Find=meaning")
-#print("# Poems in Bahr Wafer ", len(x))
+#x = getAllBaherPoemsPaths("https://www.aldiwan.net/poem.html?Word=%C7%E1%D1%E3%E1&Find=meaning")
+#print("# Poems in Bahr Ramel ", len(x))
+
+
+#x = getNumberOfPagesOfBaher("https://www.aldiwan.net/poem.html?Word=%C7%E1%E3%E4%D3%D1%CD&Find=meaning")
+#print("Monsare7 ", x)
+
+
+#x = getAllBaherPoemsPaths("https://www.aldiwan.net/poem.html?Word=%C7%E1%E3%E4%D3%D1%CD&Find=meaning")
+#print(len(x))
