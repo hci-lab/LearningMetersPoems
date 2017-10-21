@@ -50,7 +50,7 @@
 ```
 python3 buckwalter.py -c file_that_have_text.txt [options]
 ```
-* or using **jupteer notebook** 
+* or using **jupyter notebook** 
 ```
 %run path/buckwalter.py -c path/file_that_have_text.txt  [options]
 ```
