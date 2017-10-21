@@ -8,7 +8,7 @@ create a dictionary as below.
 ```python
 bohorLinks = {
    "الطويل": "https://www.aldiwan.net/poem.html?Word=%C7%E1%D8%E6%ED%E1&Find=meaning",
-   "الوافر": "https://www.aldiwan.net/poem.html?Word=%C7%E1%E6%C7%DD%D1&Find=meaning",
+   "الوافر": "https://www.aldiwan.net/poem.html?Word=%C7%E1%E6%C7%DD%D1&Find=meaning"
 }
 ```
 Then, use `scrap.scrapBohor(bohorLinks, file_name)` to start scraping.
@@ -22,6 +22,9 @@ Finally, run the script!
 ```bash
 $ python3 main.py
 ```
+## What's Next!!
+Upload your `CSV file` to [Google Drive](https://drive.google.com/drive/folders/0B92iyATPP9xIa2RwUWVPVkFCNmc)
+
 
 ## CSV Format
 **البيت**|**الشطر الأيسر**|**الشطر الأيمن**|**البحر**|**الشاعر**|**نوع القصيدة**
