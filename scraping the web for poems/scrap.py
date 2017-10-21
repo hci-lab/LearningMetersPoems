@@ -176,10 +176,9 @@ def scrapBohor(bohorLinks, file_nameCSV):
     l = "الشطر الأيسر"
     h = "البحر"
     p = "الشاعر"
-    n = "نوع القصيدة"
 
     # Saving ...
-    fileCSV.write(b + "," + l + "," + r + "," + h + "," + p + "," + n + "\n")
+    fileCSV.write(b + "," + l + "," + r + "," + h + "," + p + "\n")
 
     bahr_count = 0
     for bahr_name, bahr_url in bohorLinks.items():
