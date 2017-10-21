@@ -2,3 +2,4 @@ __pycache__/
 .DS_Store
 scraping\ the\ web\ for\ poems/dataset.csv
 dataset_version1.csv
+taha_magdy.csv
