@@ -24,7 +24,9 @@ def getBeautifulSoupObjectOfPage(link):
         htmlPage = urlopen(link)
     except HTTPError:
         return None
-    return BeautifulSoup(htmlPage.read(), "html5lib")
+    # Changing the html parser
+    # html5lib
+    return BeautifulSoup(htmlPage.read(), "html.parser")
 ###
 # END getBeautifulSoupObjectOfPage
 ###
