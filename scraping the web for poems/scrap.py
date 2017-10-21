@@ -184,13 +184,13 @@ def scrapBohor(bohorLinks, file_nameCSV):
         * Parameter1: dictionary {"اسم البحر", "its url"}
     '''
 
-    fileCSV = open(file_nameCSV, "a+")
-    b = u"البيت"
-    r = u"الشطر الأيمن"
-    l = u"الشطر الأيسر"
-    h = u"البحر"
-    p = u"الشاعر"
-    n = u"نوع القصيدة"
+    fileCSV = open(file_nameCSV, "a+", encoding='utf-8')
+    b = "البيت"
+    r = "الشطر الأيمن"
+    l = "الشطر الأيسر"
+    h = "البحر"
+    p = "الشاعر"
+    n = "نوع القصيدة"
 
     # Saving ...
     fileCSV.write(b + "," + l + "," + r + "," + h + "," + p + "," + n + "\n")
