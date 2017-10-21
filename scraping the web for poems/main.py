@@ -24,4 +24,4 @@ bohorLinks = {
 
 
 # The Scrap Function
-scrap.scrapBohor(bohorLinks, "tt.csv")
+scrap.scrapBohor(bohorLinks, "taha_magdy.csv")
