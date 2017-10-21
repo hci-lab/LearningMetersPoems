@@ -36,7 +36,7 @@ def getAllPoemsPathsInOnePage(baherPageLink):
         > Returns:   A list of tha peoms links in that page
     '''
 
-    poemsLinks = []
+    poemsLinks = set()
 
     try:
         beautifulSoupObject = getBeautifulSoupObjectOfPage(baherPageLink)
@@ -47,7 +47,7 @@ def getAllPoemsPathsInOnePage(baherPageLink):
 
     for element in instanceList:
         anchor = element.find("a")
-        poemsLinks.append(anchor.get("href"))
+        poemsLinks.add(anchor.get("href"))
 
     print("number of poems in that page > ", len(poemsLinks))
     return poemsLinks
@@ -83,7 +83,7 @@ def getAllBaherPoemsPaths(baherLink):
         > Returns:   A list of one page of the peoms links of the given baher.
     '''
 
-    baherPoemsPaths = []
+    baherPoemsPaths = set()
 
     # 1* Getting the number of pages in that Baher
     numberOfPages = getNumberOfPagesOfBaher(baherLink)
@@ -97,9 +97,9 @@ def getAllBaherPoemsPaths(baherLink):
         while(counter <= numberOfPages):
             counter += 1
             # buliding the current page ulr
-            currentPage = baherLink + "&Page=1"
-            list = getAllPoemsPathsInOnePage(currentPage)
-            baherPoemsPaths += list
+            currentPage = baherLink + "&Page=%d" % counter
+            set_poems = getAllPoemsPathsInOnePage(currentPage)
+            baherPoemsPaths = baherPoemsPaths.union(set_poems)
 
     return baherPoemsPaths
 ###
@@ -137,23 +137,6 @@ def pullPoem(poem_url, bahr_name, file):
     poet = authorTag.get("content").strip()
     print (poet)
 
-    # 3* Get el-no3
-    href_value = "categories.html?Word=عامه&Find=wsf"
-    try:
-        no3Tag = beautifulSoupObject.find("a", {"href": href_value})
-    except:
-        return None
-    no3 = "لا يوجد"
-    if no3Tag is None:
-        print("no3Tag ", no3Tag)
-    else:
-        # no3 = no3Tag.text()
-        print("no3Tag ", no3Tag.string)
-        no3 = no3Tag.string
-        print("no3 ", no3)
-
-    # 4* Get el-3asr
-    # 5* Get era
 
     # 3* Building Abyat
     counter = 0
@@ -162,7 +145,7 @@ def pullPoem(poem_url, bahr_name, file):
         firstShatr = shotor[counter].text.strip()
         secondShatr = shotor[counter+1].text.strip()
         bayt = firstShatr + " " + secondShatr
-        line = bayt + "," + secondShatr + "," + firstShatr + "," + bahr_name + "," + poet + "," + no3 + "\n"
+        line = bayt + "," + secondShatr + "," + firstShatr + "," + bahr_name + "," + poet + "\n"
         file.write(line)
         abyat.append(bayt)
         counter += 2
@@ -199,6 +182,7 @@ def scrapBohor(bohorLinks, file_nameCSV):
     for bahr_name, bahr_url in bohorLinks.items():
         # 1* get all the peoms of that Bahr
         bahr_poems = getAllBaherPoemsPaths(bahr_url)
+#        bahr_poems = set(bahr_poems)
 
         length = len(bahr_poems)
 
@@ -227,3 +211,9 @@ def scrapBohor(bohorLinks, file_nameCSV):
 # Testing
 #scrapBohor(bohorLinks, "dataset.csv")
 # pullPoem("https://www.aldiwan.net/poem123.html", "بحر", "text.csv")
+
+#x = getAllBaherPoemsPaths("https://www.aldiwan.net/poem.html?Word=%C7%E1%DF%C7%E3%E1&Find=meaning")
+#print("# Poems in Bahr Kamel ", len(x))
+
+#x = getAllBaherPoemsPaths("https://www.aldiwan.net/poem.html?Word=%C7%E1%E6%C7%DD%D1&Find=meaning")
+#print("# Poems in Bahr Wafer ", len(x))
