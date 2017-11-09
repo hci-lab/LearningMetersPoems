@@ -5,11 +5,11 @@
 
 
 ## Fetch_Quran file
-It parse *XML* file. change the `xml_file_name` variable to the quran text.
+It parse *XML* file. change the `xml_file_name` variable to the xml quran text file name.
 
 # Quran Texts
 1. `quran-uthmani.xml`: is  similar to **Madina Mushaf**.
-2. `simple`: withuot *diacritics*. 
+2. `quran-simple-clean.xml`: withuot *diacritics*. 
 <br /> 
 Diffrences between *Quran texts*:<br />
  ٱلرَّحْمَٰنِ ٱلرَّحِيمِ is `quran-uthmani`<br /> 
