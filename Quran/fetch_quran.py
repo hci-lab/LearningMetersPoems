@@ -1,15 +1,14 @@
 from xml.etree import ElementTree
 
-xml_file_name = 'quran-uthmani.xml'
+xml_file_name = 'quran-simple-clean.xml'
 
+# Parsing xml
+quran_tree = ElementTree.parse(xml_file_name)
 
 def fetch_aya(sura_number, aya_number):
 
     sura_number -= 1
     aya_number -= 1
-
-    # Parsing xml
-    quran_tree = ElementTree.parse(xml_file_name)
 
     # Getting `suras` list
     suras_list = quran_tree.findall('sura')
