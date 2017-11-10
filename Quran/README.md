@@ -10,7 +10,7 @@ change the `xml_file_name` variable to the xml quran text file name.
 
 # Quran Texts
 1. `quran-uthmani.xml`: is  similar to **Madina Mushaf**.
-2. `quran-simple-clean.xml`: withuot *diacritics*. 
+2. `quran-simple-clean.xml`: without *diacritics*. 
 <br /> 
 
 ### Diffrences between *Quran texts*:<br />
@@ -18,9 +18,9 @@ change the `xml_file_name` variable to the xml quran text file name.
  الرحمن الرحيم is `quran-simple`
 
 ## NOTE:
-I you are going to run on `Emacs`. It *MUST* be configured to use 'UTF-8';
+If you are going to run on `Emacs` shell. It *MUST* be configured to use 'UTF-8';
 <br /> else you see this
 ```python
 UnicodeEncodeError: 'ascii' codec can't encode characters in position 0-1: ordinal not in range(128)
 ```
-to avoid *emacs configuration* headache, use a terminal that support `UTF-8` to run the code=]
+to avoid *emacs configuration* headache, use a terminal that supports `UTF-8` to run the code =]
