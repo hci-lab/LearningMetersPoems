@@ -1,0 +1,2 @@
+model_checkpoint_path: "Model_2_using_LSTM"
+all_model_checkpoint_paths: "Model_2_using_LSTM"
