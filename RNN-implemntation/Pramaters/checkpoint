@@ -1,2 +1,2 @@
-model_checkpoint_path: "Model_3_using_TF_GRU"
-all_model_checkpoint_paths: "Model_3_using_TF_GRU"
+model_checkpoint_path: "Model_4_using_TF_LSTM"
+all_model_checkpoint_paths: "Model_4_using_TF_LSTM"
