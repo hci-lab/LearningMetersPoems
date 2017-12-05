@@ -1,0 +1,205 @@
+{'batch_size': 300,
+ 'checkpoint_dir': 'M:\\Learning\\Master\\CombinedWorkspace\\Python\\DeepLearningMaster\\GP-Ripo-master\\ethnicity-tensorflow\\ethnicity-tensorflow-master\\checkpoint\\ensemble_embedding',
+ 'continue_train': True,
+ 'data_dir': 'data/raw',
+ 'decay_rate': 0.99,
+ 'decay_step': 100,
+ 'default_params': True,
+ 'detail_result_path': 'result/detail.txt',
+ 'dim_bigram': 1876,
+ 'dim_embed_bigram': 100,
+ 'dim_embed_bigram_max': 200,
+ 'dim_embed_bigram_min': 30,
+ 'dim_embed_trigram': 130,
+ 'dim_embed_trigram_max': 320,
+ 'dim_embed_trigram_min': 30,
+ 'dim_embed_unigram': 30,
+ 'dim_embed_unigram_max': 100,
+ 'dim_embed_unigram_min': 10,
+ 'dim_hidden': 200,
+ 'dim_hidden_max': 399,
+ 'dim_hidden_min': 200,
+ 'dim_output': 127,
+ 'dim_rnn_cell': 200,
+ 'dim_rnn_cell_max': 399,
+ 'dim_rnn_cell_min': 200,
+ 'dim_trigram': 14767,
+ 'dim_unigram': 82,
+ 'embed': True,
+ 'embed_trainable': True,
+ 'ensemble': True,
+ 'ethnicity': False,
+ 'hidden_dropout': 0.5,
+ 'hidden_dropout_max': 0.8,
+ 'hidden_dropout_min': 0.3,
+ 'is_train': True,
+ 'is_valid': True,
+ 'learning_rate': 0.01,
+ 'learning_rate_max': 0.05,
+ 'learning_rate_min': 0.005,
+ 'lstm_dropout': 0.5,
+ 'lstm_dropout_max': 0.8,
+ 'lstm_dropout_min': 0.3,
+ 'lstm_layer': 1,
+ 'lstm_layer_max': 1,
+ 'lstm_layer_min': 1,
+ 'max_grad': 5,
+ 'max_time_step': 60,
+ 'min_grad': -5,
+ 'model_name': 'ensemble_embedding',
+ 'ngram': 3,
+ 'pred_result_path': 'result/pred.txt',
+ 'save': True,
+ 'train_epoch': 3000,
+ 'valid_iteration': 250,
+ 'valid_result_path': 'result/valid.txt'}
+reading 0_unigram_to_idx.txt of length 82
+reading 1_bigram_to_idx.txt of length 1876
+reading 2_trigram_to_idx.txt of length 14767
+reading country_to_ethnicity.txt of length 127
+reading country_to_idx.txt of length 127
+reading data_ijcai_authors of length 2408
+reading data_raw_test of length 3543
+reading data_raw_train of length 10633
+reading data_raw_train_ch of length 10754
+reading data_raw_valid of length 3545
+total data length: 10754 3545 2408
+shape of data: (5, 10754) (5, 3545) (5, 2408)
+name max length: 47
+[8, 45, 38, 57, 0, 14, 16, 22, 25, 14, 12, 27, 27, 16]
+[168, 1436, 1289, 1718, 11, 404, 497, 761, 841, 400, 325, 944, 934]
+[1626, 12101, 10973, 14236, 206, 3538, 4369, 6709, 7324, 3494, 3030, 8385]
+14 46
+shape of data: (5, 10754) (5, 3545) (5, 2408)
+preprocessing done
+
+ensemble_embedding Parameter sets: [200, 200, 0.01, 0.5, 1, 0.5, 30, 100, 130]
+## Building an RNN model
+Tensor("Unigram/Unigram/embedding_lookup:0", shape=(?, 60, 30), dtype=float32)
+Tensor("Bigram/Bigram/embedding_lookup:0", shape=(?, 60, 100), dtype=float32)
+Tensor("Trigram/Trigram/embedding_lookup:0", shape=(?, 60, 130), dtype=float32)
+model variables ['Unigram/embed:0', 'Unigram/RNN/multi_rnn_cell/cell_0/basic_lstm_cell/kernel:0', 'Unigram/RNN/multi_rnn_cell/cell_0/basic_lstm_cell/bias:0', 'Bigram/embed:0', 'Bigram/RNN/multi_rnn_cell/cell_0/basic_lstm_cell/kernel:0', 'Bigram/RNN/multi_rnn_cell/cell_0/basic_lstm_cell/bias:0', 'Trigram/embed:0', 'Trigram/RNN/multi_rnn_cell/cell_0/basic_lstm_cell/kernel:0', 'Trigram/RNN/multi_rnn_cell/cell_0/basic_lstm_cell/bias:0', 'Hidden1/Weights:0', 'Hidden1/Biases:0', 'Output/Weights:0', 'Output/Biases:0']
+[[ -7.89315999e-01  -4.05717105e-01   5.82995474e-01 ...,  -4.77228649e-02
+    5.75683057e-01  -6.99902400e-02]
+ [  1.49128705e-01  -2.43056089e-01  -6.79133683e-02 ...,  -2.34934136e-01
+   -2.90251151e-02  -6.34959787e-02]
+ [  3.88389714e-02  -3.37398767e-01   4.40573096e-02 ...,  -2.15126306e-01
+   -1.66320726e-02  -9.57036540e-02]
+ ..., 
+ [ -8.24109092e-02  -4.05485362e-01   2.56982535e-01 ...,  -1.65887088e-01
+   -4.26052585e-02   3.88036259e-02]
+ [ -9.49682370e-02  -3.24847639e-01   2.35212654e-01 ...,  -1.25174507e-01
+    6.17804006e-03   5.79614490e-02]
+ [  4.17395756e-02  -1.13259666e-01   4.48601926e-03 ...,  -9.37203020e-02
+    7.26630446e-04   1.17306691e-02]]
+## Training
+Model loaded ensemble_embedding.model.meta
+Percent: [#                   ] 2.79%  tr loss: 0.100, acc1: 0.967, acc5: 0.997Percent: [###                 ] 16.74%  tr loss: 0.071, acc1: 0.983, acc5: 1.000Percent: [######              ] 30.69%  tr loss: 0.092, acc1: 0.970, acc5: 1.000Percent: [#########           ] 44.63%  tr loss: 0.120, acc1: 0.960, acc5: 1.000Percent: [############        ] 58.58%  tr loss: 0.056, acc1: 0.973, acc5: 1.000Percent: [###############     ] 72.53%  tr loss: 0.155, acc1: 0.947, acc5: 0.997Percent: [#################   ] 86.48%  tr loss: 0.078, acc1: 0.977, acc5: 0.997Percent: [####################] 100.00% Finished. tr loss: 0.054, acc1: 0.984, acc5: 1.000
+Training loss: 0.091, acc1: 0.970, acc5: 0.999, ep: 0
+
+Validation loss: 5.754, acc1: 0.460, acc5: 0.704, ep: 0
+Testing loss: 23.343, acc1: 0.000, acc5: 0.009
+
+Model saved ensemble_embedding.model
+Percent: [#                   ] 2.79%  tr loss: 0.113, acc1: 0.963, acc5: 0.997Percent: [###                 ] 16.74%  tr loss: 0.062, acc1: 0.983, acc5: 1.000Percent: [######              ] 30.69%  tr loss: 0.110, acc1: 0.963, acc5: 1.000Percent: [#########           ] 44.63%  tr loss: 0.090, acc1: 0.977, acc5: 0.997Percent: [############        ] 58.58%  tr loss: 0.073, acc1: 0.973, acc5: 1.000Percent: [###############     ] 72.53%  tr loss: 0.070, acc1: 0.970, acc5: 1.000Percent: [#################   ] 86.48%  tr loss: 0.082, acc1: 0.977, acc5: 1.000Percent: [####################] 100.00% Finished. tr loss: 0.040, acc1: 0.992, acc5: 1.000
+Training loss: 0.080, acc1: 0.975, acc5: 0.999, ep: 1
+
+Validation loss: 5.831, acc1: 0.456, acc5: 0.703, ep: 1
+Testing loss: 23.518, acc1: 0.000, acc5: 0.011
+
+Model saved ensemble_embedding.model
+Percent: [#                   ] 2.79%  tr loss: 0.104, acc1: 0.967, acc5: 1.000Percent: [###                 ] 16.74%  tr loss: 0.054, acc1: 0.973, acc5: 1.000Percent: [######              ] 30.69%  tr loss: 0.093, acc1: 0.963, acc5: 0.997Percent: [#########           ] 44.63%  tr loss: 0.048, acc1: 0.983, acc5: 1.000Percent: [############        ] 58.58%  tr loss: 0.136, acc1: 0.973, acc5: 1.000Percent: [###############     ] 72.53%  tr loss: 0.105, acc1: 0.977, acc5: 0.997Percent: [#################   ] 86.48%  tr loss: 0.072, acc1: 0.973, acc5: 1.000Percent: [####################] 100.00% Finished. tr loss: 0.055, acc1: 0.988, acc5: 1.000
+Training loss: 0.083, acc1: 0.975, acc5: 0.999, ep: 2
+
+Validation loss: 6.404, acc1: 0.457, acc5: 0.704, ep: 2
+Testing loss: 23.886, acc1: 0.000, acc5: 0.007
+
+Model saved ensemble_embedding.model
+Percent: [#                   ] 2.79%  tr loss: 0.057, acc1: 0.980, acc5: 1.000Percent: [###                 ] 16.74%  tr loss: 0.056, acc1: 0.987, acc5: 1.000Percent: [######              ] 30.69%  tr loss: 0.166, acc1: 0.963, acc5: 1.000Percent: [#########           ] 44.63%  tr loss: 0.082, acc1: 0.980, acc5: 1.000Percent: [############        ] 58.58%  tr loss: 0.056, acc1: 0.980, acc5: 1.000Percent: [###############     ] 72.53%  tr loss: 0.131, acc1: 0.967, acc5: 0.997Percent: [#################   ] 86.48%  tr loss: 0.056, acc1: 0.983, acc5: 1.000Percent: [####################] 100.00% Finished. tr loss: 0.016, acc1: 0.996, acc5: 1.000
+Training loss: 0.078, acc1: 0.980, acc5: 1.000, ep: 3
+
+Validation loss: 6.058, acc1: 0.467, acc5: 0.711, ep: 3
+Testing loss: 23.752, acc1: 0.000, acc5: 0.007
+
+Model saved ensemble_embedding.model
+Percent: [#                   ] 2.79%  tr loss: 0.051, acc1: 0.983, acc5: 1.000Percent: [###                 ] 16.74%  tr loss: 0.085, acc1: 0.970, acc5: 1.000Percent: [######              ] 30.69%  tr loss: 0.054, acc1: 0.983, acc5: 1.000Percent: [#########           ] 44.63%  tr loss: 0.103, acc1: 0.963, acc5: 1.000Percent: [############        ] 58.58%  tr loss: 0.071, acc1: 0.980, acc5: 1.000Percent: [###############     ] 72.53%  tr loss: 0.095, acc1: 0.970, acc5: 1.000Percent: [#################   ] 86.48%  tr loss: 0.055, acc1: 0.983, acc5: 1.000Percent: [####################] 100.00% Finished. tr loss: 0.049, acc1: 0.976, acc5: 1.000
+Training loss: 0.070, acc1: 0.976, acc5: 1.000, ep: 4
+
+Validation loss: 6.251, acc1: 0.468, acc5: 0.705, ep: 4
+Testing loss: 22.881, acc1: 0.000, acc5: 0.008
+
+Model saved ensemble_embedding.model
+Percent: [#                   ] 2.79%  tr loss: 0.087, acc1: 0.977, acc5: 0.993Percent: [###                 ] 16.74%  tr loss: 0.107, acc1: 0.980, acc5: 1.000Percent: [######              ] 30.69%  tr loss: 0.063, acc1: 0.980, acc5: 1.000Percent: [#########           ] 44.63%  tr loss: 0.065, acc1: 0.980, acc5: 1.000Percent: [############        ] 58.58%  tr loss: 0.093, acc1: 0.957, acc5: 1.000Percent: [###############     ] 72.53%  tr loss: 0.066, acc1: 0.973, acc5: 0.997Percent: [#################   ] 86.48%  tr loss: 0.101, acc1: 0.977, acc5: 1.000Percent: [####################] 100.00% Finished. tr loss: 0.040, acc1: 0.988, acc5: 1.000
+Training loss: 0.078, acc1: 0.976, acc5: 0.999, ep: 5
+
+Validation loss: 6.367, acc1: 0.467, acc5: 0.704, ep: 5
+Testing loss: 22.837, acc1: 0.000, acc5: 0.057
+
+Model saved ensemble_embedding.model
+Percent: [#                   ] 2.79%  tr loss: 0.080, acc1: 0.973, acc5: 1.000Percent: [###                 ] 16.74%  tr loss: 0.102, acc1: 0.970, acc5: 0.997Percent: [######              ] 30.69%  tr loss: 0.105, acc1: 0.973, acc5: 1.000Percent: [#########           ] 44.63%  tr loss: 0.050, acc1: 0.973, acc5: 1.000Percent: [############        ] 58.58%  tr loss: 0.080, acc1: 0.980, acc5: 1.000Percent: [###############     ] 72.53%  tr loss: 0.051, acc1: 0.987, acc5: 1.000Percent: [#################   ] 86.48%  tr loss: 0.050, acc1: 0.990, acc5: 0.997Percent: [####################] 100.00% Finished. tr loss: 0.018, acc1: 0.992, acc5: 1.000
+Training loss: 0.067, acc1: 0.980, acc5: 0.999, ep: 6
+
+Validation loss: 6.322, acc1: 0.463, acc5: 0.707, ep: 6
+Testing loss: 22.727, acc1: 0.000, acc5: 0.053
+
+Model saved ensemble_embedding.model
+Percent: [#                   ] 2.79%  tr loss: 0.057, acc1: 0.980, acc5: 1.000Percent: [###                 ] 16.74%  tr loss: 0.044, acc1: 0.987, acc5: 1.000Percent: [######              ] 30.69%  tr loss: 0.057, acc1: 0.980, acc5: 1.000Percent: [#########           ] 44.63%  tr loss: 0.053, acc1: 0.977, acc5: 1.000Percent: [############        ] 58.58%  tr loss: 0.062, acc1: 0.967, acc5: 0.997Percent: [###############     ] 72.53%  tr loss: 0.081, acc1: 0.980, acc5: 1.000Percent: [#################   ] 86.48%  tr loss: 0.046, acc1: 0.980, acc5: 1.000Percent: [####################] 100.00% Finished. tr loss: 0.018, acc1: 0.996, acc5: 1.000
+Training loss: 0.052, acc1: 0.981, acc5: 1.000, ep: 7
+
+Validation loss: 6.568, acc1: 0.461, acc5: 0.709, ep: 7
+Testing loss: 22.289, acc1: 0.000, acc5: 0.054
+
+Model saved ensemble_embedding.model
+Percent: [#                   ] 2.79%  tr loss: 0.108, acc1: 0.963, acc5: 1.000Percent: [###                 ] 16.74%  tr loss: 0.101, acc1: 0.977, acc5: 0.997Percent: [######              ] 30.69%  tr loss: 0.125, acc1: 0.977, acc5: 0.997Percent: [#########           ] 44.63%  tr loss: 0.049, acc1: 0.980, acc5: 1.000Percent: [############        ] 58.58%  tr loss: 0.054, acc1: 0.983, acc5: 1.000Percent: [###############     ] 72.53%  tr loss: 0.076, acc1: 0.973, acc5: 0.997Percent: [#################   ] 86.48%  tr loss: 0.048, acc1: 0.983, acc5: 1.000Percent: [####################] 100.00% Finished. tr loss: 0.038, acc1: 0.984, acc5: 1.000
+Training loss: 0.075, acc1: 0.978, acc5: 0.999, ep: 8
+
+Validation loss: 6.611, acc1: 0.456, acc5: 0.710, ep: 8
+Testing loss: 23.497, acc1: 0.001, acc5: 0.054
+
+Model saved ensemble_embedding.model
+Percent: [#                   ] 2.79%  tr loss: 0.095, acc1: 0.977, acc5: 1.000Percent: [###                 ] 16.74%  tr loss: 0.065, acc1: 0.977, acc5: 1.000Percent: [######              ] 30.69%  tr loss: 0.043, acc1: 0.987, acc5: 1.000Percent: [#########           ] 44.63%  tr loss: 0.074, acc1: 0.983, acc5: 1.000Percent: [############        ] 58.58%  tr loss: 0.028, acc1: 0.987, acc5: 1.000Percent: [###############     ] 72.53%  tr loss: 0.096, acc1: 0.977, acc5: 1.000Percent: [#################   ] 86.48%  tr loss: 0.037, acc1: 0.980, acc5: 1.000Percent: [####################] 100.00% Finished. tr loss: 0.034, acc1: 0.992, acc5: 1.000
+Training loss: 0.059, acc1: 0.982, acc5: 1.000, ep: 9
+
+Validation loss: 6.798, acc1: 0.459, acc5: 0.695, ep: 9
+Testing loss: 23.568, acc1: 0.000, acc5: 0.009
+
+Model saved ensemble_embedding.model
+Early stopping applied
+
+Testing loss: 23.568, acc1: 0.000, acc5: 0.009
+ensemble_embedding Parameter sets: [200, 200, 0.01, 0.5, 1, 0.5, 30, 100, 130]
+## Building an RNN model
+Tensor("Unigram/Unigram/embedding_lookup:0", shape=(?, 60, 30), dtype=float32)
+Tensor("Bigram/Bigram/embedding_lookup:0", shape=(?, 60, 100), dtype=float32)
+Tensor("Trigram/Trigram/embedding_lookup:0", shape=(?, 60, 130), dtype=float32)
+model variables ['Unigram/embed:0', 'Unigram/RNN/multi_rnn_cell/cell_0/basic_lstm_cell/kernel:0', 'Unigram/RNN/multi_rnn_cell/cell_0/basic_lstm_cell/bias:0', 'Bigram/embed:0', 'Bigram/RNN/multi_rnn_cell/cell_0/basic_lstm_cell/kernel:0', 'Bigram/RNN/multi_rnn_cell/cell_0/basic_lstm_cell/bias:0', 'Trigram/embed:0', 'Trigram/RNN/multi_rnn_cell/cell_0/basic_lstm_cell/kernel:0', 'Trigram/RNN/multi_rnn_cell/cell_0/basic_lstm_cell/bias:0', 'Hidden1/Weights:0', 'Hidden1/Biases:0', 'Output/Weights:0', 'Output/Biases:0']
+[[ 0.67766339  0.97310638  1.03532171 ...,  0.50160432  0.10116133
+   1.13788068]
+ [-0.22205961 -0.00603029 -0.0718879  ...,  0.15694253  0.35206896
+   0.10625388]
+ [-0.51939023  0.05850335 -0.23847707 ..., -0.17824723  0.48536676
+   0.22410072]
+ ..., 
+ [-0.76793033 -0.03205327  0.33721578 ...,  0.13394283  1.01054108
+   0.80857837]
+ [-0.55634499  0.28313524  0.40838104 ...,  0.51630425  0.56056505
+   0.22792035]
+ [-0.17247126  0.01099588 -0.0959347  ...,  0.08158731  0.09241372
+   0.05306134]]
+## Training
+Model loaded ensemble_embedding.model.meta
+Percent: [#                   ] 2.79%  tr loss: 0.088, acc1: 0.980, acc5: 1.000Percent: [###                 ] 16.74%  tr loss: 0.096, acc1: 0.980, acc5: 0.997Percent: [######              ] 30.69%  tr loss: 0.061, acc1: 0.987, acc5: 1.000Percent: [#########           ] 44.63%  tr loss: 0.102, acc1: 0.980, acc5: 0.997Percent: [############        ] 58.58%  tr loss: 0.058, acc1: 0.980, acc5: 1.000Percent: [###############     ] 72.53%  tr loss: 0.048, acc1: 0.980, acc5: 1.000Percent: [#################   ] 86.48%  tr loss: 0.083, acc1: 0.977, acc5: 1.000Percent: [####################] 100.00% Finished. tr loss: 0.024, acc1: 0.992, acc5: 1.000
+Training loss: 0.070, acc1: 0.982, acc5: 0.999, ep: 0
+
+Validation loss: 6.705, acc1: 0.464, acc5: 0.682, ep: 0
+Testing loss: 23.990, acc1: 0.000, acc5: 0.006
+
+Model saved ensemble_embedding.model
+Percent: [#                   ] 2.79%  tr loss: 0.041, acc1: 0.973, acc5: 1.000Percent: [###                 ] 16.74%  tr loss: 0.062, acc1: 0.987, acc5: 0.997Percent: [######              ] 30.69%  tr loss: 0.079, acc1: 0.973, acc5: 1.000Percent: [#########           ] 44.63%  tr loss: 0.070, acc1: 0.983, acc5: 0.997Percent: [############        ] 58.58%  tr loss: 0.045, acc1: 0.990, acc5: 1.000Percent: [###############     ] 72.53%  tr loss: 0.158, acc1: 0.957, acc5: 1.000Percent: [#################   ] 86.48%  tr loss: 0.170, acc1: 0.970, acc5: 1.000Percent: [####################] 100.00% Finished. tr loss: 0.009, acc1: 1.000, acc5: 1.000
+Training loss: 0.079, acc1: 0.979, acc5: 0.999, ep: 1
+
+Validation loss: 6.455, acc1: 0.469, acc5: 0.704, ep: 1
+Testing loss: 23.806, acc1: 0.000, acc5: 0.010
+
+Model saved ensemble_embedding.model
+Percent: [#                   ] 2.79%  tr loss: 0.050, acc1: 0.983, acc5: 1.000Percent: [###                 ] 16.74%  tr loss: 0.079, acc1: 0.973, acc5: 1.000Percent: [######              ] 30.69%  tr loss: 0.042, acc1: 0.987, acc5: 1.000Percent: [#########           ] 44.63%  tr loss: 0.023, acc1: 0.993, acc5: 1.000Percent: [############        ] 58.58%  tr loss: 0.150, acc1: 0.973, acc5: 1.000Percent: [###############     ] 72.53%  tr loss: 0.104, acc1: 0.970, acc5: 0.997Percent: [#################   ] 86.48%  tr loss: 0.071, acc1: 0.973, acc5: 1.000Percent: [####################] 100.00% Finished. tr loss: 0.013, acc1: 0.996, acc5: 1.000
