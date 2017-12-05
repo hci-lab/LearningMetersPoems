@@ -1,0 +1,3 @@
+model_checkpoint_path: "Model_4_using_TF_LSTM"
+all_model_checkpoint_paths: "Model_6_using_multi_layer_TF_LSTM"
+all_model_checkpoint_paths: "Model_4_using_TF_LSTM"
