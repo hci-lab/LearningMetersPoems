@@ -3,7 +3,6 @@
 
 # =============================================================================
 import pandas as pd
-import numpy as np
 import tensorflow as tf
 import os
 import pyarabic.araby as araby
@@ -22,6 +21,7 @@ from keras.layers.normalization import BatchNormalization
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import OneHotEncoder
 from sklearn.preprocessing import LabelEncoder
+import numpy as np
 from numpy import array
 from numpy import argmax
 # =============================================================================
@@ -41,7 +41,7 @@ def string_vectorizer(strng, alphabet=arabic_alphabet):
 # =============================================================================
 
 # =============================================================================
-sample_arabic_poetry = pd.read_csv("./data/sample_10.csv", sep = ",")
+sample_arabic_poetry = pd.read_csv("./data/All_Data.csv", sep = ",")
 cols = [1,2,4]
 sample_arabic_poetry.drop(sample_arabic_poetry.columns[cols], axis=1,inplace=True)
 sample_arabic_poetry.columns = ['Bayt_Text', 'Category']
@@ -65,7 +65,7 @@ onehot_encoder = OneHotEncoder(sparse=False)
 integer_encoded = integer_encoded.reshape(len(integer_encoded), 1)
 Bayt_Bahr_encoded = onehot_encoder.fit_transform(integer_encoded)
 # invert first example
-inverted = label_encoder.inverse_transform([argmax(onehot_encoded[1, :])])
+inverted = label_encoder.inverse_transform([argmax(Bayt_Bahr_encoded[1, :])])
 print(inverted)
 # =============================================================================
 
@@ -73,19 +73,19 @@ print(inverted)
 # =============================================================================
 X_train, X_test, y_train, y_test = train_test_split(Bayt_Text_Encoded, Bayt_Bahr_encoded, test_size=0.2, random_state=0)
 #default padding need to check the paramters details
-X_train_padded = sequence.pad_sequences(X_train, maxlen=max_length)
-X_test_padded = sequence.pad_sequences(X_test, maxlen=max_length)
+X_train_padded = sequence.pad_sequences(X_train, maxlen=max_Bayt_length)
+X_test_padded = sequence.pad_sequences(X_test, maxlen=max_Bayt_length)
 # =============================================================================
 
 # =============================================================================
 # Initialising the RNN
 model = Sequential()
 
-model.add(LSTM(units = 4, activation = 'sigmoid', input_shape = (59,35)))
+model.add(LSTM(units = 4, activation = 'sigmoid', input_shape = ( 82, 35)))
 # Adding the input layer and the LSTM layer
 
 # Adding the output layer
-model.add(Dense(units = 10))
+model.add(Dense(units = 11))
 
 # Compiling the RNN
 model.compile(optimizer = 'adam', loss = 'mean_squared_error')
@@ -95,8 +95,8 @@ print(model.summary())
 model.fit(X_train_padded, y_train, validation_data=(X_test_padded, y_test), epochs=3, batch_size=64)
 
 # Final evaluation of the model
-scores = model.evaluate(X_test, y_test, verbose=0)
-print("Accuracy: %.2f%%" % (scores[1]*100))
+scores = model.evaluate(X_test_padded, y_test, verbose=0)
+print("Accuracy: %.2f%%" % (scores*100))
 # =============================================================================
 
 
