@@ -77,28 +77,49 @@ X_train_padded = sequence.pad_sequences(X_train, maxlen=max_Bayt_length)
 X_test_padded = sequence.pad_sequences(X_test, maxlen=max_Bayt_length)
 # =============================================================================
 
-# =============================================================================
+# =========================Without any hidden Layer========================================
 # Initialising the RNN
 model = Sequential()
 
-model.add(LSTM(units = 4, activation = 'sigmoid', input_shape = ( 82, 35)))
+model.add(LSTM(units = 100, input_shape = ( 82, 35)))
 # Adding the input layer and the LSTM layer
 
 # Adding the output layer
-model.add(Dense(units = 11))
+model.add(Dense(units = 11,activation = 'softmax'))
 
 # Compiling the RNN
-model.compile(optimizer = 'adam', loss = 'mean_squared_error')
+model.compile(optimizer = 'adam', loss='categorical_crossentropy' )
 print(model.summary())
 
 # Fitting the RNN to the Training set
-model.fit(X_train_padded, y_train, validation_data=(X_test_padded, y_test), epochs=3, batch_size=64)
+model.fit(X_train_padded, y_train, validation_split = 0.1,, epochs=20, batch_size=64)
 
 # Final evaluation of the model
 scores = model.evaluate(X_test_padded, y_test, verbose=0)
 print("Accuracy: %.2f%%" % (scores*100))
-# =============================================================================
+# =========================With one hidden Layer================================
 
+model = Sequential()
+
+model.add(LSTM(units = 100, input_shape = ( 82, 35)))
+# Adding the input layer and the LSTM layer
+
+# Adding the output layer
+model.add(Dense(units = 100,activation = 'relu'))
+
+# Adding the output layer
+model.add(Dense(units = 11,activation = 'softmax'))
+
+# Compiling the RNN
+model.compile(optimizer = 'adam', loss='categorical_crossentropy',metrics = ['accuracy'] )
+print(model.summary())
+
+# Fitting the RNN to the Training set
+model.fit(X_train_padded, y_train, validation_split = 0.1, epochs=20, batch_size=32)
+
+# Final evaluation of the model
+scores = model.evaluate(X_test_padded, y_test, verbose=0)
+print("Accuracy: %.2f%%" % (scores*100))
 
 
 # =============================================================================
