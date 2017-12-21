@@ -23,6 +23,10 @@ def getBeautifulSoupObjectOfPage(link):
     try:
         htmlPage = urlopen(link)
     except HTTPError:
+        # record faild links
+        log = open('error_logs', 'a')
+        log.write(link + '\n')
+        log.close()
         return None
     # Changing the html parser
     # html5lib
