@@ -3,11 +3,8 @@
 
 
 ###### TODO: List
-# Automate the experiement name to be input and create folder by experiement name
 # Read padded data from the files 
 # Add option to read from padded or to rerun it again.
-# Add option to read the weights or to continue
-# Add options to read direct the weights for the epoc from the file name
 # Add option to pass the epoc
 # Add option to pass the batch_size
 # Get the maximum weight from the folder in case continue
@@ -62,8 +59,8 @@ test_size_param=0.05
 validation_split_param = 0.02
 n_units = 500
 input_data_path = "./data/All_Data.csv"
-
-
+epochs_param = 20
+batch_size_param = 100
 #===============================Concatinated Variables ========================
 
 checkpoints_path ="./checkpoints/"+Experiement_Name+"/"
@@ -210,8 +207,8 @@ callbacks_list = [checkpoint,tensorboard]
 hist = model.fit(X_train_padded, 
                  y_train, 
                  validation_split = validation_split_param, 
-                 epochs=20, 
-                 batch_size=100, 
+                 epochs=epochs_param, 
+                 batch_size=batch_size_param, 
                  callbacks=callbacks_list,
                  verbose=1)
 
