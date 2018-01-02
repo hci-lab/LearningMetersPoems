@@ -16,7 +16,7 @@ import numpy as np
 from numpy import array
 from numpy import argmax
 import pandas as pd
-import os
+import os,errno
 from time import time
 import keras
 from keras.models import Sequential
@@ -29,8 +29,9 @@ from sklearn.preprocessing import OneHotEncoder
 from sklearn.preprocessing import LabelEncoder
 import matplotlib.pyplot as plt
 import pyarabic.araby as araby
+from keras import backend as K
 
-
+#from keras.layers.core import
 
 # =============================================================================
 np.random.seed(7)
@@ -56,17 +57,26 @@ def string_vectorizer(strng, alphabet=arabic_alphabet):
 # =======================Program Parameters====================================
 
 load_weights_flag = 0
-Experiement_Name = 'Experiement10'
+Experiement_Name = 'Experiement12'
 test_size_param=0.05
 validation_split_param = 0.02
 n_units = 500
 input_data_path = "./data/All_Data.csv"
 
+
 #===============================Concatinated Variables ========================
 
 checkpoints_path ="./checkpoints/"+Experiement_Name+"/"
-check_points_file_path = check_points_path+ "/weights-improvement-{epoch:02d}-{loss:.2f}.hdf5"
+check_points_file_path = checkpoints_path+ "/weights-improvement-{epoch:02d}-{val_acc:.2f}.hdf5"
 board_log_dir="./logs/"+Experiement_Name+"/"#+.format(time())
+
+try:
+    os.makedirs(board_log_dir)
+    os.makedirs(checkpoints_path)
+except OSError as e:
+    if e.errno != errno.EEXIST:
+        print("Can't create file for checkpoints or for logs please check ")
+        raise
 
 # =========================Data Loading========================================
 sample_arabic_poetry = pd.read_csv(input_data_path, sep = ",")
@@ -118,12 +128,26 @@ X_test_padded = sequence.pad_sequences(X_test, maxlen=max_Bayt_length)
 
 # =========================With Bi-LSTM Layers ================================
 # create model
+K.set_learning_phase(1) #set learning phase
+
+n_units = 100
 model = Sequential()
 
 # Adding the input layer and the LSTM layer
 model.add(Bidirectional(LSTM(n_units, return_sequences=True), input_shape=(max_Bayt_length, numberOfUniqueChars)))
+model.add(Dropout(0.1))
+
+model.add(Bidirectional(LSTM(n_units, return_sequences=True)))
+#model.add(Bidirectional(LSTM(n_units)))
+model.add(Dropout(0.1))
+
+#model.add(Bidirectional(LSTM(n_units)))
+model.add(Bidirectional(LSTM(n_units, return_sequences=True)))
+model.add(Dropout(0.1))
+
 
 model.add(Bidirectional(LSTM(n_units)))
+model.add(Dropout(0.1))
 
 #model.add(Bidirectional(LSTM(n_units)))
 
@@ -162,7 +186,7 @@ model.compile(optimizer = 'adam',
 print(model.summary())
 
 checkpoint = ModelCheckpoint(check_points_file_path, 
-                             monitor='loss', 
+                             monitor='val_acc', 
                              verbose=1,
                              save_best_only=True, 
                              mode='max')
@@ -180,13 +204,13 @@ tensorboard  = keras.callbacks.TensorBoard(log_dir=board_log_dir ,
 callbacks_list = [checkpoint,tensorboard]
 
 
-history = LossHistory()
+#history = LossHistory()
 
 # Fitting the RNN to the Training set
 hist = model.fit(X_train_padded, 
                  y_train, 
                  validation_split = validation_split_param, 
-                 epochs=50, 
+                 epochs=20, 
                  batch_size=100, 
                  callbacks=callbacks_list,
                  verbose=1)
