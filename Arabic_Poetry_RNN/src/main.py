@@ -5,9 +5,6 @@
 ###### TODO: List
 # Read padded data from the files 
 # Add option to read from padded or to rerun it again.
-# Add option to pass the epoc
-# Add option to pass the batch_size
-# Get the maximum weight from the folder in case continue
 # =============================================================================
 import numpy as np
 from numpy import array
