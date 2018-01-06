@@ -27,6 +27,7 @@ from keras import backend as K
 
 import arabic
 from itertools import product 
+import helpers
 #from keras.layers.core import
 
 # =============================================================================
@@ -51,8 +52,7 @@ def string_vectorizer(strng, alphabet=arabic_alphabet):
     return array(vector)
 
 
-tashkeel = arabic.shortharakat
-def string_with_tashkeel_vectorizer(string, tashkeel=tashkeel):
+def string_with_tashkeel_vectorizer(string, tashkeel=arabic.shortharakat):
     '''
         return: 8*1 vector representation for each letter in string
     '''
@@ -82,22 +82,7 @@ def string_with_tashkeel_vectorizer(string, tashkeel=tashkeel):
 #    print(string_clean)
 
     # 1* Building letter and taskell compinations
-    arabic_alphabet_tashkeel = []
-    for haraka in arabic.shortharakat:
-        for letter in arabic.alphabet:
-                arabic_alphabet_tashkeel.append(letter + haraka)
-
-    '''
-        * Adding alphabets without tashkeel in front of 
-          the letters/tashkeel combination
-        * [] => alphabet without taskell then alphabet with fatha, ...
-    '''
-    alphabet += ' '
-    alphabet += '\n'
-    arabic_alphabet_tashkeel = alphabet + arabic_alphabet_tashkeel
-
-    # 2* add the letters/tashkeel combination to letters without tashkeel
-    arabic_alphabet_tashkeel = arabic_alphabet_tashkeel + arabic_alphabet
+    arabic_alphabet_tashkeel = helpers.get_alphabet_tashkeel_combination()
 
 
 #    print(arabic_alphabet_tashkeel)
