@@ -113,6 +113,7 @@ alphabet = [
 
 tashkeel      = (fathatan, dammatan, kasratan, fatha, damma, kasra, sukun, shadda)
 harakat       = (fathatan, dammatan, kasratan, fatha, damma, kasra, sukun)
+# This order is important, I depend on it in letter_of_encoding return.
 shortharakat  = (fatha, damma, kasra, sukun)
 tanwin        = (fathatan, dammatan, kasratan)
 not_def_haraka = tatweel
