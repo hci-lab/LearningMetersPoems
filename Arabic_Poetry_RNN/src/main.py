@@ -51,7 +51,7 @@ def string_vectorizer(strng, alphabet=arabic_alphabet):
     return array(vector)
 
 
-tashkeel = [arabic.fatha, arabic.damma, arabic.kasra, arabic.sukun]
+tashkeel = arabic.shortharakat
 def string_with_tashkeel_vectorizer(string, tashkeel=tashkeel):
     '''
         return: 8*1 vector representation for each letter in string
@@ -63,7 +63,7 @@ def string_with_tashkeel_vectorizer(string, tashkeel=tashkeel):
         > Harakah will no be a single member in list
         > it will be concatinated with its previous letter or not exist
     '''
-    string_clean = []
+    string_clean = [] # harakah is concatinated with previous latter.
     i = 0
     while True:
         # it is the last item?!
@@ -79,14 +79,22 @@ def string_with_tashkeel_vectorizer(string, tashkeel=tashkeel):
             string_clean.append(string[i] + string[i+1])
             i += 2
 
-    print(string_clean)
+#    print(string_clean)
 
     # 1* Building letter and taskell compinations
     arabic_alphabet_tashkeel = []
-    for letter in arabic_alphabet:
-        if letter != ' '  and letter != '\n':
-            for haraka in tashkeel:
+    for haraka in arabic.shortharakat:
+        for letter in arabic.alphabet:
                 arabic_alphabet_tashkeel.append(letter + haraka)
+
+    '''
+        * Adding alphabets without tashkeel in front of 
+          the letters/tashkeel combination
+        * [] => alphabet without taskell then alphabet with fatha, ...
+    '''
+    alphabet += ' '
+    alphabet += '\n'
+    arabic_alphabet_tashkeel = alphabet + arabic_alphabet_tashkeel
 
     # 2* add the letters/tashkeel combination to letters without tashkeel
     arabic_alphabet_tashkeel = arabic_alphabet_tashkeel + arabic_alphabet
