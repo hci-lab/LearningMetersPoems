@@ -32,7 +32,7 @@ from itertools import product
 # =============================================================================
 np.random.seed(7)
 os.chdir("m://Learning/Master/CombinedWorkspace/Python/DeepLearningMaster/GP-Ripo-master/Arabic_Poetry_RNN/")
-arabic_alphabet = [' ','ب','ة' ,'ث','ج','ح','خ','د','ذ','ر','ز','س','ش','ص','ض','ط','ظ','ع','غ','ف','ق','ك','ل','م','ن','ه','و','ي','ء','آ','أ','ؤ','ئ','\n','ا' ]
+arabic_alphabet = arabic.alphabet
 numberOfUniqueChars = len(arabic_alphabet)
 
 # =========================Functions ==========================================
