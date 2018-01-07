@@ -62,3 +62,41 @@ def letter_of_encoding(encodingList):
 for i in range (182):
     print(letter_of_encoding(encoding_combination[i]))
 '''
+
+def factor_shadda_tanwin(string):
+    '''
+    * factors shadda to letter with sukun and letter
+    * factors tanwin to ?????????
+    # Some redundancy is simpler. :"D
+    '''
+    factoredString = []
+    i = 0
+    for x in string:
+        # if it's shadda factor it to sukun and previous letter
+        if x == arabic.shadda:
+            factoredString.append(arabic.sukun)
+            factoredString.append(string[i-1])
+            i += 1
+        
+        # if it's not shadda add it to the new string.
+        elif x == arabic.kasratan:
+            factoredString.append(arabic.kasra)
+            factoredString.append(arabic.noon)
+            factoredString.append(arabic.sukun)
+            i += 1
+        elif x == arabic.dammatan:
+            factoredString.append(arabic.damma)
+            factoredString.append(arabic.noon)
+            factoredString.append(arabic.sukun)
+            i += 1
+        else:
+            factoredString.append(x)
+            i += 1
+
+    return factoredString
+
+'''
+# Testing
+for i in factor_shadda_tanwin('أَشَّدونٌ'):
+    print(i)
+'''
