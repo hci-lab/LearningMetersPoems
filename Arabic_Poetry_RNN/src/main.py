@@ -82,17 +82,13 @@ def string_with_tashkeel_vectorizer(string, tashkeel=arabic.shortharakat):
 #    print(string_clean)
 
     # 1* Building letter and taskell compinations
-    arabic_alphabet_tashkeel = helpers.get_alphabet_tashkeel_combination()
-
+    arabic_alphabet_tashkeel = helpers.lettersTashkeelCombination
 
 #    print(arabic_alphabet_tashkeel)
 #    print(len(arabic_alphabet_tashkeel))
 
-    # 3* creating binary encoding combination
-    binary = [0,1]
-    encoding_combination = [list(i) for i in product([0, 1], repeat=8)]
 
-    encoding_combination = array(encoding_combination)
+    encoding_combination = array(helpers.encoding_combination)
 #   print(encoding_combination)
 #   print(len(encoding_combination))
 
