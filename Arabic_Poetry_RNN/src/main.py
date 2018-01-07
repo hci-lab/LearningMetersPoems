@@ -63,6 +63,9 @@ def string_with_tashkeel_vectorizer(string, tashkeel=arabic.shortharakat):
         > Harakah will no be a single member in list
         > it will be concatinated with its previous letter or not exist
     '''
+    # factor shaddah and tanwin
+    string = helpers.factor_shadda_tanwin(string)
+
     string_clean = [] # harakah is concatinated with previous latter.
     i = 0
     while True:
@@ -79,19 +82,11 @@ def string_with_tashkeel_vectorizer(string, tashkeel=arabic.shortharakat):
             string_clean.append(string[i] + string[i+1])
             i += 2
 
-#    print(string_clean)
 
     # 1* Building letter and taskell compinations
     arabic_alphabet_tashkeel = helpers.lettersTashkeelCombination
 
-#    print(arabic_alphabet_tashkeel)
-#    print(len(arabic_alphabet_tashkeel))
-
-
     encoding_combination = array(helpers.encoding_combination)
-#   print(encoding_combination)
-#   print(len(encoding_combination))
-
 
     # 4* getting encoding for each letter from input string
     representation = []
