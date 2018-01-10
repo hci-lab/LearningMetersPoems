@@ -27,12 +27,13 @@ from keras import backend as K
 
 import arabic
 from itertools import product 
+import helpers
 #from keras.layers.core import
 
 # =============================================================================
 np.random.seed(7)
 os.chdir("m://Learning/Master/CombinedWorkspace/Python/DeepLearningMaster/GP-Ripo-master/Arabic_Poetry_RNN/")
-arabic_alphabet = [' ','ب','ة' ,'ث','ج','ح','خ','د','ذ','ر','ز','س','ش','ص','ض','ط','ظ','ع','غ','ف','ق','ك','ل','م','ن','ه','و','ي','ء','آ','أ','ؤ','ئ','\n','ا' ]
+arabic_alphabet = arabic.alphabet
 numberOfUniqueChars = len(arabic_alphabet)
 
 # =========================Functions ==========================================
@@ -51,8 +52,7 @@ def string_vectorizer(strng, alphabet=arabic_alphabet):
     return array(vector)
 
 
-tashkeel = [arabic.fatha, arabic.damma, arabic.kasra, arabic.sukun]
-def string_with_tashkeel_vectorizer(string, tashkeel=tashkeel):
+def string_with_tashkeel_vectorizer(string, tashkeel=arabic.shortharakat):
     '''
         return: 8*1 vector representation for each letter in string
     '''
@@ -63,7 +63,10 @@ def string_with_tashkeel_vectorizer(string, tashkeel=tashkeel):
         > Harakah will no be a single member in list
         > it will be concatinated with its previous letter or not exist
     '''
-    string_clean = []
+    # factor shaddah and tanwin
+    string = helpers.factor_shadda_tanwin(string)
+
+    string_clean = [] # harakah is concatinated with previous latter.
     i = 0
     while True:
         # it is the last item?!
@@ -79,30 +82,11 @@ def string_with_tashkeel_vectorizer(string, tashkeel=tashkeel):
             string_clean.append(string[i] + string[i+1])
             i += 2
 
-    print(string_clean)
 
     # 1* Building letter and taskell compinations
-    arabic_alphabet_tashkeel = []
-    for letter in arabic_alphabet:
-        if letter != ' '  and letter != '\n':
-            for haraka in tashkeel:
-                arabic_alphabet_tashkeel.append(letter + haraka)
+    arabic_alphabet_tashkeel = helpers.lettersTashkeelCombination
 
-    # 2* add the letters/tashkeel combination to letters without tashkeel
-    arabic_alphabet_tashkeel = arabic_alphabet_tashkeel + arabic_alphabet
-
-
-#    print(arabic_alphabet_tashkeel)
-#    print(len(arabic_alphabet_tashkeel))
-
-    # 3* creating binary encoding combination
-    binary = [0,1]
-    encoding_combination = [list(i) for i in product([0, 1], repeat=8)]
-
-    encoding_combination = array(encoding_combination)
-#   print(encoding_combination)
-#   print(len(encoding_combination))
-
+    encoding_combination = array(helpers.encoding_combination)
 
     # 4* getting encoding for each letter from input string
     representation = []

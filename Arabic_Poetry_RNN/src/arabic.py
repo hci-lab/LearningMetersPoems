@@ -68,10 +68,10 @@ lam_alef_mad_above           = u'\ufef5'
 simple_lam_alef              = u'\u0644\u0627'
 simple_lam_alef_hamza_above  = u'\u0644\u0623'
 simple_lam_alef_hamza_below  = u'\u0644\u0625'
-simple_lam_alef_mad_above  = u'\u0644\u0622'
+simple_lam_alef_mad_above    = u'\u0644\u0622'
 
 # Lists
-alphabet = u''.join([
+alphabet = [
         alef, 
         beh,
         teh,
@@ -108,27 +108,16 @@ alphabet = u''.join([
         yeh_hamza, 
         alef_maksura,  
         teh_marbuta
-        ])
+        ]
 
-tashkeel  = (fathatan,  dammatan,  kasratan, 
-            fatha, damma, kasra, 
-            sukun, 
-            shadda)
-harakat  = (  fathatan,    dammatan,    kasratan, 
-            fatha,   damma,   kasra, 
-            sukun
-            )
-shortharakat  = ( fatha,   damma,   kasra,  sukun)
 
-tanwin  = (fathatan,   dammatan,    kasratan)
-
+tashkeel      = (fathatan, dammatan, kasratan, fatha, damma, kasra, sukun, shadda)
+harakat       = (fathatan, dammatan, kasratan, fatha, damma, kasra, sukun)
+# This order is important, I depend on it in letter_of_encoding return.
+shortharakat  = (fatha, damma, kasra, sukun)
+tanwin        = (fathatan, dammatan, kasratan)
 not_def_haraka = tatweel
-liguatures = (
-            lam_alef, 
-            lam_alef_hamza_above, 
-            lam_alef_hamza_below, 
-            lam_alef_mad_above, 
-            )
+liguatures = (lam_alef, lam_alef_hamza_above, lam_alef_hamza_below, lam_alef_mad_above)
 hamzat = (
             hamza, 
             waw_hamza, 
@@ -231,50 +220,3 @@ def treat_as_the_same(listOfLetter, letter, text):
     for x in listOfLetter:
         text = text.replace(x, letter)
     return text
-
-file = open('mmm.txt', 'w')
-
-file.write("|Name | Arabic Letter      \n<br>")
-file.write("------------------|-------------------------------\n<br>")
-file.write("|hamza            | \u0621 \n")
-file.write("|alef_mad         | \u0622 \n")
-file.write("|alef_hamza_above | \u0623 \n")
-file.write("|waw_hamza        | \u0624 \n")
-file.write("|alef_hamza_below | \u0625 \n")
-file.write("|yeh_hamza        | \u0626 \n")
-file.write("|alef             | \u0627 \n")
-file.write("|beh              | \u0628 \n")
-file.write("|teh_marbuta      | \u0629 \n")
-file.write("|teh              | \u062a \n")
-file.write("|theh             | \u062b \n")
-file.write("|jeem             | \u062c \n")
-file.write("|hah              | \u062d \n")
-file.write("|khah             | \u062e \n")
-file.write("|dal              | \u062f \n")
-file.write("|thal             | \u0630 \n")
-file.write("|reh              | \u0631 \n")
-file.write("|zain             | \u0632 \n")
-file.write("|seen             | \u0633 \n")
-file.write("|sheen            | \u0634 \n")
-file.write("|sad              | \u0635 \n")
-file.write("|dad              | \u0636 \n")
-file.write("|tah              | \u0637 \n")
-file.write("|zah              | \u0638 \n")
-file.write("|ain              | \u0639 \n")
-file.write("|ghain            | \u063a \n")
-file.write("|feh              | \u0641 \n")
-file.write("|qaf              | \u0642 \n")
-file.write("|kaf              | \u0643 \n")
-file.write("|lam              | \u0644 \n")
-file.write("|meem             | \u0645 \n")
-file.write("|noon             | \u0646 \n")
-file.write("|heh              | \u0647 \n")
-file.write("|waw              | \u0648 \n")
-file.write("|alef_maksura     | \u0649 \n")
-file.write("|yeh              | \u064a \n")
-file.write("|madda_above      | \u0653 \n<br>")
-file.write("|hamza_above      | \u0654 \n<br>")
-file.write("|hamza_below      | \u0655 \n<br>")
-file.write("|alef_wasl        | \u0671 \n<br>")
-file.write("--------------------------------------------------\n<br>")
-file.close()
