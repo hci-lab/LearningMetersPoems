@@ -1,59 +1,118 @@
-#!/usr/bin/env python
 # -*- coding: utf-8 -*-
+"""
+Created on Thu Jan 11 00:58:10 2018
 
-import pandas as pd
-from sklearn.model_selection import train_test_split
-from sklearn.preprocessing import OneHotEncoder
-from sklearn.preprocessing import LabelEncoder
+@author: ali
+"""
+
+
+# Importing the libraries
 import numpy as np
-from numpy import array
-from numpy import argmax
-
-# =============================================================================
-
-# =============================================================================
-np.random.seed(7)
-english_alphabet = 'abcdefghijklmnopqrstuvwxyz '
-numberOfUniqueChars = len(english_alphabet)
-# =============================================================================
-
-# vectorize fanction 
-# =============================================================================
-def string_vectorizer(strng, alphabet=arabic_alphabet):
-    vector = [[0 if char != letter else 1 for char in alphabet]
-                  for letter in strng]
-    return array(vector)
-# =============================================================================
+import matplotlib.pyplot as plt
+import pandas as pd
+from sklearn.utils import shuffle
+import seaborn as ses
+import string
+import re
+from IPython.display import clear_output
+import time
+import h5py
+from sklearn.preprocessing import OneHotEncoder,  LabelEncoder
+from keras.utils import to_categorical
 
 
-# read data
-# =============================================================================
-sample_english_poetry = pd.read_csv("./data/All_Data.csv", sep = ",")
-max_Bayt_length =  sample_english_poetry.verse.map(len).max()
-# =============================================================================
+#==================================Program Constants ==========================
+english_alphapets=list(string.ascii_lowercase)
+alphapet=english_alphapets+[' ', '\''] #Add space and apostrophe to our alphabets
+len_of_alphapet=len(alphapet)
 
-
-# =============================================================================
-Verse_Text_Encoded = sample_arabic_poetry['Bayt_Text'].apply(string_vectorizer)
-
-
-######******************save oure encoding ***************************
+#Decimal Encoding Dict For All Alphabet 
+decimal_alphapet_dict={}
+i=0
+for char in alphapet:
+    decimal_alphapet_dict.update({char: i})
+    i=i+1
+#Binary Encoding Dict For All Alphabet 
+binary_alphapet_dict={}
+for key, value in decimal_alphapet_dict.items():
+    binary_string=[int(i) for i in np.binary_repr(value,  width=5)]
+    binary_alphapet_dict.update({key:binary_string})
 
 
 
-# =============================================================================
-#one hot encoding for classes
-# =============================================================================
-Bayt_Bahr = sample_arabic_poetry['Category']
-# integer encode
-label_encoder = LabelEncoder()
-integer_encoded = label_encoder.fit_transform(Bayt_Bahr)
-# binary encode
-onehot_encoder = OneHotEncoder(sparse=False)
-integer_encoded = integer_encoded.reshape(len(integer_encoded), 1)
-Bayt_Bahr_encoded = onehot_encoder.fit_transform(integer_encoded)
-# invert first example
-inverted = label_encoder.inverse_transform([argmax(Bayt_Bahr_encoded[1, :])])
-print(inverted)
-# =============================================================================
- 
+#==================================Importing Data set==========================
+dataset = pd.read_csv('Data/english_dataset.csv') #, encoding = "ISO-8859-1"
+#data= shuffle(dataset)
+#Data Stat
+dataset.iloc[:, 1].value_counts()
+
+# =========================Cleaning Data ============================== 
+
+# just keep english alphabet , spance and apostroph. remove all specail characters 
+def remove_spectial_char(verse):
+   
+    cleaned_verse = ''.join(char for char in verse if char in alphapet)
+    return cleaned_verse
+
+
+
+#==================================Char counts for Padding===================== 
+#Get maximum length to padding other verses with spaces 
+data=dataset
+data['char_count'] = [len(str(verse)) for verse in data['Verse']]
+
+#get max count of chars 
+max_count_of_chars=data['char_count'].max()
+
+# ============================= Encoding Data ================================= 
+def encode_verse_in_Binary(verse):
+    """convert verse to matrix (t,n)
+       n : one hot vector 28 dimantion
+       t : max count of chars
+    """
+    #make verse as lower chares
+    verse = verse.lower()
+    #remove any strange char that don't in our alphabet
+    verse = remove_spectial_char(verse)
+
+    current_verse_length=len(verse)
+    #Padding verse with spaces  
+    verse=verse + ' '*(max_count_of_chars-current_verse_length)
+    #encode each char with it's binary encoding in verse
+    binary_encoded = [binary_alphapet_dict[char] for char in verse ]
+    return  binary_encoded
+
+
+def encode_meter(y_data):
+    # integer encoding
+    label_encoder = LabelEncoder()
+    integer_encoded = label_encoder.fit_transform([meter for i,meter in enumerate(y_data)] )#shuffledData.iloc[:,1]
+
+    # one hot encoding
+    one_hot_encoded = to_categorical(integer_encoded)
+    return one_hot_encoded
+    
+
+#Encode X_data : all verses
+X = np.asarray([encode_verse_in_Binary(verse) for i,verse in enumerate(dataset.iloc[:,0])])
+#the shape of encoding matrix
+X.shape
+#Encode Y_data 
+Y = np.asarray(encode_meter(dataset.iloc[:,1]))
+#the shape of encoding matrix
+Y.shape
+#=============================Save Encoding ===================================
+def save(nameOfFile,nameOfDataset,dataVar):
+    h5f = h5py.File(nameOfFile, 'w')
+    h5f.create_dataset(nameOfDataset, data=dataVar)
+    h5f.close()
+    
+save("Data/data_matrix_X.h5","X",X)
+save("Data/data_matrix_Y.h5","Y",Y)
+
+#---------------------------Retrive Encoding--------------------------------------
+def restore (nameOfFile,nameOfDataset):
+    h5f = h5py.File(nameOfFile,'r')
+    matrix = h5f[nameOfDataset][:]
+    h5f.close()
+    return matrix
