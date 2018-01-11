@@ -1,26 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-# =============================================================================
-# import tensorflow as tf
-# import pyarabic.number as number
-# import keras.callbacks
-# from keras.layers import Dense
-# from keras.layers import LSTM
-# from keras.layers.embeddings import Embedding
-# from keras.models import Model
-# from keras.layers import TimeDistributed, Bidirectional
-# from keras.layers.normalization import BatchNormalization
-# =============================================================================
-
-
 import pandas as pd
-import os
-import pyarabic.araby as araby
-from keras.models import Sequential
-from keras.preprocessing import sequence
-from keras.layers import Dense, Input, Dropout, MaxPooling1D, Conv1D
-from keras.layers import LSTM, Lambda
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import OneHotEncoder
 from sklearn.preprocessing import LabelEncoder
@@ -32,11 +13,11 @@ from numpy import argmax
 
 # =============================================================================
 np.random.seed(7)
-os.chdir("m://Learning/Master/CombinedWorkspace/Python/DeepLearningMaster/GP-Ripo-master/Arabic_Poetry_RNN/")
-arabic_alphabet = [' ','ب','ة' ,'ث','ج','ح','خ','د','ذ','ر','ز','س','ش','ص','ض','ط','ظ','ع','غ','ف','ق','ك','ل','م','ن','ه','و','ي','ء','آ','أ','ؤ','ئ','\n','ا']
-numberOfUniqueChars = len(arabic_alphabet)
+english_alphabet = 'abcdefghijklmnopqrstuvwxyz '
+numberOfUniqueChars = len(english_alphabet)
 # =============================================================================
 
+# vectorize fanction 
 # =============================================================================
 def string_vectorizer(strng, alphabet=arabic_alphabet):
     vector = [[0 if char != letter else 1 for char in alphabet]
@@ -44,21 +25,21 @@ def string_vectorizer(strng, alphabet=arabic_alphabet):
     return array(vector)
 # =============================================================================
 
-# =============================================================================
-sample_arabic_poetry = pd.read_csv("./data/All_Data.csv", sep = ",")
-cols = [1,2,4]
-sample_arabic_poetry.drop(sample_arabic_poetry.columns[cols], axis=1,inplace=True)
-sample_arabic_poetry.columns = ['Bayt_Text', 'Category']
-sample_arabic_poetry['Bayt_Text'] = sample_arabic_poetry['Bayt_Text'].apply(araby.strip_tashkeel).apply(araby.strip_tatweel)
-max_Bayt_length =  sample_arabic_poetry.Bayt_Text.map(len).max()
 
+# read data
+# =============================================================================
+sample_english_poetry = pd.read_csv("./data/All_Data.csv", sep = ",")
+max_Bayt_length =  sample_english_poetry.verse.map(len).max()
 # =============================================================================
 
 
 # =============================================================================
-Bayt_Text_Encoded = sample_arabic_poetry['Bayt_Text'].apply(string_vectorizer)
+Verse_Text_Encoded = sample_arabic_poetry['Bayt_Text'].apply(string_vectorizer)
 
-Bayt_Text_Encoded.to_csv( 'file.csv' )
+
+######******************save oure encoding ***************************
+
+
 
 # =============================================================================
 #one hot encoding for classes
@@ -75,38 +56,4 @@ Bayt_Bahr_encoded = onehot_encoder.fit_transform(integer_encoded)
 inverted = label_encoder.inverse_transform([argmax(Bayt_Bahr_encoded[1, :])])
 print(inverted)
 # =============================================================================
-
-
-# =============================================================================
-X_train, X_test, y_train, y_test = train_test_split(Bayt_Text_Encoded, Bayt_Bahr_encoded, test_size=0.2, random_state=0)
-#default padding need to check the paramters details
-
-X_train_padded = sequence.pad_sequences(X_train, maxlen=max_Bayt_length)
-X_test_padded = sequence.pad_sequences(X_test, maxlen=max_Bayt_length)
-# =============================================================================
-
-# =============================================================================
-# #This allows for characters to be represented by numbers
-# CharsForids = {char:Id for Id, char in enumerate(chars)}
-# #This is the opposite to the above
-# idsForChars = {Id:char for Id, char in enumerate(chars)}
-# #How many timesteps e.g how many characters we want to process in one go
-# numberOfCharsToLearn = 1
-#
-# #letters = "العربية"
-# # integer encode input data
-# integer_encoded = [CharsForids[char] for char in letters]
-# print(integer_encoded)
-#
-# # one hot encode
-# onehot_encoded = list()
-# for value in integer_encoded:
-# 	letter = [0 for _ in range(len(chars))]
-# 	letter[value] = 1
-# 	onehot_encoded.append(letter)
-# print(onehot_encoded)
-# # invert encoding
-# inverted = int_to_char[argmax(onehot_encoded[0])]
-# print(inverted)
-# sss = string_vectorizer(letters)
-# =============================================================================
+ 

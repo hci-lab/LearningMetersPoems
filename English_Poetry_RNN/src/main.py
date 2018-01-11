@@ -32,12 +32,8 @@ import helpers
 
 # =============================================================================
 np.random.seed(7)
-os.chdir("m://Learning/Master/CombinedWorkspace/Python/DeepLearningMaster/GP-Ripo-master/Arabic_Poetry_RNN/")
-arabic_alphabet = arabic.alphabet
-numberOfUniqueChars = len(arabic_alphabet)
 
 # =========================Functions ==========================================
-
 class LossHistory(keras.callbacks.Callback):
     def on_train_begin(self, logs={}):
         self.losses = []
@@ -46,65 +42,23 @@ class LossHistory(keras.callbacks.Callback):
         self.losses.append(logs.get('loss'))
 # =============================================================================
 
-def string_vectorizer(strng, alphabet=arabic_alphabet):
-    vector = [[0 if char != letter else 1 for char in alphabet]
-                  for letter in strng]
-    return array(vector)
 
 
-def string_with_tashkeel_vectorizer(string, tashkeel=arabic.shortharakat):
-    '''
-        return: 8*1 vector representation for each letter in string
-    '''
-
-    # 0* change string to list of letters 
-    '''
-        * where tshkeel is not considerd a letter
-        > Harakah will no be a single member in list
-        > it will be concatinated with its previous letter or not exist
-    '''
-    # factor shaddah and tanwin
-    string = helpers.factor_shadda_tanwin(string)
-
-    string_clean = [] # harakah is concatinated with previous latter.
-    i = 0
-    while True:
-        # it is the last item?!
-        if i == len(string) - 1:
-            string_clean.append(string[i])
-            break
-        elif i > len(string)-1:
-            break 
-        elif string[i+1] not in tashkeel:        
-            string_clean.append(string[i])
-            i += 1
-        elif string[i+1] in tashkeel:        
-            string_clean.append(string[i] + string[i+1])
-            i += 2
-
-
-    # 1* Building letter and taskell compinations
-    arabic_alphabet_tashkeel = helpers.lettersTashkeelCombination
-
-    encoding_combination = array(helpers.encoding_combination)
-
-    # 4* getting encoding for each letter from input string
-    representation = []
-    for x in string_clean:
-        index = string_clean.index(x)
-        representation.append(encoding_combination[index])
-
-    return array(representation)
 # =======================Program Parameters====================================
 
+input_data_path = "./data/All_Data.csv"
+layer_number = 1
+# 1->LSTM  , 2->GRU , 3->Bi-LSTM 
+cell_mode = 1
 load_weights_flag = 0
-Experiement_Name = 'Experiement12'
+Experiement_Name = 'Experiement1'
 test_size_param=0.05
 validation_split_param = 0.02
 n_units = 500
-input_data_path = "./data/All_Data.csv"
 epochs_param = 20
 batch_size_param = 100
+
+
 #===============================Concatinated Variables ========================
 
 checkpoints_path ="./checkpoints/"+Experiement_Name+"/"
@@ -120,50 +74,17 @@ except OSError as e:
         raise
 
 # =========================Data Loading========================================
-sample_arabic_poetry = pd.read_csv(input_data_path, sep = ",")
-cols = [1,2,4]
-sample_arabic_poetry.drop(sample_arabic_poetry.columns[cols], axis=1,inplace=True)
-sample_arabic_poetry.columns = ['Bayt_Text', 'Category']
-sample_arabic_poetry['Bayt_Text'] = sample_arabic_poetry['Bayt_Text'].apply(araby.strip_tashkeel).apply(araby.strip_tatweel)
-max_Bayt_length =  sample_arabic_poetry.Bayt_Text.map(len).max()
-# =============================================================================
-
-
-
-
-# =============================================================================
-Bayt_Text_Encoded = sample_arabic_poetry['Bayt_Text'].apply(string_vectorizer)
-
-# =============================================================================
-#one hot encoding for classes
-# =============================================================================
-Bayt_Bahr = sample_arabic_poetry['Category']
-numbber_of_bohor = Bayt_Bahr.unique().size
-
-# integer encode
-label_encoder = LabelEncoder()
-integer_encoded = label_encoder.fit_transform(Bayt_Bahr)
-
-# binary encode
-onehot_encoder = OneHotEncoder(sparse=False)
-integer_encoded = integer_encoded.reshape(len(integer_encoded), 1)
-Bayt_Bahr_encoded = onehot_encoder.fit_transform(integer_encoded)
-
-# invert first example
-inverted = label_encoder.inverse_transform([argmax(Bayt_Bahr_encoded[1, :])])
-print(inverted)
+X,Y = load_encoding_data()#*********************************
+max_Bayt_length=0#**************************
+numberOfUniqueChars=0#********************************
 # =============================================================================
 
 
 # =============================================================================
-X_train, X_test, y_train, y_test=train_test_split(Bayt_Text_Encoded, #bayts
-                                                    Bayt_Bahr_encoded, #classes
-                                                    test_size=test_size_param, 
-                                                    random_state=0)
-#default padding need to check the paramters details
-
-X_train_padded = sequence.pad_sequences(X_train, maxlen=max_Bayt_length)
-X_test_padded = sequence.pad_sequences(X_test, maxlen=max_Bayt_length)
+X_train, X_test, y_train, y_test=train_test_split(X, #bayts
+                                                  Y, #classes
+                                                  test_size=test_size_param, 
+                                                  random_state=0)
 # =============================================================================
 
 
