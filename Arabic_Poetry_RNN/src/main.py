@@ -57,7 +57,7 @@ def string_with_tashkeel_vectorizer(string, tashkeel=arabic.shortharakat):
         return: 8*1 vector representation for each letter in string
     '''
 
-    # 0* change string to list of letters 
+    # 0* change string to list of letters
     '''
         * where tshkeel is not considerd a letter
         > Harakah will no be a single member in list
@@ -66,35 +66,38 @@ def string_with_tashkeel_vectorizer(string, tashkeel=arabic.shortharakat):
     # factor shaddah and tanwin
     string = helpers.factor_shadda_tanwin(string)
 
-    string_clean = [] # harakah is concatinated with previous latter.
+    string_clean = []  # harakah is concatinated with previous latter.
     i = 0
     while True:
         # it is the last item?!
         if i == len(string) - 1:
             string_clean.append(string[i])
             break
-        elif i > len(string)-1:
-            break 
-        elif string[i+1] not in tashkeel:        
+        elif i > len(string) - 1:
+            break
+        elif string[i + 1] not in tashkeel:
             string_clean.append(string[i])
             i += 1
-        elif string[i+1] in tashkeel:        
-            string_clean.append(string[i] + string[i+1])
+        elif string[i + 1] in tashkeel:
+            string_clean.append(string[i] + string[i + 1])
             i += 2
-
 
     # 1* Building letter and taskell compinations
     arabic_alphabet_tashkeel = helpers.lettersTashkeelCombination
 
-    encoding_combination = array(helpers.encoding_combination)
+    encoding_combination = np.array(helpers.encoding_combination)
 
     # 4* getting encoding for each letter from input string
     representation = []
     for x in string_clean:
         index = string_clean.index(x)
-        representation.append(encoding_combination[index])
+        # Shift index by one
+        representation.append(encoding_combination[index + 1])
 
-    return array(representation)
+    reminder = 111 - len(representation)
+    for i in range(reminder):
+        representation.append([0, 0, 0, 0, 0, 0, 0, 0])
+    return np.asarray(representation)
 # =======================Program Parameters====================================
 
 load_weights_flag = 0
