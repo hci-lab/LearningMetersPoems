@@ -22,19 +22,8 @@ from sklearn.model_selection import train_test_split
 from keras import backend as K
 import sys
 from preprocessing import restore
-
-# =============================================================================
-np.random.seed(7)
-
-
-# =========================Functions ==========================================
-class LossHistory(keras.callbacks.Callback):
-    def on_train_begin(self, logs={}):
-        self.losses = []
-
-    def on_batch_end(self, batch, logs={}):
-        self.losses.append(logs.get('loss'))
-# =============================================================================
+import tensorflow as tf
+import random as rn
 
 
 # =======================Program Parameters====================================
@@ -54,9 +43,32 @@ batch_size_param = 64
 # 0 -> for test mode , 1 -> for train mode
 learning_mode = 1
 
-epochs_param = 1#50
+epochs_param = 0#50
 #num of epoch should be wait when monitor don't change
 earlystopping_patience=-1  
+seed=7
+
+
+
+# =============================================================================
+np.random.seed(seed)
+os.environ['PYTHONHASHSEED'] = '0'
+np.random.seed(seed)
+rn.seed(seed)
+K.set_random_seed(seed)
+
+
+# =========================Functions ==========================================
+class LossHistory(keras.callbacks.Callback):
+    def on_train_begin(self, logs={}):
+        self.losses = []
+
+    def on_batch_end(self, batch, logs={}):
+        self.losses.append(logs.get('loss'))
+# =============================================================================
+
+
+
 
 
 #===============================Concatinated Variables ========================
@@ -161,12 +173,10 @@ for n in range(layer_number):
                 model.add(Bidirectional(LSTM(n_units[i], return_sequences=True)))
     #check if there Dopout or not
     if drop_out_rate != 0:
-        model.add(Dropout(drop_out_rate))
+        model.add(Dropout(drop_out_rate,seed=seed))
 
-                      
 #add softmax layer
 model.add(Dense(units = numbber_of_bohor,activation = 'softmax'))
-
 
 
 #==================================check to load last epoch====================
@@ -183,11 +193,12 @@ if(load_weights_flag == 1):
         print(all_checkpoints_list_sorted[-1])
         max_weight_checkpoints =  all_checkpoints_list_sorted[-1]
         # load weights
-        model.load_weights(max_weight_checkpoints)
+        model = keras.models.load_model(max_weight_checkpoints)
     except IOError:
         print('An error occured trying to read the file.')
     except:
         print("No wieghts avialable \n check the paths")
+
 
 
 #==================================compile model===============================        

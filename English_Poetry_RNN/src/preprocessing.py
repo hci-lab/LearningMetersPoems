@@ -126,8 +126,8 @@ def save(nameOfFile,nameOfDataset,dataVar):
     h5f.create_dataset(nameOfDataset, data=dataVar)
     h5f.close()
     
-save("../data/data_matrix_X_binary_encoding.h5","X",X)
-save("../data/data_matrix_Y_one_hot_encoding.h5","Y",Y)
+#save("../data/data_matrix_X_binary_encoding.h5","X",X)
+#save("../data/data_matrix_Y_one_hot_encoding.h5","Y",Y)
 
 #---------------------------Retrive Encoding--------------------------------------
 def restore (nameOfFile,nameOfDataset):
