@@ -22,10 +22,7 @@ from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import OneHotEncoder
 from sklearn.preprocessing import LabelEncoder
 import matplotlib.pyplot as plt
-import pyarabic.araby as araby
 from keras import backend as K
-
-import arabic
 from itertools import product 
 import helpers
 #from keras.layers.core import
@@ -33,6 +30,9 @@ import helpers
 # =============================================================================
 np.random.seed(7)
 os.chdir("m://Learning/Master/CombinedWorkspace/Python/DeepLearningMaster/GP-Ripo-master/Arabic_Poetry_RNN/")
+
+import src.arabic as arabic
+#import src.pyarabic.araby as araby
 arabic_alphabet = arabic.alphabet
 numberOfUniqueChars = len(arabic_alphabet)
 
@@ -98,13 +98,14 @@ def string_with_tashkeel_vectorizer(string, tashkeel=arabic.shortharakat):
 # =======================Program Parameters====================================
 
 load_weights_flag = 0
-Experiement_Name = 'Experiement12'
-test_size_param=0.05
-validation_split_param = 0.02
-n_units = 500
-input_data_path = "./data/All_Data.csv"
+Experiement_Name = 'Experiement_1_WITH_Tashkeel_ASIS'
+test_size_param=0.1
+validation_split_param = 0.05
+n_units = 200
+#input_data_path = "./data/All_Data.csv"
+input_data_path = "./data/Almoso3a_Alshe3rya/cleaned_data/All_clean_data.csv"
 epochs_param = 20
-batch_size_param = 100
+batch_size_param = 64
 #===============================Concatinated Variables ========================
 
 checkpoints_path ="./checkpoints/"+Experiement_Name+"/"
@@ -121,10 +122,10 @@ except OSError as e:
 
 # =========================Data Loading========================================
 sample_arabic_poetry = pd.read_csv(input_data_path, sep = ",")
-cols = [1,2,4]
+cols = [0,1,2,3,4,6,7]
 sample_arabic_poetry.drop(sample_arabic_poetry.columns[cols], axis=1,inplace=True)
-sample_arabic_poetry.columns = ['Bayt_Text', 'Category']
-sample_arabic_poetry['Bayt_Text'] = sample_arabic_poetry['Bayt_Text'].apply(araby.strip_tashkeel).apply(araby.strip_tatweel)
+sample_arabic_poetry.columns = [ 'Category','Bayt_Text']
+#sample_arabic_poetry['Bayt_Text'] = sample_arabic_poetry['Bayt_Text'].apply(araby.strip_tashkeel).apply(araby.strip_tatweel)
 max_Bayt_length =  sample_arabic_poetry.Bayt_Text.map(len).max()
 # =============================================================================
 
@@ -132,7 +133,8 @@ max_Bayt_length =  sample_arabic_poetry.Bayt_Text.map(len).max()
 
 
 # =============================================================================
-Bayt_Text_Encoded = sample_arabic_poetry['Bayt_Text'].apply(string_vectorizer)
+#Bayt_Text_Encoded = sample_arabic_poetry['Bayt_Text'].apply(string_vectorizer)
+Bayt_Text_Encoded = sample_arabic_poetry['Bayt_Text'].apply(string_with_tashkeel_vectorizer)
 
 # =============================================================================
 #one hot encoding for classes
@@ -174,28 +176,19 @@ K.set_learning_phase(1) #set learning phase
 n_units = 100
 model = Sequential()
 
+
 # Adding the input layer and the LSTM layer
-model.add(Bidirectional(LSTM(n_units, return_sequences=True), input_shape=(max_Bayt_length, numberOfUniqueChars)))
-model.add(Dropout(0.1))
 
-model.add(Bidirectional(LSTM(n_units, return_sequences=True)))
-#model.add(Bidirectional(LSTM(n_units)))
-model.add(Dropout(0.1))
+model.add(LSTM(units = n_units, input_shape = ( 82, 35), return_sequences=True))
+ 
+model.add(LSTM(n_units, return_sequences=True))
 
-#model.add(Bidirectional(LSTM(n_units)))
-model.add(Bidirectional(LSTM(n_units, return_sequences=True)))
-model.add(Dropout(0.1))
+model.add(LSTM(n_units, return_sequences=True))
 
+model.add(LSTM(n_units, return_sequences=True))
 
-model.add(Bidirectional(LSTM(n_units)))
-model.add(Dropout(0.1))
-
-#model.add(Bidirectional(LSTM(n_units)))
-
-#model.add(Bidirectional(LSTM(n_units)))
-#model.add(TimeDistributedDense(output_dim=5))
-
-#model.add(TimeDistributed(Dense(11, activation='relu')))
+model.add(LSTM(n_units, return_sequences=True))
+ 
 
 # Adding the output layer
 model.add(Dense(units = numbber_of_bohor,activation = 'softmax'))
@@ -283,7 +276,31 @@ plt.legend(['train', 'test'], loc='upper left')
 plt.show()
 
 # =============================================================================
-
+# =============================================================================
+# model.add(Bidirectional(LSTM(n_units, return_sequences=True), input_shape=(max_Bayt_length, numberOfUniqueChars)))
+# model.add(Dropout(0.1))
+# 
+# model.add(Bidirectional(LSTM(n_units, return_sequences=True)))
+# #model.add(Bidirectional(LSTM(n_units)))
+# model.add(Dropout(0.1))
+# 
+# #model.add(Bidirectional(LSTM(n_units)))
+# model.add(Bidirectional(LSTM(n_units, return_sequences=True)))
+# model.add(Dropout(0.1))
+# 
+# 
+# model.add(Bidirectional(LSTM(n_units)))
+# model.add(Dropout(0.1))
+# 
+# #model.add(Bidirectional(LSTM(n_units)))
+# 
+# #model.add(Bidirectional(LSTM(n_units)))
+# #model.add(TimeDistributedDense(output_dim=5))
+# 
+# #model.add(TimeDistributed(Dense(11, activation='relu')))
+# 
+# 
+# =============================================================================
 # =============================================================================
 # =========================With three hidden Layer=============================
 # # create model
