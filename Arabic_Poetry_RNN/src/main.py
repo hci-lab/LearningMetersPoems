@@ -179,15 +179,20 @@ model = Sequential()
 
 # Adding the input layer and the LSTM layer
 
-model.add(LSTM(units = n_units, input_shape = ( 82, 35), return_sequences=True))
- 
-model.add(LSTM(n_units, return_sequences=True))
+model.add(LSTM(units = n_units, input_shape=(max_Bayt_length, numberOfUniqueChars), return_sequences=True))
+model.add(Dropout(0.1,seed=7)) 
 
 model.add(LSTM(n_units, return_sequences=True))
+model.add(Dropout(0.1,seed=7)) 
 
 model.add(LSTM(n_units, return_sequences=True))
+model.add(Dropout(0.1,seed=7)) 
 
 model.add(LSTM(n_units, return_sequences=True))
+model.add(Dropout(0.1,seed=7)) 
+
+model.add(LSTM(n_units, return_sequences=True))
+model.add(Dropout(0.1,seed=7)) 
  
 
 # Adding the output layer
