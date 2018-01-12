@@ -34,6 +34,9 @@ encoding_combination = [list(i) for i in product([0, 1], repeat=8)]
 
 def get_alphabet_tashkeel_combination(tashkeel=arabic.shortharakat):
 
+    '''
+        * Creating Letters with (fatha, damma, kasra, sukun) combinations
+    '''
     arabic_alphabet_tashkeel = []
     for haraka in arabic.shortharakat:
         for letter in arabic.alphabet:
