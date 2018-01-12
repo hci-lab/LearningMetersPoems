@@ -28,7 +28,7 @@ len_of_alphapet=len(alphapet)
 
 #Decimal Encoding Dict For All Alphabet 
 decimal_alphapet_dict={}
-i=0
+i=1
 for char in alphapet:
     decimal_alphapet_dict.update({char: i})
     i=i+1
@@ -41,7 +41,7 @@ for key, value in decimal_alphapet_dict.items():
 
 
 #==================================Importing Data set==========================
-dataset = pd.read_csv('Data/english_dataset.csv') #, encoding = "ISO-8859-1"
+dataset = pd.read_csv('../data/english_dataset.csv', encoding = "ISO-8859-1")
 #data= shuffle(dataset)
 #Data Stat
 dataset.iloc[:, 1].value_counts()
@@ -107,8 +107,8 @@ def save(nameOfFile,nameOfDataset,dataVar):
     h5f.create_dataset(nameOfDataset, data=dataVar)
     h5f.close()
     
-save("Data/data_matrix_X.h5","X",X)
-save("Data/data_matrix_Y.h5","Y",Y)
+save("../data/data_matrix_X.h5","X",X)
+save("../data/data_matrix_Y.h5","Y",Y)
 
 #---------------------------Retrive Encoding--------------------------------------
 def restore (nameOfFile,nameOfDataset):

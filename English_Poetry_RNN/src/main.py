@@ -21,7 +21,8 @@ from keras.callbacks import ModelCheckpoint,TensorBoard#,TimeDistributed
 from sklearn.model_selection import train_test_split
 from keras import backend as K
 import sys
- 
+from preprocessing import restore
+
 # =============================================================================
 np.random.seed(7)
 
@@ -37,7 +38,6 @@ class LossHistory(keras.callbacks.Callback):
 
 
 # =======================Program Parameters====================================
-input_data_path = "./data/All_Data.csv"
 load_weights_flag = 0
 Experiement_Name = 'Experiement1'
 layer_number = 1
@@ -58,13 +58,11 @@ earlystopping_patience=3
 
 
 
-
 #===============================Concatinated Variables ========================
 
 checkpoints_path ="./Experiement/checkpoints/"+Experiement_Name+"/"
 check_points_file_path = checkpoints_path+ "/weights-improvement-{epoch:02d}-{val_acc:.2f}.hdf5"
 board_log_dir="./Experiement/logs/"+Experiement_Name+"/"#+.format(time())
-losses_dir = "./Experiement/losses/"+Experiement_Name+"_ loss"# *************************************
 
 try:
     os.makedirs(board_log_dir)
@@ -76,10 +74,11 @@ except OSError as e:
 
     
 # =========================Data Loading========================================
-X,Y = load_encoding_data()#*********************************
-max_Bayt_length=0#**************************
-char_dimension=0#********************************
-numbber_of_bohor=0#************************
+X = restore("../data/data_matrix_X_binary_encoding.h5","X")
+Y = restore("../data/data_matrix_Y_one_hot_encoding.h5","Y")
+max_Bayt_length=X.shape[1]
+char_dimension=X.shape[2]
+numbber_of_bohor=Y.shape[1]
 # =============================================================================
 
 
@@ -105,7 +104,6 @@ for n in range(layer_number):
         if len(n_units)>=1 and len(n_units) != layer_number:
             sys.exit("pleas make length of n_units == layer_number or add only one element in n_units ")
         i=n
-    
     # check if LSTM 
     if cell_mode==1:
         #check if first layer to add input_shape
@@ -119,7 +117,7 @@ for n in range(layer_number):
         # if it's not the first layer
         else:
             #check if last layer
-            if len(n_units)-1 == i:
+            if layer_number-1 == n:
                 model.add(LSTM(n_units[i]))
             else:
                 model.add(LSTM(n_units[i], return_sequences=True))
@@ -138,7 +136,7 @@ for n in range(layer_number):
         # if it's not the first layer
         else:
             #check if last layer
-            if len(n_units)-1 == i:
+            if layer_number-1 == n:
                 model.add(GRU(n_units[i]))
             else:
                 model.add(GRU(n_units[i], return_sequences=True))        
@@ -157,15 +155,15 @@ for n in range(layer_number):
         # if it's not the first layer
         else:
             #check if last layer
-            if len(n_units)-1 == i:
+            if layer_number-1 == n:
                 model.add(Bidirectional(LSTM(n_units[i])))
             else:
                 model.add(Bidirectional(LSTM(n_units[i], return_sequences=True)))
     #check if there Dopout or not
     if drop_out_rate != 0:
         model.add(Dropout(drop_out_rate))
-                
-        
+
+                      
 #add softmax layer
 model.add(Dense(units = numbber_of_bohor,activation = 'softmax'))
 
@@ -190,8 +188,6 @@ if(load_weights_flag == 1):
     except:
         print("No wieghts avialable \n check the paths")
 
-
-        
 
 #==================================compile model===============================        
 # Compiling the RNN
