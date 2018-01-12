@@ -19,6 +19,25 @@ import time
 import h5py
 from sklearn.preprocessing import OneHotEncoder,  LabelEncoder
 from keras.utils import to_categorical
+import math
+
+
+
+
+#==================================Clean data==================================
+# dataset = pd.read_csv('../data/english_dataset.csv', encoding = "utf-8",index_col=0)
+# dataset.columns = ['Verse','Meter']
+# dataset['Verse'] = dataset['Verse'].map(lambda x: x.lower())
+# dataset['Meter'] = dataset['Meter'].map(lambda x: x.lower())
+# our_alphabets="".join(list(string.ascii_lowercase)+[" ","\'"])
+# dataset['Verse']=dataset['Verse'].apply(lambda x: re.sub(r'[^'+our_alphabets+']','',str(x))).apply(
+#                                           lambda x: re.sub(r'  *'," ",x))
+# dataset['Meter']=dataset['Meter'].apply(lambda x: re.sub(r'[^'+our_alphabets+']','',str(x))).apply(
+#                                           lambda x: re.sub(r'  *'," ",x))
+# dataset['Verse']=dataset['Verse'].apply(lambda x: x.strip())
+# dataset['Meter']=dataset['Meter'].apply(lambda x: x.strip())
+# dataset.to_csv('../data/english_dataset.csv', encoding = "utf-8")
+
 
 
 #==================================Program Constants ==========================
@@ -41,7 +60,7 @@ for key, value in decimal_alphapet_dict.items():
 
 
 #==================================Importing Data set==========================
-dataset = pd.read_csv('../data/english_dataset.csv', encoding = "ISO-8859-1")
+dataset = pd.read_csv('../data/english_dataset.csv', encoding='utf-8' ,index_col=0)
 #data= shuffle(dataset)
 #Data Stat
 dataset.iloc[:, 1].value_counts()
@@ -107,8 +126,8 @@ def save(nameOfFile,nameOfDataset,dataVar):
     h5f.create_dataset(nameOfDataset, data=dataVar)
     h5f.close()
     
-save("../data/data_matrix_X.h5","X",X)
-save("../data/data_matrix_Y.h5","Y",Y)
+save("../data/data_matrix_X_binary_encoding.h5","X",X)
+save("../data/data_matrix_Y_one_hot_encoding.h5","Y",Y)
 
 #---------------------------Retrive Encoding--------------------------------------
 def restore (nameOfFile,nameOfDataset):

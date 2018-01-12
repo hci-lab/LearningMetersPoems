@@ -40,26 +40,26 @@ class LossHistory(keras.callbacks.Callback):
 # =======================Program Parameters====================================
 load_weights_flag = 0
 Experiement_Name = 'Experiement1'
-layer_number = 1
+layer_number = 3
 #if u need one number for all layers add number alone
-n_units = [500]
+n_units = [200]
 # 1->LSTM  , 2->GRU , 3->Bi-LSTM 
 cell_mode = 1
+
 drop_out_rate = 0.1
-test_size_param=0.05
-validation_split_param = 0.02
-batch_size_param = 100
+test_size_param=0.1
+validation_split_param = 0.1
+batch_size_param = 64
+
 # 0 -> for test mode , 1 -> for train mode
 learning_mode = 1
 
-epochs_param = 20
+epochs_param = 50
 #num of epoch should be wait when monitor don't change
-earlystopping_patience=3  
-
+earlystopping_patience=-1  
 
 
 #===============================Concatinated Variables ========================
-
 checkpoints_path ="./Experiement/checkpoints/"+Experiement_Name+"/"
 check_points_file_path = checkpoints_path+ "/weights-improvement-{epoch:02d}-{val_acc:.2f}.hdf5"
 board_log_dir="./Experiement/logs/"+Experiement_Name+"/"#+.format(time())
@@ -173,6 +173,7 @@ model.add(Dense(units = numbber_of_bohor,activation = 'softmax'))
 # load weights
 if(load_weights_flag == 1):
     try:
+        print("loading last weights in last epoch")
         #List all avialble checkpoints into the directory
         checkpoints_path_list = os.listdir(checkpoints_path)
         all_checkpoints_list = [os.path.join(checkpoints_path,i) for i in checkpoints_path_list]
@@ -221,8 +222,13 @@ earlystopping = keras.callbacks.EarlyStopping(monitor='val_acc',
                                              verbose=1,
                                              mode='auto')
 
-callbacks_list = [checkpoint,tensorboard,earlystopping]
-
+if earlystopping_patience ==-1:
+    callbacks_list = [checkpoint,tensorboard]
+    print("Add  checkpoint - tensorboard")
+else:
+    callbacks_list = [checkpoint,tensorboard,earlystopping]
+    print("Add  checkpoint - tensorboard - earlystopping")
+    
 print(model.summary())
 #==============================================================================
 
@@ -237,11 +243,10 @@ hist = model.fit(X_train,
                  callbacks=callbacks_list,
                  verbose=1)
 
+
 #===========================Evaluate model=====================================
 # Final evaluation of the model
 scores = model.evaluate(X_test_padded, y_test, verbose=1)
 print("Accuracy: %.2f%%" % (scores[1]*100))
-
-
 
 
