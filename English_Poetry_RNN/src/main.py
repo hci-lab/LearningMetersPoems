@@ -15,7 +15,7 @@ from time import time
 import keras
 from keras.models import Sequential
 from keras.preprocessing import sequence
-from keras.layers import Dropout,LSTM, Lambda,Bidirectional,GRU
+from keras.layers import Dropout,LSTM, Lambda,Bidirectional,GRU,Dense
 from keras.callbacks import ModelCheckpoint,TensorBoard#,TimeDistributed
 #from keras.models import load_model
 from sklearn.model_selection import train_test_split
@@ -38,13 +38,13 @@ class LossHistory(keras.callbacks.Callback):
 
 
 # =======================Program Parameters====================================
-load_weights_flag = 0
+load_weights_flag = 1
 Experiement_Name = 'Experiement1'
 layer_number = 3
 #if u need one number for all layers add number alone
 n_units = [200]
 # 1->LSTM  , 2->GRU , 3->Bi-LSTM 
-cell_mode = 1
+cell_mode = 2
 
 drop_out_rate = 0.1
 test_size_param=0.1
@@ -54,15 +54,15 @@ batch_size_param = 64
 # 0 -> for test mode , 1 -> for train mode
 learning_mode = 1
 
-epochs_param = 50
+epochs_param = 1#50
 #num of epoch should be wait when monitor don't change
 earlystopping_patience=-1  
 
 
 #===============================Concatinated Variables ========================
-checkpoints_path ="./Experiement/checkpoints/"+Experiement_Name+"/"
+checkpoints_path ="../Experiement/checkpoints/"+Experiement_Name+"/"
 check_points_file_path = checkpoints_path+ "/weights-improvement-{epoch:02d}-{val_acc:.2f}.hdf5"
-board_log_dir="./Experiement/logs/"+Experiement_Name+"/"#+.format(time())
+board_log_dir="../Experiement/logs/"+Experiement_Name+"/"#+.format(time())
 
 try:
     os.makedirs(board_log_dir)
@@ -246,7 +246,7 @@ hist = model.fit(X_train,
 
 #===========================Evaluate model=====================================
 # Final evaluation of the model
-scores = model.evaluate(X_test_padded, y_test, verbose=1)
+scores = model.evaluate(X_test, Y_test, verbose=1)
 print("Accuracy: %.2f%%" % (scores[1]*100))
 
 
