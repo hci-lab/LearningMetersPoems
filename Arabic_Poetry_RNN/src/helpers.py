@@ -78,7 +78,7 @@ def letter_of_encoding(encodingList):
 
     '''
     index  = encoding_combination.index(encodingList)
-    letter = lettersTashkeelCombination[index+1]
+    letter = lettersTashkeelCombination[index]
 
     # if it has tashkeel
     if len(letter) == 1:
