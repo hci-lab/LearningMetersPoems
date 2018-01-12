@@ -25,12 +25,15 @@ import matplotlib.pyplot as plt
 import pyarabic.araby as araby
 from keras import backend as K
 
+import arabic
+from itertools import product 
+import helpers
 #from keras.layers.core import
 
 # =============================================================================
 np.random.seed(7)
 os.chdir("m://Learning/Master/CombinedWorkspace/Python/DeepLearningMaster/GP-Ripo-master/Arabic_Poetry_RNN/")
-arabic_alphabet = [' ','ب','ة' ,'ث','ج','ح','خ','د','ذ','ر','ز','س','ش','ص','ض','ط','ظ','ع','غ','ف','ق','ك','ل','م','ن','ه','و','ي','ء','آ','أ','ؤ','ئ','\n','ا' ]
+arabic_alphabet = arabic.alphabet
 numberOfUniqueChars = len(arabic_alphabet)
 
 # =========================Functions ==========================================
@@ -48,6 +51,50 @@ def string_vectorizer(strng, alphabet=arabic_alphabet):
                   for letter in strng]
     return array(vector)
 
+
+def string_with_tashkeel_vectorizer(string, tashkeel=arabic.shortharakat):
+    '''
+        return: 8*1 vector representation for each letter in string
+    '''
+
+    # 0* change string to list of letters 
+    '''
+        * where tshkeel is not considerd a letter
+        > Harakah will no be a single member in list
+        > it will be concatinated with its previous letter or not exist
+    '''
+    # factor shaddah and tanwin
+    string = helpers.factor_shadda_tanwin(string)
+
+    string_clean = [] # harakah is concatinated with previous latter.
+    i = 0
+    while True:
+        # it is the last item?!
+        if i == len(string) - 1:
+            string_clean.append(string[i])
+            break
+        elif i > len(string)-1:
+            break 
+        elif string[i+1] not in tashkeel:        
+            string_clean.append(string[i])
+            i += 1
+        elif string[i+1] in tashkeel:        
+            string_clean.append(string[i] + string[i+1])
+            i += 2
+
+
+    # 1* Building letter and taskell compinations
+    arabic_alphabet_tashkeel = helpers.lettersTashkeelCombination
+
+    encoding_combination = array(helpers.encoding_combination)
+
+    # 4* getting encoding for each letter from input string
+    representation = []
+    for x in string_clean:
+        index = string_clean.index(x)
+        representation.append(encoding_combination[index])
+
+    return array(representation)
 # =======================Program Parameters====================================
 
 load_weights_flag = 0
