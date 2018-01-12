@@ -1,6 +1,7 @@
 import arabic
 from itertools import product 
 from pyarabic.araby import strip_tashkeel, strip_tatweel
+import numpy as np
 
 
 def separate_token_with_dicrites(token):
@@ -156,3 +157,52 @@ print(factor_shadda_tanwin('كبَّ'))
 for i in factor_shadda_tanwin('أَشَّدونٌ'):
     print(i)
 '''
+
+def string_with_tashkeel_vectorizer(string, tashkeel=arabic.shortharakat):
+    '''
+        return: 8*1 vector representation for each letter in string
+    '''
+
+    # 0* change string to list of letters
+    '''
+        * where tshkeel is not considerd a letter
+        > Harakah will no be a single member in list
+        > it will be concatinated with its previous letter or not exist
+    '''
+    # factor shaddah and tanwin
+    string = factor_shadda_tanwin(string)
+
+    string_clean = []  # harakah is concatinated with previous latter.
+    i = 0
+    while True:
+        # it is the last item?!
+        if i == len(string) - 1:
+            string_clean.append(string[i])
+            break
+        elif i > len(string) - 1:
+            break
+        elif string[i + 1] not in tashkeel:
+            string_clean.append(string[i])
+            i += 1
+        elif string[i + 1] in tashkeel:
+            string_clean.append(string[i] + string[i + 1])
+            i += 2
+
+    # 1* Building letter and taskell compinations
+    arabic_alphabet_tashkeel = lettersTashkeelCombination
+
+    encoding_combination_ = np.array(encoding_combination)
+
+    # 4* getting encoding for each letter from input string
+    representation = []
+    for x in string_clean:
+        index = string_clean.index(x)
+        # Shift index by one
+        representation.append(encoding_combination_[index + 1])
+
+    reminder = 111 - len(representation)
+    for i in range(reminder):
+        representation.append([0, 0, 0, 0, 0, 0, 0, 0])
+    return np.asarray(representation)
+
+# print(len(string_with_tashkeel_vectorizer('أنا')))
