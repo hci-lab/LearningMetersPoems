@@ -27,7 +27,8 @@ import random as rn
 
 
 # =======================Program Parameters====================================
-load_weights_flag = 1
+load_weights_flag = 0     #0 or 1
+
 Experiement_Name = 'Experiement1'
 layer_number = 3
 #if u need one number for all layers add number alone
@@ -35,19 +36,19 @@ n_units = [200]
 # 1->LSTM  , 2->GRU , 3->Bi-LSTM 
 cell_mode = 2
 
+# 0 if you don't need
 drop_out_rate = 0.1
-test_size_param=0.1
+test_size_param = 0.1
 validation_split_param = 0.1
 batch_size_param = 64
 
 # 0 -> for test mode , 1 -> for train mode
 learning_mode = 1
 
-epochs_param = 0#50
+epochs_param = 50
 #num of epoch should be wait when monitor don't change
 earlystopping_patience=-1  
 seed=7
-
 
 
 # =============================================================================
