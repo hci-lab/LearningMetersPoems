@@ -24,33 +24,18 @@ from sklearn.preprocessing import LabelEncoder
 import matplotlib.pyplot as plt
 from keras import backend as K
 from itertools import product 
+import helpers
 from helpers import string_with_tashkeel_vectorizer
+import arabic
 #from keras.layers.core import
 
+print("Imports Done")
 # =============================================================================
 np.random.seed(7)
-os.chdir("m://Learning/Master/CombinedWorkspace/Python/DeepLearningMaster/GP-Ripo-master/Arabic_Poetry_RNN/")
+#os.chdir("m://Learning/Master/CombinedWorkspace/Python/DeepLearningMaster/GP-Ripo-master/Arabic_Poetry_RNN/")
 
-import src.arabic as arabic
-#import src.pyarabic.araby as araby
 arabic_alphabet = arabic.alphabet
 numberOfUniqueChars = len(arabic_alphabet)
-
-# =========================Functions ==========================================
-
-class LossHistory(keras.callbacks.Callback):
-    def on_train_begin(self, logs={}):
-        self.losses = []
-
-    def on_batch_end(self, batch, logs={}):
-        self.losses.append(logs.get('loss'))
-# =============================================================================
-
-def string_vectorizer(strng, alphabet=arabic_alphabet):
-    vector = [[0 if char != letter else 1 for char in alphabet]
-                  for letter in strng]
-    return array(vector)
-
 
 # =======================Program Parameters====================================
 
@@ -62,7 +47,7 @@ n_units = 200
 #input_data_path = "./data/All_Data.csv"
 input_data_path = "./data/Almoso3a_Alshe3rya/cleaned_data/All_clean_data.csv"
 epochs_param = 20
-batch_size_param = 64
+batch_size_param = 512
 #===============================Concatinated Variables ========================
 
 checkpoints_path ="./checkpoints/"+Experiement_Name+"/"
@@ -76,7 +61,7 @@ except OSError as e:
     if e.errno != errno.EEXIST:
         print("Can't create file for checkpoints or for logs please check ")
         raise
-
+print("Input Parameters Defined and Experiement directory created")
 # =========================Data Loading========================================
 sample_arabic_poetry = pd.read_csv(input_data_path, sep = ",")
 cols = [0,1,2,3,4,6,7]
@@ -84,15 +69,14 @@ sample_arabic_poetry.drop(sample_arabic_poetry.columns[cols], axis=1,inplace=Tru
 sample_arabic_poetry.columns = [ 'Category','Bayt_Text']
 #sample_arabic_poetry['Bayt_Text'] = sample_arabic_poetry['Bayt_Text'].apply(araby.strip_tashkeel).apply(araby.strip_tatweel)
 max_Bayt_length =  sample_arabic_poetry.Bayt_Text.map(len).max()
+
+print("Input Data Read done.")
 # =============================================================================
-
-
-
 
 # =============================================================================
 #Bayt_Text_Encoded = sample_arabic_poetry['Bayt_Text'].apply(string_vectorizer)
 Bayt_Text_Encoded = sample_arabic_poetry['Bayt_Text'].apply(string_with_tashkeel_vectorizer)
-
+print("Input Data Bayt_Text encoded done.")
 # =============================================================================
 #one hot encoding for classes
 # =============================================================================
@@ -111,6 +95,8 @@ Bayt_Bahr_encoded = onehot_encoder.fit_transform(integer_encoded)
 # invert first example
 inverted = label_encoder.inverse_transform([argmax(Bayt_Bahr_encoded[1, :])])
 print(inverted)
+
+print("Input Data Category encoded done.")
 # =============================================================================
 
 
@@ -120,9 +106,13 @@ X_train, X_test, y_train, y_test=train_test_split(Bayt_Text_Encoded, #bayts
                                                     test_size=test_size_param, 
                                                     random_state=0)
 #default padding need to check the paramters details
+print("Input Train/Test Split done.")
+# =================================Padding=====================================
 
 X_train_padded = sequence.pad_sequences(X_train, maxlen=max_Bayt_length)
 X_test_padded = sequence.pad_sequences(X_test, maxlen=max_Bayt_length)
+
+print("Padding done.")
 # =============================================================================
 
 
@@ -136,7 +126,7 @@ model = Sequential()
 
 # Adding the input layer and the LSTM layer
 
-model.add(LSTM(units = n_units, input_shape=(max_Bayt_length, numberOfUniqueChars), return_sequences=True))
+model.add(LSTM(units = n_units, input_shape=(max_Bayt_length, 8), return_sequences=True))
 model.add(Dropout(0.1,seed=7)) 
 
 model.add(LSTM(n_units, return_sequences=True))
@@ -148,7 +138,7 @@ model.add(Dropout(0.1,seed=7))
 model.add(LSTM(n_units, return_sequences=True))
 model.add(Dropout(0.1,seed=7)) 
 
-model.add(LSTM(n_units, return_sequences=True))
+model.add(LSTM(n_units))
 model.add(Dropout(0.1,seed=7)) 
  
 
@@ -178,7 +168,7 @@ if(load_weights_flag == 1):
 model.compile(optimizer = 'adam', 
               loss='categorical_crossentropy',
               metrics = ['accuracy'])
-
+print("Model Defined and compliled.")
 print(model.summary())
 
 checkpoint = ModelCheckpoint(check_points_file_path, 
@@ -186,22 +176,21 @@ checkpoint = ModelCheckpoint(check_points_file_path,
                              verbose=1,
                              save_best_only=True, 
                              mode='max')
-
+print("Model checkpoint defined to track val_acc")
 tensorboard  = keras.callbacks.TensorBoard(log_dir=board_log_dir , 
                                            histogram_freq=0, 
-                                           batch_size=50, 
+                                           batch_size=batch_size_param, 
                                            write_graph=True, 
                                            write_grads=True, 
                                            write_images=True, 
                                            embeddings_freq=0, 
                                            embeddings_layer_names=None, 
                                            embeddings_metadata=None)
-
+print("Model tensorboard defined")
 callbacks_list = [checkpoint,tensorboard]
 
 
-#history = LossHistory()
-
+print("Model Training and validation started")
 # Fitting the RNN to the Training set
 hist = model.fit(X_train_padded, 
                  y_train, 
@@ -211,11 +200,14 @@ hist = model.fit(X_train_padded,
                  callbacks=callbacks_list,
                  verbose=1)
 
+print("Model Training and validation finished")
 print(history.losses)
 
 # Final evaluation of the model
 scores = model.evaluate(X_test_padded, y_test, verbose=1)
 print("Accuracy: %.2f%%" % (scores[1]*100))
+
+
 
 # ===========================Ploting===========================================
 # list all data in history

@@ -6,7 +6,6 @@ import numpy as np
 
 def separate_token_with_dicrites(token):
     """gets a token with taskeel, and returns a list contains the token characters with their tashkeel.
-
     Args:
         param1 (int): list contains the token characters with their tashkeel.
     Returns:
@@ -59,7 +58,6 @@ def get_alphabet_tashkeel_combination(tashkeel=arabic.shortharakat):
 # Testings
 for i in get_alphabet_tashkeel_combination():
     print(i)
-
 for i  in arabic.alphabet:
     print(i)
 print(len(arabic.alphabet))
@@ -76,7 +74,6 @@ def letter_of_encoding(encodingList):
     return (a, b):
         a -> can be 0-4 (0 for no tahskeel, 1 fatha, 2 damma, 3 kasra, 4 sukun)
         b -> is the charachter 
-
     '''
     index  = encoding_combination.index(encodingList)
     letter = lettersTashkeelCombination[index]
@@ -157,6 +154,12 @@ print(factor_shadda_tanwin('كبَّ'))
 for i in factor_shadda_tanwin('أَشَّدونٌ'):
     print(i)
 '''
+
+
+def string_vectorizer(strng, alphabet=arabic_alphabet):
+    vector = [[0 if char != letter else 1 for char in alphabet]
+                  for letter in strng]
+    return array(vector)
 
 def string_with_tashkeel_vectorizer(string, tashkeel=arabic.shortharakat):
     '''
