@@ -29,7 +29,7 @@ import random as rn
 # =======================Program Parameters====================================
 load_weights_flag = 0     #0 or 1
 
-Experiement_Name = 'Experiement1'
+Experiement_Name = 'Experiment6'
 layer_number = 3
 #if u need one number for all layers add number alone
 n_units = [200]
@@ -56,7 +56,7 @@ np.random.seed(seed)
 os.environ['PYTHONHASHSEED'] = '0'
 np.random.seed(seed)
 rn.seed(seed)
-K.set_random_seed(seed)
+#K.set_random_seed(seed)
 
 
 # =========================Functions ==========================================
@@ -87,7 +87,7 @@ except OSError as e:
 
     
 # =========================Data Loading========================================
-X = restore("../data/data_matrix_X_binary_encoding.h5","X")
+X = restore("../data/data_matrix_X_one_hot_encoding.h5","X")
 Y = restore("../data/data_matrix_Y_one_hot_encoding.h5","Y")
 max_Bayt_length=X.shape[1]
 char_dimension=X.shape[2]
