@@ -145,13 +145,16 @@ print("Padding done.")
 # create model
 K.set_learning_phase(1) #set learning phase
 
-n_units = 100
+n_units = 1000
 model = Sequential()
 
 
 # Adding the input layer and the LSTM layer
-
-model.add(LSTM(units = n_units, input_shape=(max_Bayt_length, 8), return_sequences=True))
+if (old_date_flag == 1):
+    model.add(LSTM(units = n_units, input_shape=(max_Bayt_length, numberOfUniqueChars), return_sequences=True))
+else:
+    model.add(LSTM(units = n_units, input_shape=(max_Bayt_length, 8), return_sequences=True))
+    
 model.add(Dropout(0.1,seed=7)) 
 
 model.add(LSTM(n_units, return_sequences=True))
