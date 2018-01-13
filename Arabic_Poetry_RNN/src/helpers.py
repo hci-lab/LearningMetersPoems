@@ -2,6 +2,7 @@ import arabic
 from itertools import product 
 from pyarabic.araby import strip_tashkeel, strip_tatweel
 import numpy as np
+from numpy import array
 
 
 def separate_token_with_dicrites(token):
@@ -156,10 +157,10 @@ for i in factor_shadda_tanwin('أَشَّدونٌ'):
 '''
 
 
-def string_vectorizer(strng, alphabet=arabic_alphabet):
+def string_vectorizer(strng, alphabet=arabic.alphabet):
     vector = [[0 if char != letter else 1 for char in alphabet]
                   for letter in strng]
-    return array(vector)
+    return  np.array(vector)
 
 def string_with_tashkeel_vectorizer(string, tashkeel=arabic.shortharakat):
     '''

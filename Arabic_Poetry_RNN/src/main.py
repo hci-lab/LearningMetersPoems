@@ -25,34 +25,44 @@ import matplotlib.pyplot as plt
 from keras import backend as K
 from itertools import product 
 import helpers
-from helpers import string_with_tashkeel_vectorizer
+from helpers import string_with_tashkeel_vectorizer,string_vectorizer
 import arabic
+import pyarabic.araby as araby
+
 #from keras.layers.core import
 
 print("Imports Done")
 # =============================================================================
 np.random.seed(7)
-#os.chdir("m://Learning/Master/CombinedWorkspace/Python/DeepLearningMaster/GP-Ripo-master/Arabic_Poetry_RNN/")
+os.chdir("m://Learning/Master/CombinedWorkspace/Python/DeepLearningMaster/GP-Ripo-master/Arabic_Poetry_RNN/src/")
 
 arabic_alphabet = arabic.alphabet
 numberOfUniqueChars = len(arabic_alphabet)
 
+# =======================Functions====================================
+def string_vectorizer(strng, alphabet=arabic.alphabet):
+    vector = [[0 if char != letter else 1 for char in alphabet]
+                  for letter in strng]
+    return  array(vector)
+
 # =======================Program Parameters====================================
 
 load_weights_flag = 0
-Experiement_Name = 'Experiement_1_WITH_Tashkeel_ASIS'
-test_size_param=0.1
-validation_split_param = 0.05
+#Experiement_Name = 'Experiement_1_WITH_Tashkeel_ASIS'
+Experiement_Name = 'Experiement_1_WITH_Tashkeel_ASIS_OldData'
+test_size_param=0.5
+validation_split_param = 0.01
 n_units = 200
-#input_data_path = "./data/All_Data.csv"
-input_data_path = "./data/Almoso3a_Alshe3rya/cleaned_data/All_clean_data.csv"
+input_data_path = "../data/All_Data.csv"
+#input_data_path = "./data/Almoso3a_Alshe3rya/cleaned_data/All_clean_data.csv"
 epochs_param = 20
-batch_size_param = 512
+batch_size_param = 50
+old_date_flag = 1
 #===============================Concatinated Variables ========================
 
-checkpoints_path ="./checkpoints/"+Experiement_Name+"/"
+checkpoints_path ="../checkpoints/"+Experiement_Name+"/"
 check_points_file_path = checkpoints_path+ "/weights-improvement-{epoch:02d}-{val_acc:.2f}.hdf5"
-board_log_dir="./logs/"+Experiement_Name+"/"#+.format(time())
+board_log_dir="../logs/"+Experiement_Name+"/"#+.format(time())
 
 try:
     os.makedirs(board_log_dir)
@@ -63,20 +73,35 @@ except OSError as e:
         raise
 print("Input Parameters Defined and Experiement directory created")
 # =========================Data Loading========================================
+
 sample_arabic_poetry = pd.read_csv(input_data_path, sep = ",")
-cols = [0,1,2,3,4,6,7]
-sample_arabic_poetry.drop(sample_arabic_poetry.columns[cols], axis=1,inplace=True)
-sample_arabic_poetry.columns = [ 'Category','Bayt_Text']
+if (old_date_flag == 1):
+    print("working into old data sample ")
+    cols = [1,2,4]
+    sample_arabic_poetry.drop(sample_arabic_poetry.columns[cols], axis=1,inplace=True)
+    sample_arabic_poetry.columns = ['Bayt_Text', 'Category']
+    sample_arabic_poetry['Bayt_Text'] = sample_arabic_poetry['Bayt_Text'].apply(araby.strip_tashkeel).apply(araby.strip_tatweel)
+    
+    max_Bayt_length =  sample_arabic_poetry.Bayt_Text.map(len).max()
+    
+    Bayt_Text_Encoded = sample_arabic_poetry['Bayt_Text'].apply(string_vectorizer)
+    print("Input Data Bayt_Text encoded done.")
+
+else:
+    print("working on new data sample")
+    cols = [0,1,2,3,4,6,7]
+    sample_arabic_poetry.drop(sample_arabic_poetry.columns[cols], axis=1,inplace=True)
+    sample_arabic_poetry.columns = [ 'Category','Bayt_Text']
+    Bayt_Text_Encoded = sample_arabic_poetry['Bayt_Text'].apply(string_with_tashkeel_vectorizer)
+    print("Input Data Bayt_Text encoded done.")
+
+    
 #sample_arabic_poetry['Bayt_Text'] = sample_arabic_poetry['Bayt_Text'].apply(araby.strip_tashkeel).apply(araby.strip_tatweel)
 max_Bayt_length =  sample_arabic_poetry.Bayt_Text.map(len).max()
 
 print("Input Data Read done.")
-# =============================================================================
 
-# =============================================================================
-#Bayt_Text_Encoded = sample_arabic_poetry['Bayt_Text'].apply(string_vectorizer)
-Bayt_Text_Encoded = sample_arabic_poetry['Bayt_Text'].apply(string_with_tashkeel_vectorizer)
-print("Input Data Bayt_Text encoded done.")
+
 # =============================================================================
 #one hot encoding for classes
 # =============================================================================
