@@ -6,28 +6,26 @@ from numpy import array
 
 
 def separate_token_with_dicrites(token):
-    """gets a token with taskeel, and returns a list contains the token characters with their tashkeel.
+    """gets a token(string) with taskeel, and returns a list of strings,
+    each string in the list represents each character in the token with its own tashkeel.
     Args:
-        param1 (int): list contains the token characters with their tashkeel.
+        token (str): string represents a word or aya or sura
     Returns:
-         [str]: a list contains the token characters with their tashkeel.
+        [str]: a list contains the token characters with their tashkeel.
     """
-
     token_without_tatweel = strip_tatweel(token)
     hroof_with_tashkeel = []
     for index,i in enumerate(token):
-        if token[index] in (arabic.alphabet or arabic.alefat or arabic.hamzat) :
+        if(((token[index] in (arabic.alphabet or arabic.alefat or arabic.hamzat )) or token[index] is ' ' )):
             k = index
-            harf_with_taskeel =token[index]
-            while((k+1) != len(token) and (token[k + 1] in arabic.tashkeel)):
-                harf_with_taskeel = harf_with_taskeel + "" + token[k + 1]
+            harf_with_taskeel = token[index]
+            while((k+1) != len(token) and (token[k+1] in (arabic.tashkeel or 
+            arabic.harakat or arabic.shortharakat or arabic.tanwin))):
+                harf_with_taskeel =harf_with_taskeel+""+token[k+1]
                 k = k + 1
             index = k
             hroof_with_tashkeel.append(harf_with_taskeel)
     return hroof_with_tashkeel
-
-
-
 
 
 binary = [0,1]
@@ -210,3 +208,21 @@ def string_with_tashkeel_vectorizer(string, tashkeel=arabic.shortharakat):
     return np.asarray(representation)
 
 # print(len(string_with_tashkeel_vectorizer('أنا')))
+
+def string_with_tashkeel_vectorizer_OneHot(string):
+    '''
+        * encodes each letter in string with ont-hot vector
+        * returns a list of one-hot vectors a list of (1*182) vectors
+        * letter -> 1*182 vector
+    '''
+    cleanedString = factor_shadda_tanwin(string)
+    charCleanedString = separate_token_with_dicrites(cleanedString)
+    vector = [[0 if char != letter else 1 for char in lettersTashkeelCombination]
+                  for letter in charCleanedString]
+    vector = np.array(vector)
+    return vector
+
+'''
+x = 'ا ب'
+print(string_with_tashkeel_vectorizer_OneHot(x))
+'''
