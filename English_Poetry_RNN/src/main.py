@@ -27,9 +27,11 @@ import random as rn
 
 
 # =======================Program Parameters====================================
-load_weights_flag = 0     #0 or 1
+load_weights_flag = 1     #0 or 1
+# 0-> last wait | 1 max val_acc
+last_or_max_val_acc = 0
 
-Experiement_Name = 'Experiment6'
+Experiement_Name = 'Experiment7'
 layer_number = 3
 #if u need one number for all layers add number alone
 n_units = [200]
@@ -180,6 +182,7 @@ for n in range(layer_number):
 model.add(Dense(units = numbber_of_bohor,activation = 'softmax'))
 
 
+
 #==================================check to load last epoch====================
 # load weights
 if(load_weights_flag == 1):
@@ -190,15 +193,30 @@ if(load_weights_flag == 1):
         all_checkpoints_list = [os.path.join(checkpoints_path,i) for i in checkpoints_path_list]
         #Get the last inserted weight into the checkpoint_path
         all_checkpoints_list_sorted = sorted(all_checkpoints_list, key=os.path.getmtime)
-        print (" max_weight_checkpoints")
-        print(all_checkpoints_list_sorted[-1])
-        max_weight_checkpoints =  all_checkpoints_list_sorted[-1]
-        # load weights
-        model = keras.models.load_model(max_weight_checkpoints)
+        if(last_or_max_val_acc == 0):
+            print ("last check point")
+            if "last" in all_checkpoints_list_sorted[-1]:
+                print(all_checkpoints_list_sorted[-1])
+                max_weight_checkpoints =  all_checkpoints_list_sorted[-1]
+                #load weights
+                model = keras.models.load_model(max_weight_checkpoints)
+            else:
+                sys.exit(0)
+        else:
+            print ("max_weight_checkpoints")
+            print(all_checkpoints_list_sorted[-2])
+            max_weight_checkpoints =  all_checkpoints_list_sorted[-2]
+            #load weights
+            model = keras.models.load_model(max_weight_checkpoints)
+
     except IOError:
         print('An error occured trying to read the file.')
     except:
-        print("No wieghts avialable \n check the paths")
+        if "last" not in  all_checkpoints_list_sorted[-1]:
+            sys.exit("Last epoch don't exist in this modle , you can make last_or_max_val_acc=1 to load the epoch has max val_acc")
+        else:
+            print("No wieghts avialable \n check the paths")
+
 
 
 
@@ -255,6 +273,10 @@ hist = model.fit(X_train,
                  callbacks=callbacks_list,
                  verbose=1)
 
+
+#save last epoch weghits 
+model.save(checkpoints_path+"weights-improvement-last-epoch.hdf5")
+print("Save last epoch Done! ....")
 
 #===========================Evaluate model=====================================
 # Final evaluation of the model
