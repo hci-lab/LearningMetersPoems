@@ -24,12 +24,13 @@ import sys
 from preprocessing import restore
 import tensorflow as tf
 import random as rn
+import re
 
 
 # =======================Program Parameters====================================
 load_weights_flag = 1     #0 or 1
 # 0-> last wait | 1 max val_acc
-last_or_max_val_acc = 0
+last_or_max_val_acc = 1
 
 Experiement_Name = 'Experiment11-con1'
 layer_number = 2
@@ -193,27 +194,30 @@ if(load_weights_flag == 1):
         all_checkpoints_list_sorted = sorted(all_checkpoints_list, key=os.path.getmtime)
         if(last_or_max_val_acc == 0):
             print ("last check point")
-            if "last" in all_checkpoints_list_sorted[-1]:
-                print(all_checkpoints_list_sorted[-1])
-                max_weight_checkpoints =  all_checkpoints_list_sorted[-1]
-                #load weights
-                model = keras.models.load_model(max_weight_checkpoints)
-            else:
-                sys.exit(0)
-        else:
-            print ("max_weight_checkpoints")
-            print(all_checkpoints_list_sorted[-2])
-            max_weight_checkpoints =  all_checkpoints_list_sorted[-2]
+            print(checkpoints_path+'weights-improvement-last-epoch.hdf5')
+            max_weight_checkpoints = checkpoints_path+'weights-improvement-last-epoch.hdf5'#all_checkpoints_list_sorted[-1]
             #load weights
             model = keras.models.load_model(max_weight_checkpoints)
-
+        else:
+            print ("max_weight_checkpoints")
+            all_checkpoints_list_sorted.remove(checkpoints_path+'weights-improvement-last-epoch.hdf5')
+            epochs_list = [int(re.findall(r'-[0-9|.]*-',path)[0].replace('-',""))
+                           for path in all_checkpoints_list_sorted]
+            max_checkpoint = all_checkpoints_list_sorted[epochs_list.index(max(epochs_list))]
+            print(max_checkpoint)
+            #load weights
+            model = keras.models.load_model(max_checkpoint)
+        sys.exit(0)
     except IOError:
+        sys.exit(0)
         print('An error occured trying to read the file.')
     except:
         if "last" not in  all_checkpoints_list_sorted[-1]:
             sys.exit("Last epoch don't exist in this modle , you can make last_or_max_val_acc=1 to load the epoch has max val_acc")
         else:
             print("No wieghts avialable \n check the paths")
+
+
 
 
 
