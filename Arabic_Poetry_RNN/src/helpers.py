@@ -198,7 +198,7 @@ def string_with_tashkeel_vectorizer(string, tashkeel=arabic.shortharakat):
     # 4* getting encoding for each letter from input string
     representation = []
     for x in string_clean:
-        index = string_clean.index(x)
+        index = arabic_alphabet_tashkeel.index(x)
         # Shift index by one
         representation.append(encoding_combination_[index + 1])
 
