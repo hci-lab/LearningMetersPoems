@@ -27,14 +27,14 @@ import random as rn
 
 
 # =======================Program Parameters====================================
-load_weights_flag = 1     #0 or 1
+load_weights_flag = 0     #0 or 1
 # 0-> last wait | 1 max val_acc
 last_or_max_val_acc = 1
 
-Experiement_Name = 'Experiment7'
-layer_number = 3
+Experiement_Name = 'Experiment9'
+layer_number = 4
 #if u need one number for all layers add number alone
-n_units = [200]
+n_units = [300]
 # 1->LSTM  , 2->GRU , 3->Bi-LSTM 
 cell_mode = 2
 
@@ -230,6 +230,12 @@ model.compile(optimizer = 'adam',
 
 
 #==============================Callbacks========================================
+class last_epoch_saver(keras.callbacks.Callback):
+    def on_epoch_end(self, epoch, logs={}):
+        #save last epoch weghits 
+        self.model.save(checkpoints_path+"weights-improvement-last-epoch.hdf5")
+        print("Save last epoch Done! ....")
+
 checkpoint = ModelCheckpoint(check_points_file_path, 
                              monitor='val_acc', 
                              verbose=1,
@@ -252,12 +258,14 @@ earlystopping = keras.callbacks.EarlyStopping(monitor='val_acc',
                                              verbose=1,
                                              mode='auto')
 
+last_epoch_saver_ = last_epoch_saver()
+
 if earlystopping_patience ==-1:
-    callbacks_list = [checkpoint,tensorboard]
-    print("Add  checkpoint - tensorboard")
+    callbacks_list = [checkpoint,tensorboard,last_epoch_saver_]
+    print("Add  checkpoint - tensorboard - last_epoch_saver")
 else:
-    callbacks_list = [checkpoint,tensorboard,earlystopping]
-    print("Add  checkpoint - tensorboard - earlystopping")
+    callbacks_list = [checkpoint,tensorboard,earlystopping,last_epoch_saver_]
+    print("Add  checkpoint - tensorboard - earlystopping - last_epoch_saver")
     
 print(model.summary())
 #==============================================================================
