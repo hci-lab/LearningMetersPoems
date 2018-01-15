@@ -32,10 +32,10 @@ load_weights_flag = 1     #0 or 1
 # 0-> last wait | 1 max val_acc
 last_or_max_val_acc = 0
 
-Experiement_Name = 'Experiment11-con1'
+Experiement_Name = 'Experiment13'
 layer_number = 2
 #if u need one number for all layers add number alone
-n_units = [20]
+n_units = [40]
 # 1->LSTM  , 2->GRU , 3->Bi-LSTM 
 cell_mode = 2
 
@@ -45,7 +45,7 @@ test_size_param = 0.1
 validation_split_param = 0.1
 batch_size_param = 64
 
-epochs_param = 50
+epochs_param = 100
 #num of epoch should be wait when monitor don't change
 earlystopping_patience=-1  
 
