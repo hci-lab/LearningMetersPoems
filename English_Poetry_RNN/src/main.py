@@ -29,7 +29,7 @@ import random as rn
 # =======================Program Parameters====================================
 load_weights_flag = 1     #0 or 1
 # 0-> last wait | 1 max val_acc
-last_or_max_val_acc = 0
+last_or_max_val_acc = 1
 
 Experiement_Name = 'Experiment7'
 layer_number = 3
