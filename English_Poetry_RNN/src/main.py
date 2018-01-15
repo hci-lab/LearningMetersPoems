@@ -27,11 +27,11 @@ import random as rn
 
 
 # =======================Program Parameters====================================
-load_weights_flag = 0     #0 or 1
+load_weights_flag = 1     #0 or 1
 # 0-> last wait | 1 max val_acc
-last_or_max_val_acc = 1
+last_or_max_val_acc = 0
 
-Experiement_Name = 'Experiment11'
+Experiement_Name = 'Experiment11-con1'
 layer_number = 2
 #if u need one number for all layers add number alone
 n_units = [20]
