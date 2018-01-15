@@ -28,14 +28,14 @@ import re
 
 
 # =======================Program Parameters====================================
-load_weights_flag = 1     #0 or 1
+load_weights_flag = 0     #0 or 1
 # 0-> last wait | 1 max val_acc
 last_or_max_val_acc = 0
 
-Experiement_Name = 'Experiment13'
-layer_number = 2
+Experiement_Name = 'Experiment15'
+layer_number = 3
 #if u need one number for all layers add number alone
-n_units = [40]
+n_units = [20]
 # 1->LSTM  , 2->GRU , 3->Bi-LSTM 
 cell_mode = 2
 
