@@ -30,7 +30,7 @@ import re
 # =======================Program Parameters====================================
 load_weights_flag = 1     #0 or 1
 # 0-> last wait | 1 max val_acc
-last_or_max_val_acc = 1
+last_or_max_val_acc = 0
 
 Experiement_Name = 'Experiment11-con1'
 layer_number = 2
@@ -207,9 +207,7 @@ if(load_weights_flag == 1):
             print(max_checkpoint)
             #load weights
             model = keras.models.load_model(max_checkpoint)
-        sys.exit(0)
     except IOError:
-        sys.exit(0)
         print('An error occured trying to read the file.')
     except:
         if "last" not in  all_checkpoints_list_sorted[-1]:
