@@ -58,6 +58,7 @@ input_data_path = "../data/All_Data.csv"
 epochs_param = 20
 batch_size_param = 50
 old_date_flag = 1
+new_encoding_flag = 1
 #===============================Concatinated Variables ========================
 
 checkpoints_path ="../checkpoints/"+Experiement_Name+"/"
@@ -84,7 +85,10 @@ if (old_date_flag == 1):
     
     max_Bayt_length =  sample_arabic_poetry.Bayt_Text.map(len).max()
     
-    Bayt_Text_Encoded = sample_arabic_poetry['Bayt_Text'].apply(string_vectorizer)
+    if(new_encoding_flag ==0 ):
+        Bayt_Text_Encoded = sample_arabic_poetry['Bayt_Text'].apply(string_vectorizer)
+    else:
+        Bayt_Text_Encoded = sample_arabic_poetry['Bayt_Text'].apply(string_with_tashkeel_vectorizer)
     print("Input Data Bayt_Text encoded done.")
 
 else:
@@ -145,12 +149,12 @@ print("Padding done.")
 # create model
 K.set_learning_phase(1) #set learning phase
 
-n_units = 1000
+n_units = 500
 model = Sequential()
 
 
 # Adding the input layer and the LSTM layer
-if (old_date_flag == 1):
+if (new_encoding_flag == 0):
     model.add(LSTM(units = n_units, input_shape=(max_Bayt_length, numberOfUniqueChars), return_sequences=True))
 else:
     model.add(LSTM(units = n_units, input_shape=(max_Bayt_length, 8), return_sequences=True))
