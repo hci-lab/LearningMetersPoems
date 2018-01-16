@@ -32,12 +32,12 @@ load_weights_flag = 1     #0 or 1
 # 0-> last wait | 1 max val_acc
 last_or_max_val_acc = 0
 
-Experiement_Name = 'Experiment23-con1'
+Experiement_Name = 'Experiment25'
 layer_number = 2
 #if u need one number for all layers add number alone
-n_units = [20]
+n_units = [40]
 # 1->LSTM  , 2->GRU , 3->Bi-LSTM 
-cell_mode = 2
+cell_mode = 2 
 
 # 0 if you don't need
 drop_out_rate = 0#0.1
