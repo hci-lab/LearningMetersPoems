@@ -3,6 +3,7 @@ from itertools import product
 from pyarabic.araby import strip_tashkeel, strip_tatweel
 import numpy as np
 from numpy import array
+import re
 
 
 def separate_token_with_dicrites(token):
@@ -31,7 +32,7 @@ def separate_token_with_dicrites(token):
 binary = [0,1]
 encoding_combination = [list(i) for i in product([0, 1], repeat=8)]
 
-def get_alphabet_tashkeel_combination(tashkeel=arabic.shortharakat):
+def get_alphabet_tashkeel_combination(tashkeel=arabic.shortharakat+[arabic.shadda]):
 
     '''
         * Creating Letters with (fatha, damma, kasra, sukun) combinations
@@ -97,6 +98,7 @@ def factor_shadda_tanwin(string):
     * factors tanwin to ?????????
     # Some redundancy is simpler. :"D
     '''
+    string = re.sub(r'ّ+', 'ّ', x)
     factoredString = ''
     charsList = separate_token_with_dicrites(string)
     # print(charsList)
@@ -160,7 +162,7 @@ def string_vectorizer(strng, alphabet=arabic.alphabet):
                   for letter in strng]
     return  np.array(vector)
 
-def string_with_tashkeel_vectorizer(string, tashkeel=arabic.shortharakat):
+def string_with_tashkeel_vectorizer(string, tashkeel=arabic.shortharakat + [arabic.shadda]):
     '''
         return: 8*1 vector representation for each letter in string
     '''
@@ -174,21 +176,8 @@ def string_with_tashkeel_vectorizer(string, tashkeel=arabic.shortharakat):
     # factor shaddah and tanwin
     string = factor_shadda_tanwin(string)
 
-    string_clean = []  # harakah is concatinated with previous latter.
-    i = 0
-    while True:
-        # it is the last item?!
-        if i == len(string) - 1:
-            string_clean.append(string[i])
-            break
-        elif i > len(string) - 1:
-            break
-        elif string[i + 1] not in tashkeel:
-            string_clean.append(string[i])
-            i += 1
-        elif string[i + 1] in tashkeel:
-            string_clean.append(string[i] + string[i + 1])
-            i += 2
+    # harakah is concatinated with previous latter.
+    string_clean = separate_token_with_dicrites(string)
 
     # 1* Building letter and taskell compinations
     arabic_alphabet_tashkeel = lettersTashkeelCombination
@@ -199,8 +188,8 @@ def string_with_tashkeel_vectorizer(string, tashkeel=arabic.shortharakat):
     representation = []
     for x in string_clean:
         index = arabic_alphabet_tashkeel.index(x)
-        # Shift index by one
-        representation.append(encoding_combination_[index + 1])
+
+        representation.append(encoding_combination_[index])
 
     reminder = 111 - len(representation)
     for i in range(reminder):
