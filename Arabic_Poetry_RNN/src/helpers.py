@@ -194,7 +194,7 @@ def string_with_tashkeel_vectorizer(string, tashkeel=arabic.shortharakat + [arab
 
         representation.append(encoding_combination_[index])
 
-    reminder = 111 - len(representation)
+    reminder = 82 - len(representation)
     for i in range(reminder):
         representation.append([0, 0, 0, 0, 0, 0, 0, 0])
     return np.asarray(representation)
@@ -228,7 +228,4 @@ for x in get_alphabet_tashkeel_combination():
 print(len(all_traing))
 '''
 
-'''
-x = '\n \n'
-print(separate_token_with_dicrites(x))
 '''
