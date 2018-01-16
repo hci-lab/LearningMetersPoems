@@ -111,14 +111,14 @@ alphabet = [
         ]
 
 
-tashkeel      = (fathatan, dammatan, kasratan, fatha, damma, kasra, sukun, shadda)
-harakat       = (fathatan, dammatan, kasratan, fatha, damma, kasra, sukun)
+tashkeel      = [fathatan, dammatan, kasratan, fatha, damma, kasra, sukun, shadda]
+harakat       = [fathatan, dammatan, kasratan, fatha, damma, kasra, sukun]
 # This order is important, I depend on it in letter_of_encoding return.
-shortharakat  = (fatha, damma, kasra, sukun)
-tanwin        = (fathatan, dammatan, kasratan)
+shortharakat  = [fatha, damma, kasra, sukun]
+tanwin        = [fathatan, dammatan, kasratan]
 not_def_haraka = tatweel
-liguatures = (lam_alef, lam_alef_hamza_above, lam_alef_hamza_below, lam_alef_mad_above)
-hamzat = (
+liguatures = [lam_alef, lam_alef_hamza_above, lam_alef_hamza_below, lam_alef_mad_above]
+hamzat = [
             hamza, 
             waw_hamza, 
             yeh_hamza, 
@@ -126,8 +126,8 @@ hamzat = (
             hamza_below, 
             alef_hamza_below, 
             alef_hamza_above, 
-            )
-alefat = (
+            ]
+alefat = [
             alef, 
             alef_mad, 
             alef_hamza_above, 
@@ -136,15 +136,15 @@ alefat = (
             alef_maksura, 
             small_alef, 
 
-        )
-weak   = ( alef,  waw,  yeh,  alef_maksura)
-yehlike =  ( yeh,   yeh_hamza,   alef_maksura,    small_yeh  )
+        ]
+weak   = [ alef,  waw,  yeh,  alef_maksura]
+yehlike =  [ yeh,   yeh_hamza,   alef_maksura,    small_yeh  ]
 
-wawLike   = ( waw,   waw_hamza,   small_waw )
-tehLike   = ( teh,   teh_marbuta )
+wawLike   = [ waw,   waw_hamza,   small_waw ]
+tehLike   = [ teh,   teh_marbuta ]
 
-small   = ( small_alef,  small_waw,  small_yeh)
-moon_letters = (hamza    , 
+small   = [ small_alef,  small_waw,  small_yeh]
+moon_letters = [hamza    , 
         alef_mad         , 
         alef_hamza_above , 
         alef_hamza_below , 
@@ -162,8 +162,8 @@ moon_letters = (hamza    ,
         heh              , 
         waw              , 
         yeh
-    )
-sun_letters = (
+    ]
+sun_letters = [
         teh              , 
         theh             , 
         dal              , 
@@ -178,7 +178,7 @@ sun_letters = (
         zah              , 
         lam              , 
         noon             , 
-    )
+    ]
 
 """
     * Some alphabet building tools
