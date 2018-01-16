@@ -6,9 +6,11 @@ from numpy import array
 import re
 
 
+
 def separate_token_with_dicrites(token):
     """gets a token(string) with taskeel, and returns a list of strings,
-    each string in the list represents each character in the token with its own tashkeel.
+    each string in the list represents each character in the token with its own
+tashkeel.
     Args:
         token (str): string represents a word or aya or sura
     Returns:
@@ -17,7 +19,8 @@ def separate_token_with_dicrites(token):
     token_without_tatweel = strip_tatweel(token)
     hroof_with_tashkeel = []
     for index,i in enumerate(token):
-        if(((token[index] in (arabic.alphabet or arabic.alefat or arabic.hamzat )) or token[index] is ' ' )):
+        if(((token[index] in (arabic.alphabet or arabic.alefat or arabic.hamzat
+)) or token[index] is ' ' or  token[index] is "\n" )):
             k = index
             harf_with_taskeel = token[index]
             while((k+1) != len(token) and (token[k+1] in (arabic.tashkeel or 
@@ -223,4 +226,9 @@ for x in get_alphabet_tashkeel_combination():
     all_traing.append(x)
     print(string_with_tashkeel_vectorizer(x))
 print(len(all_traing))
+'''
+
+'''
+x = '\n \n'
+print(separate_token_with_dicrites(x))
 '''
