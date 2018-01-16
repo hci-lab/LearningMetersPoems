@@ -28,7 +28,7 @@ import re
 
 
 # =======================Program Parameters====================================
-load_weights_flag = 1     #0 or 1
+load_weights_flag = 0     #0 or 1
 # 0-> last wait | 1 max val_acc
 last_or_max_val_acc = 0
 
