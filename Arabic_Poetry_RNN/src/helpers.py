@@ -226,3 +226,12 @@ def string_with_tashkeel_vectorizer_OneHot(string):
 x = 'ا ب'
 print(string_with_tashkeel_vectorizer_OneHot(x))
 '''
+
+'''
+# Exhaustive test for 8bit encoding
+all_traing = []
+for x in get_alphabet_tashkeel_combination():
+    all_traing.append(x)
+    print(string_with_tashkeel_vectorizer(x))
+print(len(all_traing))
+'''
