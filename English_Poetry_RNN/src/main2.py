@@ -32,20 +32,20 @@ load_weights_flag = 0     #0 or 1
 # 0-> last wait | 1 max val_acc
 last_or_max_val_acc = 0
 
-Experiement_Name = 'Experiment27'
-layer_number = 2
+Experiement_Name = 'Experiment31'
+layer_number = 3
 #if u need one number for all layers add number alone
 n_units = [40]
 # 1->LSTM  , 2->GRU , 3->Bi-LSTM 
-cell_mode = 2 
+cell_mode = 4 
 
 # 0 if you don't need
 drop_out_rate = 0#0.1
 test_size_param = 0.1
 validation_split_param = 0.1
-batch_size_param = 32
+batch_size_param = 64
 
-epochs_param = 100
+epochs_param = 150
 #num of epoch should be wait when monitor don't change
 earlystopping_patience=-1  
 
@@ -88,7 +88,7 @@ except OSError as e:
 
     
 # =========================Data Loading========================================
-X = restore("../data/data_matrix_X_binary_encoding.h5","X")
+X = restore("../data/data_matrix_X_one_hot_encoding.h5","X")
 Y = restore("../data/data_matrix_Y_one_hot_encoding.h5","Y")
 max_Bayt_length=X.shape[1]
 char_dimension=X.shape[2]
