@@ -101,7 +101,6 @@ def factor_shadda_tanwin(string):
     * factors tanwin to ?????????
     # Some redundancy is simpler. :"D
     '''
-    string = re.sub(r'ّ+', 'ّ', string)
     factoredString = ''
     charsList = separate_token_with_dicrites(string)
     # print(charsList)
