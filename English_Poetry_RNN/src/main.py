@@ -32,7 +32,7 @@ load_weights_flag = 0     #0 or 1
 # 0-> last wait | 1 max val_acc
 last_or_max_val_acc = 0
 
-Experiement_Name = 'Experiment33'
+Experiement_Name = 'Experiment35'
 layer_number = 2
 #if u need one number for all layers add number alone
 n_units = [20]
@@ -41,8 +41,8 @@ cell_mode = 3
 
 # 0 if you don't need
 drop_out_rate = 0#0.1
-test_size_param = 0.2
-validation_split_param = 0.2
+test_size_param = 0.1
+validation_split_param = 0.1
 batch_size_param = 64
 
 epochs_param = 100
@@ -88,7 +88,7 @@ except OSError as e:
 
     
 # =========================Data Loading========================================
-X = restore("../data/data_matrix_X_binary_encoding.h5","X")
+X = restore("../data/data_matrix_X_one_hot_encoding.h5","X")
 Y = restore("../data/data_matrix_Y_one_hot_encoding.h5","Y")
 max_Bayt_length=X.shape[1]
 char_dimension=X.shape[2]
