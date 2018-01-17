@@ -107,7 +107,7 @@ else:
 
     
 #input_arabic_poetry_dataset['Bayt_Text'] = input_arabic_poetry_dataset['Bayt_Text'].apply(araby.strip_tashkeel).apply(araby.strip_tatweel)
-
+Bayt_Text_Encoded_Stacked = np.stack(Bayt_Text_Encoded,axis = 0)
 max_Bayt_length =  input_arabic_poetry_dataset.Bayt_Text.map(len).max()
 
 print("Input Data Read done.")
@@ -137,7 +137,7 @@ print("Input Data Category encoded done.")
 
 
 # =============================================================================
-X_train, X_test, Y_train, Y_test=train_test_split(Bayt_Text_Encoded, #bayts
+X_train, X_test, Y_train, Y_test=train_test_split(Bayt_Text_Encoded_Stacked, #bayts
                                                     Bayt_Bahr_encoded, #classes
                                                     test_size=test_size_param, 
                                                     random_state=0)
@@ -173,10 +173,10 @@ model.add(LSTM(n_units, return_sequences=True))
 model.add(LSTM(n_units, return_sequences=True))
 #model.add(Dropout(0.1,seed=7)) 
 
-model.add(LSTM(n_units, return_sequences=True))
+model.add(LSTM(n_units))
 #model.add(Dropout(0.1,seed=7)) 
 
-model.add(LSTM(n_units))
+#model.add(LSTM(n_units))
 #model.add(Dropout(0.1,seed=7)) 
  
 
