@@ -164,7 +164,7 @@ def string_vectorizer(strng, alphabet=arabic.alphabet):
                   for letter in strng]
     return  np.array(vector)
 
-def string_with_tashkeel_vectorizer(string, tashkeel=arabic.shortharakat + [arabic.shadda]):
+def string_with_tashkeel_vectorizer(string, padding_length):
     '''
         return: 8*1 vector representation for each letter in string
     '''
@@ -193,7 +193,7 @@ def string_with_tashkeel_vectorizer(string, tashkeel=arabic.shortharakat + [arab
 
         representation.append(encoding_combination_[index])
 
-    reminder = 82 - len(representation)
+    reminder = padding_length - len(representation)
     for i in range(reminder):
         representation.append([0, 0, 0, 0, 0, 0, 0, 0])
     return np.asarray(representation)
