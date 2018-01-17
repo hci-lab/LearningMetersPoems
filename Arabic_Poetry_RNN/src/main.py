@@ -6,11 +6,17 @@
 # Read padded data from the files 
 # Add option to read from padded or to rerun it again.
 # =============================================================================
+
+# =============================================================================
+import os,errno
+os.chdir("m://Learning/Master/CombinedWorkspace/Python/DeepLearningMaster/MasterCode/ArabicPoetry-1/Arabic_Poetry_RNN/src/")
+# =============================================================================
+
+
 import numpy as np
 from numpy import array
 from numpy import argmax
 import pandas as pd
-import os,errno
 from time import time
 import keras
 from keras.models import Sequential
@@ -28,35 +34,32 @@ import helpers
 from helpers import string_with_tashkeel_vectorizer,string_vectorizer
 import arabic
 import pyarabic.araby as araby
+import re
 
 #from keras.layers.core import
 
 print("Imports Done")
 # =============================================================================
 np.random.seed(7)
-os.chdir("m://Learning/Master/CombinedWorkspace/Python/DeepLearningMaster/GP-Ripo-master/Arabic_Poetry_RNN/src/")
 
 arabic_alphabet = arabic.alphabet
 numberOfUniqueChars = len(arabic_alphabet)
-
-# =======================Functions====================================
-def string_vectorizer(strng, alphabet=arabic.alphabet):
-    vector = [[0 if char != letter else 1 for char in alphabet]
-                  for letter in strng]
-    return  array(vector)
 
 # =======================Program Parameters====================================
 
 load_weights_flag = 0
 #Experiement_Name = 'Experiement_1_WITH_Tashkeel_ASIS'
-Experiement_Name = 'Experiement_1_WITH_Tashkeel_ASIS_OldData'
-test_size_param=0.5
-validation_split_param = 0.01
-n_units = 200
+Experiement_Name = 'Experiement_2_WITH_Tashkeel_ASIS_OldData_8bits_50units'
+earlystopping_patience=-1  
+test_size_param=0.1
+validation_split_param = 0.1
+n_units = 50
 input_data_path = "../data/All_Data.csv"
+# 0-> last wait | 1 max val_acc
+last_or_max_val_acc = 0
 #input_data_path = "./data/Almoso3a_Alshe3rya/cleaned_data/All_clean_data.csv"
-epochs_param = 20
-batch_size_param = 50
+epochs_param = 10
+batch_size_param = 32
 old_date_flag = 1
 new_encoding_flag = 1
 #===============================Concatinated Variables ========================
@@ -75,33 +78,37 @@ except OSError as e:
 print("Input Parameters Defined and Experiement directory created")
 # =========================Data Loading========================================
 
-sample_arabic_poetry = pd.read_csv(input_data_path, sep = ",")
+input_arabic_poetry_dataset = pd.read_csv(input_data_path, sep = ",")
 if (old_date_flag == 1):
     print("working into old data sample ")
     cols = [1,2,4]
-    sample_arabic_poetry.drop(sample_arabic_poetry.columns[cols], axis=1,inplace=True)
-    sample_arabic_poetry.columns = ['Bayt_Text', 'Category']
-    sample_arabic_poetry['Bayt_Text'] = sample_arabic_poetry['Bayt_Text'].apply(araby.strip_tashkeel).apply(araby.strip_tatweel)
+    input_arabic_poetry_dataset.drop(input_arabic_poetry_dataset.columns[cols], axis=1,inplace=True)
+    input_arabic_poetry_dataset.columns = ['Bayt_Text', 'Category']
+    our_alphabets = "".join(arabic.alphabet) + "".join(arabic.tashkeel)+" "
+    our_alphabets = "".join(our_alphabets)
+    input_arabic_poetry_dataset['Bayt_Text'] = input_arabic_poetry_dataset['Bayt_Text'].apply(lambda x: re.sub(r'[^'+our_alphabets+']','',str(x))).apply(lambda x: re.sub(r'  *'," ",x)).apply(lambda x: re.sub(r'ّ+', 'ّ', x)).apply(lambda x: x.strip())
     
-    max_Bayt_length =  sample_arabic_poetry.Bayt_Text.map(len).max()
+    input_arabic_poetry_dataset['Bayt_Text'] = input_arabic_poetry_dataset['Bayt_Text'].apply(araby.strip_tashkeel).apply(araby.strip_tatweel)
+    #    
     
     if(new_encoding_flag ==0 ):
-        Bayt_Text_Encoded = sample_arabic_poetry['Bayt_Text'].apply(string_vectorizer)
+        Bayt_Text_Encoded = input_arabic_poetry_dataset['Bayt_Text'].apply(string_vectorizer)
     else:
-        Bayt_Text_Encoded = sample_arabic_poetry['Bayt_Text'].apply(string_with_tashkeel_vectorizer)
+        Bayt_Text_Encoded = input_arabic_poetry_dataset['Bayt_Text'].apply(string_with_tashkeel_vectorizer)
     print("Input Data Bayt_Text encoded done.")
 
 else:
     print("working on new data sample")
     cols = [0,1,2,3,4,6,7]
-    sample_arabic_poetry.drop(sample_arabic_poetry.columns[cols], axis=1,inplace=True)
-    sample_arabic_poetry.columns = [ 'Category','Bayt_Text']
-    Bayt_Text_Encoded = sample_arabic_poetry['Bayt_Text'].apply(string_with_tashkeel_vectorizer)
+    input_arabic_poetry_dataset.drop(input_arabic_poetry_dataset.columns[cols], axis=1,inplace=True)
+    input_arabic_poetry_dataset.columns = [ 'Category','Bayt_Text']
+    Bayt_Text_Encoded = input_arabic_poetry_dataset['Bayt_Text'].apply(string_with_tashkeel_vectorizer)
     print("Input Data Bayt_Text encoded done.")
 
     
-#sample_arabic_poetry['Bayt_Text'] = sample_arabic_poetry['Bayt_Text'].apply(araby.strip_tashkeel).apply(araby.strip_tatweel)
-max_Bayt_length =  sample_arabic_poetry.Bayt_Text.map(len).max()
+#input_arabic_poetry_dataset['Bayt_Text'] = input_arabic_poetry_dataset['Bayt_Text'].apply(araby.strip_tashkeel).apply(araby.strip_tatweel)
+
+max_Bayt_length =  input_arabic_poetry_dataset.Bayt_Text.map(len).max()
 
 print("Input Data Read done.")
 
@@ -109,7 +116,7 @@ print("Input Data Read done.")
 # =============================================================================
 #one hot encoding for classes
 # =============================================================================
-Bayt_Bahr = sample_arabic_poetry['Category']
+Bayt_Bahr = input_arabic_poetry_dataset['Category']
 numbber_of_bohor = Bayt_Bahr.unique().size
 
 # integer encode
@@ -130,7 +137,7 @@ print("Input Data Category encoded done.")
 
 
 # =============================================================================
-X_train, X_test, y_train, y_test=train_test_split(Bayt_Text_Encoded, #bayts
+X_train, X_test, Y_train, Y_test=train_test_split(Bayt_Text_Encoded, #bayts
                                                     Bayt_Bahr_encoded, #classes
                                                     test_size=test_size_param, 
                                                     random_state=0)
@@ -138,18 +145,17 @@ X_train, X_test, y_train, y_test=train_test_split(Bayt_Text_Encoded, #bayts
 print("Input Train/Test Split done.")
 # =================================Padding=====================================
 
-X_train_padded = sequence.pad_sequences(X_train, maxlen=max_Bayt_length)
-X_test_padded = sequence.pad_sequences(X_test, maxlen=max_Bayt_length)
+#X_train_padded = sequence.pad_sequences(X_train, maxlen=max_Bayt_length)
+#X_test_padded = sequence.pad_sequences(X_test, maxlen=max_Bayt_length)
 
-print("Padding done.")
+#print("Padding done.")
 # =============================================================================
 
 
 # =========================With Bi-LSTM Layers ================================
 # create model
-K.set_learning_phase(1) #set learning phase
-
-n_units = 500
+#K.set_learning_phase(1) #set learning phase
+#
 model = Sequential()
 
 
@@ -159,25 +165,26 @@ if (new_encoding_flag == 0):
 else:
     model.add(LSTM(units = n_units, input_shape=(max_Bayt_length, 8), return_sequences=True))
     
-model.add(Dropout(0.1,seed=7)) 
+#model.add(Dropout(0.1,seed=7)) 
 
 model.add(LSTM(n_units, return_sequences=True))
-model.add(Dropout(0.1,seed=7)) 
+#model.add(Dropout(0.1,seed=7)) 
 
 model.add(LSTM(n_units, return_sequences=True))
-model.add(Dropout(0.1,seed=7)) 
+#model.add(Dropout(0.1,seed=7)) 
 
 model.add(LSTM(n_units, return_sequences=True))
-model.add(Dropout(0.1,seed=7)) 
+#model.add(Dropout(0.1,seed=7)) 
 
 model.add(LSTM(n_units))
-model.add(Dropout(0.1,seed=7)) 
+#model.add(Dropout(0.1,seed=7)) 
  
 
 # Adding the output layer
 model.add(Dense(units = numbber_of_bohor,activation = 'softmax'))
 
-# load weights
+
+#===========================load weights====================================
 if(load_weights_flag == 1):
     try:
         #List all avialble checkpoints into the directory
@@ -185,6 +192,22 @@ if(load_weights_flag == 1):
         all_checkpoints_list = [os.path.join(checkpoints_path,i) for i in checkpoints_path_list]
         #Get the last inserted weight into the checkpoint_path
         all_checkpoints_list_sorted = sorted(all_checkpoints_list, key=os.path.getmtime)
+        if(last_or_max_val_acc == 0):
+            print ("last check point")
+            print(checkpoints_path+'weights-improvement-last-epoch.hdf5')
+            max_weight_checkpoints = checkpoints_path+'weights-improvement-last-epoch.hdf5'#all_checkpoints_list_sorted[-1]
+            #load weights
+            model = keras.models.load_model(max_weight_checkpoints)
+        else:
+            print ("max_weight_checkpoints")
+            all_checkpoints_list_sorted.remove(checkpoints_path+'weights-improvement-last-epoch.hdf5')
+            epochs_list = [int(re.findall(r'-[0-9|.]*-',path)[0].replace('-',""))
+                           for path in all_checkpoints_list_sorted]
+            max_checkpoint = all_checkpoints_list_sorted[epochs_list.index(max(epochs_list))]
+            print(max_checkpoint)
+            #load weights
+            model = keras.models.load_model(max_checkpoint)
+
         print (" max_weight_checkpoints")
         print(all_checkpoints_list_sorted[-1])
         max_weight_checkpoints =  all_checkpoints_list_sorted[-1]
@@ -193,22 +216,33 @@ if(load_weights_flag == 1):
     except IOError:
         print('An error occured trying to read the file.')
     except:
-        print("No wieghts avialable \n check the paths")
-
+        if "last" not in  all_checkpoints_list_sorted[-1]:
+            sys.exit("Last epoch don't exist in this modle , you can make last_or_max_val_acc=1 to load the epoch has max val_acc")
+        else:
+            print("No wieghts avialable \n check the paths")
         
 # Compiling the RNN
 model.compile(optimizer = 'adam', 
               loss='categorical_crossentropy',
               metrics = ['accuracy'])
 print("Model Defined and compliled.")
-print(model.summary())
+
+#===========================last_epoch_saver====================================
+class last_epoch_saver(keras.callbacks.Callback):
+    def on_epoch_end(self, epoch, logs={}):
+        #save last epoch weghits 
+        self.model.save(checkpoints_path+"weights-improvement-last-epoch.hdf5")
+        print("Save last epoch Done! ....")
+
 
 checkpoint = ModelCheckpoint(check_points_file_path, 
                              monitor='val_acc', 
                              verbose=1,
                              save_best_only=True, 
                              mode='max')
+
 print("Model checkpoint defined to track val_acc")
+#===========================tensorboard========================================
 tensorboard  = keras.callbacks.TensorBoard(log_dir=board_log_dir , 
                                            histogram_freq=0, 
                                            batch_size=batch_size_param, 
@@ -218,27 +252,70 @@ tensorboard  = keras.callbacks.TensorBoard(log_dir=board_log_dir ,
                                            embeddings_freq=0, 
                                            embeddings_layer_names=None, 
                                            embeddings_metadata=None)
+
 print("Model tensorboard defined")
+#==============================================================================    
+#
+#===========================earlystopping======================================
+earlystopping = keras.callbacks.EarlyStopping(monitor='val_acc',
+                                             min_delta=0,
+                                             patience=earlystopping_patience,
+                                             verbose=1,
+                                             mode='auto')
+
+
+last_epoch_saver_ = last_epoch_saver()
+
 callbacks_list = [checkpoint,tensorboard]
 
+if earlystopping_patience ==-1:
+    callbacks_list = [checkpoint,tensorboard,last_epoch_saver_]
+    print("Add  checkpoint - tensorboard - last_epoch_saver")
+else:
+    callbacks_list = [checkpoint,tensorboard,earlystopping,last_epoch_saver_]
+    print("Add  checkpoint - tensorboard - earlystopping - last_epoch_saver")
+#==============================================================================    
+    
+print(model.summary())
 
 print("Model Training and validation started")
+
 # Fitting the RNN to the Training set
-hist = model.fit(X_train_padded, 
-                 y_train, 
+#hist = model.fit(X_train_padded, 
+#                 y_train, 
+#                 validation_split = validation_split_param, 
+#                 epochs=epochs_param, 
+#                 batch_size=batch_size_param, 
+#                 callbacks=callbacks_list,
+#                 verbose=1)
+
+
+#=============================Fitting Model====================================
+# Fitting the RNN to the Training set
+hist = model.fit(X_train, 
+                 Y_train, 
                  validation_split = validation_split_param, 
                  epochs=epochs_param, 
                  batch_size=batch_size_param, 
                  callbacks=callbacks_list,
                  verbose=1)
+#==============================================================================
 
+#==============================================================================
+#save last epoch weghits 
+model.save(checkpoints_path+"weights-improvement-last-epoch.hdf5")
+print("Save last epoch Done! ....")
+
+#==============================================================================
 print("Model Training and validation finished")
 print(history.losses)
 
+#===========================Evaluate model=====================================
 # Final evaluation of the model
-scores = model.evaluate(X_test_padded, y_test, verbose=1)
+scores = model.evaluate(X_test, Y_test, verbose=1)
 print("Accuracy: %.2f%%" % (scores[1]*100))
 
+#==============================================================================
 
 
 # ===========================Ploting===========================================
