@@ -35,7 +35,7 @@ tashkeel.
 binary = [0,1]
 encoding_combination = [list(i) for i in product([0, 1], repeat=8)]
 
-def get_alphabet_tashkeel_combination(tashkeel=arabic.shortharakat+[arabic.shadda]):
+def get_alphabet_tashkeel_combination(tashkeel=arabic.shortharakat):
 
     '''
         * Creating Letters with (fatha, damma, kasra, sukun) combinations
@@ -53,7 +53,7 @@ def get_alphabet_tashkeel_combination(tashkeel=arabic.shortharakat+[arabic.shadd
     alphabet = [] + arabic.alphabet
     alphabet += ' '
     alphabet += '\n'
-    arabic_alphabet_tashkeel = alphabet + arabic_alphabet_tashkeel
+    arabic_alphabet_tashkeel = [''] + alphabet + arabic_alphabet_tashkeel
         
     return arabic_alphabet_tashkeel
  
