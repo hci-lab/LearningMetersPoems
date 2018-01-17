@@ -37,7 +37,7 @@ layer_number = 3
 #if u need one number for all layers add number alone
 n_units = [40]
 # 1->LSTM  , 2->GRU , 3->Bi-LSTM 
-cell_mode = 4 
+cell_mode = 3 
 
 # 0 if you don't need
 drop_out_rate = 0#0.1
