@@ -227,5 +227,3 @@ for x in get_alphabet_tashkeel_combination():
     print(string_with_tashkeel_vectorizer(x))
 print(len(all_traing))
 '''
-
-'''
