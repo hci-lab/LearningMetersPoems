@@ -47,7 +47,7 @@ numberOfUniqueChars = len(arabic_alphabet)
 
 # =======================Program Parameters====================================
 
-load_weights_flag = 0
+load_weights_flag = 1
 #Experiement_Name = 'Experiement_1_WITH_Tashkeel_ASIS'
 Experiement_Name = 'Experiement_2_WITH_Tashkeel_ASIS_OldData_8bits_50units'
 earlystopping_patience=-1  
@@ -58,7 +58,7 @@ input_data_path = "../data/All_Data.csv"
 # 0-> last wait | 1 max val_acc
 last_or_max_val_acc = 0
 #input_data_path = "./data/Almoso3a_Alshe3rya/cleaned_data/All_clean_data.csv"
-epochs_param = 10
+epochs_param = 7
 batch_size_param = 32
 old_date_flag = 1
 new_encoding_flag = 1
@@ -308,7 +308,7 @@ print("Save last epoch Done! ....")
 
 #==============================================================================
 print("Model Training and validation finished")
-print(history.losses)
+#print(history.losses)
 
 #===========================Evaluate model=====================================
 # Final evaluation of the model
