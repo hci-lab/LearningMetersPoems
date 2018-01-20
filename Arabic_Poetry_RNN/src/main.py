@@ -49,7 +49,7 @@ numberOfUniqueChars = len(arabic_alphabet)
 
 load_weights_flag = 1
 #Experiement_Name = 'Experiement_1_WITH_Tashkeel_ASIS'
-Experiement_Name = 'Experiement_2_WITH_Tashkeel_ASIS_OldData_8bits_50units'
+Experiement_Name = 'Experiement_3_WITH_Tashkeel_ASIS_OldData_8bits_50units'
 earlystopping_patience=-1  
 test_size_param=0.1
 validation_split_param = 0.1
@@ -58,7 +58,7 @@ input_data_path = "../data/All_Data.csv"
 # 0-> last wait | 1 max val_acc
 last_or_max_val_acc = 0
 #input_data_path = "./data/Almoso3a_Alshe3rya/cleaned_data/All_clean_data.csv"
-epochs_param = 7
+epochs_param = 8
 batch_size_param = 32
 old_date_flag = 1
 new_encoding_flag = 1
@@ -94,7 +94,9 @@ if (old_date_flag == 1):
     if(new_encoding_flag ==0 ):
         Bayt_Text_Encoded = input_arabic_poetry_dataset['Bayt_Text'].apply(string_vectorizer)
     else:
-        Bayt_Text_Encoded = input_arabic_poetry_dataset['Bayt_Text'].apply(string_with_tashkeel_vectorizer)
+        
+        max_Bayt_length =  input_arabic_poetry_dataset.Bayt_Text.map(len).max()
+        Bayt_Text_Encoded = input_arabic_poetry_dataset['Bayt_Text'].apply(lambda x: helpers.string_with_tashkeel_vectorizer(x, max_Bayt_length))
     print("Input Data Bayt_Text encoded done.")
 
 else:
