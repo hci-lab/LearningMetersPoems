@@ -1,0 +1,98 @@
+Model Defined and compliled.
+Model checkpoint defined to track val_acc
+Model tensorboard defined
+Add  checkpoint - tensorboard - last_epoch_saver
+_________________________________________________________________
+Layer (type)                 Output Shape              Param #   
+=================================================================
+lstm_36 (LSTM)               (None, 82, 50)            11800     
+_________________________________________________________________
+lstm_37 (LSTM)               (None, 82, 50)            20200     
+_________________________________________________________________
+lstm_38 (LSTM)               (None, 82, 50)            20200     
+_________________________________________________________________
+lstm_39 (LSTM)               (None, 50)                20200     
+_________________________________________________________________
+dense_9 (Dense)              (None, 11)                561       
+=================================================================
+Total params: 72,961
+Trainable params: 72,961
+Non-trainable params: 0
+_________________________________________________________________
+None
+Model Training and validation started
+Train on 184367 samples, validate on 20486 samples
+Epoch 1/7
+184352/184367 [============================>.] - ETA: 0s - loss: 1.2148 - acc: 0.5345     Epoch 00001: val_acc improved from -inf to 0.57024, saving model to ../checkpoints/Experiement_2_WITH_Tashkeel_ASIS_OldData_8bits_50units//weights-improvement-01-0.57.hdf5
+Save last epoch Done! ....
+184367/184367 [==============================] - 6410s 35ms/step - loss: 1.2148 - acc: 0.5345 - val_loss: 1.1799 - val_acc: 0.5702
+Epoch 2/7
+184352/184367 [============================>.] - ETA: 0s - loss: 1.0072 - acc: 0.6465     Epoch 00002: val_acc improved from 0.57024 to 0.66738, saving model to ../checkpoints/Experiement_2_WITH_Tashkeel_ASIS_OldData_8bits_50units//weights-improvement-02-0.67.hdf5
+Save last epoch Done! ....
+184367/184367 [==============================] - 6367s 35ms/step - loss: 1.0072 - acc: 0.6466 - val_loss: 0.9610 - val_acc: 0.6674
+Epoch 3/7
+184352/184367 [============================>.] - ETA: 0s - loss: 0.8784 - acc: 0.6978     Epoch 00003: val_acc improved from 0.66738 to 0.71185, saving model to ../checkpoints/Experiement_2_WITH_Tashkeel_ASIS_OldData_8bits_50units//weights-improvement-03-0.71.hdf5
+Save last epoch Done! ....
+184367/184367 [==============================] - 6527s 35ms/step - loss: 0.8784 - acc: 0.6978 - val_loss: 0.8472 - val_acc: 0.7119
+Epoch 4/7
+184352/184367 [============================>.] - ETA: 0s - loss: 0.7672 - acc: 0.7404     Epoch 00004: val_acc improved from 0.71185 to 0.74588, saving model to ../checkpoints/Experiement_2_WITH_Tashkeel_ASIS_OldData_8bits_50units//weights-improvement-04-0.75.hdf5
+Save last epoch Done! ....
+184367/184367 [==============================] - 6363s 35ms/step - loss: 0.7672 - acc: 0.7404 - val_loss: 0.7541 - val_acc: 0.7459
+Epoch 5/7
+184352/184367 [============================>.] - ETA: 0s - loss: 0.6653 - acc: 0.7769     Epoch 00005: val_acc improved from 0.74588 to 0.79464, saving model to ../checkpoints/Experiement_2_WITH_Tashkeel_ASIS_OldData_8bits_50units//weights-improvement-05-0.79.hdf5
+Save last epoch Done! ....
+184367/184367 [==============================] - 6392s 35ms/step - loss: 0.6652 - acc: 0.7769 - val_loss: 0.6168 - val_acc: 0.7946
+Epoch 6/7
+184352/184367 [============================>.] - ETA: 0s - loss: 0.5826 - acc: 0.8085     Epoch 00006: val_acc improved from 0.79464 to 0.82915, saving model to ../checkpoints/Experiement_2_WITH_Tashkeel_ASIS_OldData_8bits_50units//weights-improvement-06-0.83.hdf5
+Save last epoch Done! ....
+184367/184367 [==============================] - 6409s 35ms/step - loss: 0.5826 - acc: 0.8084 - val_loss: 0.5320 - val_acc: 0.8292
+Epoch 7/7
+184352/184367 [============================>.] - ETA: 0s - loss: 0.4996 - acc: 0.8403     Epoch 00007: val_acc improved from 0.82915 to 0.85414, saving model to ../checkpoints/Experiement_2_WITH_Tashkeel_ASIS_OldData_8bits_50units//weights-improvement-07-0.85.hdf5
+Save last epoch Done! ....
+184367/184367 [==============================] - 6431s 35ms/step - loss: 0.4996 - acc: 0.8403 - val_loss: 0.4591 - val_acc: 0.8541
+
+scores = model.evaluate(X_test, Y_test, verbose=1)
+print("Accuracy: %.2f%%" % (scores[1]*100))
+22762/22762 [==============================] - 169s 7ms/step
+Accuracy: 85.34%
+
+Train on 184367 samples, validate on 20486 samples
+Epoch 1/3
+184352/184367 [============================>.] - ETA: 0s - loss: 0.4386 - acc: 0.8620     Epoch 00001: val_acc improved from -inf to 0.86591, saving model to ../checkpoints/Experiement_2_WITH_Tashkeel_ASIS_OldData_8bits_50units//weights-improvement-01-0.87.hdf5
+Save last epoch Done! ....
+184367/184367 [==============================] - 6460s 35ms/step - loss: 0.4386 - acc: 0.8620 - val_loss: 0.4285 - val_acc: 0.8659
+Epoch 2/3
+184352/184367 [============================>.] - ETA: 0s - loss: 0.3961 - acc: 0.8778     Epoch 00002: val_acc improved from 0.86591 to 0.87899, saving model to ../checkpoints/Experiement_2_WITH_Tashkeel_ASIS_OldData_8bits_50units//weights-improvement-02-0.88.hdf5
+Save last epoch Done! ....
+184367/184367 [==============================] - 6535s 35ms/step - loss: 0.3961 - acc: 0.8777 - val_loss: 0.3926 - val_acc: 0.8790
+Epoch 3/3
+184352/184367 [============================>.] - ETA: 0s - loss: 0.3678 - acc: 0.8877     Epoch 00003: val_acc improved from 0.87899 to 0.88172, saving model to ../checkpoints/Experiement_2_WITH_Tashkeel_ASIS_OldData_8bits_50units//weights-improvement-03-0.88.hdf5
+Save last epoch Done! ....
+184367/184367 [==============================] - 8631s 47ms/step - loss: 0.3678 - acc: 0.8877 - val_loss: 0.3836 - val_acc: 0.8817
+
+model.save(checkpoints_path+"weights-improvement-last-epoch.hdf5")
+print("Save last epoch Done! ....")
+
+#==============================================================================
+print("Model Training and validation finished")
+print(history.losses)
+
+#===========================Evaluate model=====================================
+# Final evaluation of the model
+scores = model.evaluate(X_test, Y_test, verbose=1)
+print("Accuracy: %.2f%%" % (scores[1]*100))
+Save last epoch Done! ....
+Model Training and validation finished
+
+
+
+print("Model Training and validation finished")
+#print(history.losses)
+
+#===========================Evaluate model=====================================
+# Final evaluation of the model
+scores = model.evaluate(X_test, Y_test, verbose=1)
+print("Accuracy: %.2f%%" % (scores[1]*100))
+Model Training and validation finished
+22762/22762 [==============================] - 200s 9ms/step
+Accuracy: 88.85%
