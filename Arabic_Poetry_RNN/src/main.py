@@ -1,40 +1,29 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-
-
-###### TODO: List
-# Read padded data from the files 
-# Add option to read from padded or to rerun it again.
-# =============================================================================
-
 # =============================================================================
 import os,errno
 os.chdir("m://Learning/Master/CombinedWorkspace/Python/DeepLearningMaster/MasterCode/ArabicPoetry-1/Arabic_Poetry_RNN/src/")
 # =============================================================================
 
-
 import numpy as np
 import keras
-from keras.models import Sequential
-from keras.preprocessing import sequence
-from keras.layers import Dense, Input, Dropout,LSTM, Lambda,Bidirectional
 from keras.callbacks import ModelCheckpoint,TensorBoard#,TimeDistributed
 #from keras.models import load_model
 import matplotlib.pyplot as plt
 import preprossesor
 import arabic
-
-#from keras.layers.core import
+from sklearn.model_selection import train_test_split
 
 print("Imports Done")
 # =============================================================================
 np.random.seed(7)
-
 arabic_alphabet = arabic.alphabet
 numberOfUniqueChars = len(arabic_alphabet)
 
 # =======================Program Parameters====================================
-
+num_layers_hidden = 3
+layers_type = 'LSTM'
+activation_output_function = 'softmax'
 load_weights_flag = 1
 Experiement_Name = 'Experiement_3_WITH_Tashkeel_ASIS_OldData_8bits_50units'
 earlystopping_patience=-1  
@@ -86,70 +75,8 @@ print("Input Train/Test Split done.")
 # create model
 #K.set_learning_phase(1) #set learning phase
 #
-model = Sequential()
 
-# Adding the input layer and the LSTM layer
-if (new_encoding_flag == 0):
-    model.add(LSTM(units = n_units, input_shape=(max_Bayt_length, numberOfUniqueChars), return_sequences=True))
-else:
-    model.add(LSTM(units = n_units, input_shape=(max_Bayt_length, 8), return_sequences=True))
-    
-#model.add(Dropout(0.1,seed=7)) 
-
-model.add(LSTM(n_units, return_sequences=True))
-#model.add(Dropout(0.1,seed=7)) 
-
-model.add(LSTM(n_units, return_sequences=True))
-#model.add(Dropout(0.1,seed=7)) 
-
-model.add(LSTM(n_units))
-#model.add(Dropout(0.1,seed=7))  
-
-# Adding the output layer
-model.add(Dense(units = numbber_of_bohor,activation = 'softmax'))
-
-#===========================load weights====================================
-if(load_weights_flag == 1):
-    try:
-        #List all avialble checkpoints into the directory
-        checkpoints_path_list = os.listdir(checkpoints_path)
-        all_checkpoints_list = [os.path.join(checkpoints_path,i) for i in checkpoints_path_list]
-        #Get the last inserted weight into the checkpoint_path
-        all_checkpoints_list_sorted = sorted(all_checkpoints_list, key=os.path.getmtime)
-        if(last_or_max_val_acc == 0):
-            print ("last check point")
-            print(checkpoints_path+'weights-improvement-last-epoch.hdf5')
-            max_weight_checkpoints = checkpoints_path+'weights-improvement-last-epoch.hdf5'#all_checkpoints_list_sorted[-1]
-            #load weights
-            model = keras.models.load_model(max_weight_checkpoints)
-        else:
-            print ("max_weight_checkpoints")
-            all_checkpoints_list_sorted.remove(checkpoints_path+'weights-improvement-last-epoch.hdf5')
-            epochs_list = [int(re.findall(r'-[0-9|.]*-',path)[0].replace('-',""))
-                           for path in all_checkpoints_list_sorted]
-            max_checkpoint = all_checkpoints_list_sorted[epochs_list.index(max(epochs_list))]
-            print(max_checkpoint)
-            #load weights
-            model = keras.models.load_model(max_checkpoint)
-
-        print (" max_weight_checkpoints")
-        print(all_checkpoints_list_sorted[-1])
-        max_weight_checkpoints =  all_checkpoints_list_sorted[-1]
-        # load weights
-        model.load_weights(max_weight_checkpoints)
-    except IOError:
-        print('An error occured trying to read the file.')
-    except:
-        if "last" not in  all_checkpoints_list_sorted[-1]:
-            sys.exit("Last epoch don't exist in this modle , you can make last_or_max_val_acc=1 to load the epoch has max val_acc")
-        else:
-            print("No wieghts avialable \n check the paths")
-        
-# Compiling the RNN
-model.compile(optimizer = 'adam', 
-              loss='categorical_crossentropy',
-              metrics = ['accuracy'])
-print("Model Defined and compliled.")
+model = preprossesor.get_model(num_layers_hidden,layers_type,n_units,max_Bayt_length,activation_output_function,numbber_of_bohor,load_weights_flag,checkpoints_path,last_or_max_val_acc)
 
 #===========================last_epoch_saver====================================
 class last_epoch_saver(keras.callbacks.Callback):
@@ -203,16 +130,6 @@ else:
 print(model.summary())
 
 print("Model Training and validation started")
-
-# Fitting the RNN to the Training set
-#hist = model.fit(X_train_padded, 
-#                 y_train, 
-#                 validation_split = validation_split_param, 
-#                 epochs=epochs_param, 
-#                 batch_size=batch_size_param, 
-#                 callbacks=callbacks_list,
-#                 verbose=1)
-
 
 #=============================Fitting Model====================================
 # Fitting the RNN to the Training set
