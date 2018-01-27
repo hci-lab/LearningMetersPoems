@@ -60,7 +60,7 @@ for key, value in decimal_alphapet_dict.items():
 
 
 #==================================Importing Data set==========================
-dataset = pd.read_csv('../data/english_dataset.csv', encoding='utf-8' ,index_col=0)
+dataset = pd.read_csv('../data/downsampled_iambic.csv', encoding='utf-8' ,index_col=0)
 #data= shuffle(dataset)
 #Data Stat
 dataset.iloc[:, 1].value_counts()
@@ -126,8 +126,8 @@ def save(nameOfFile,nameOfDataset,dataVar):
     h5f.create_dataset(nameOfDataset, data=dataVar)
     h5f.close()
     
-#save("../data/data_matrix_X_binary_encoding.h5","X",X)
-#save("../data/data_matrix_Y_one_hot_encoding.h5","Y",Y)
+save("../data/new_downsample_merged_data_matrix_X_binary_encoding.h5","X",X)
+save("../data/new_downsample_merged_data_matrix_Y_one_hot_encoding.h5","Y",Y)
 
 #---------------------------Retrive Encoding--------------------------------------
 def restore (nameOfFile,nameOfDataset):
