@@ -22,24 +22,25 @@ numberOfUniqueChars = len(arabic_alphabet)
 
 # =======================Program Parameters====================================
 num_layers_hidden = 3
-layers_type = 'LSTM'
+#layers_type = 'LSTM'
+layers_type = 'Bidirectional_LSTM'
 activation_output_function = 'softmax'
-load_weights_flag = 1
-Experiement_Name = 'Experiement_3_WITH_Tashkeel_ASIS_OldData_8bits_50units'
+load_weights_flag = 0
+Experiement_Name = 'Experiement_4_WITH_Tashkeel_ASIS_OldData_8bits_50units'
 earlystopping_patience=-1  
 test_size_param=0.1
 validation_split_param = 0.1
 n_units = 50
-input_data_path = "../data/All_Data.csv"
+input_data_path = "../data/All_Data_cleaned.csv"
 # 0-> last wait | 1 max val_acc
 last_or_max_val_acc = 0
 #input_data_path = "./data/Almoso3a_Alshe3rya/cleaned_data/All_clean_data.csv"
-epochs_param = 4
-batch_size_param = 32
+epochs_param = 20
+batch_size_param = 512
 old_date_flag = 1
 new_encoding_flag = 1
 with_tashkeel_flag = 0
-old_data_col =  [1,2,4]
+old_data_col =  [0,2,3,5]
 new_data_col =  [0,1,2,3,4,6,7]
 checkpoints_path ="../checkpoints/"+Experiement_Name+"/"
 check_points_file_path = checkpoints_path+ "/weights-improvement-{epoch:02d}-{val_acc:.2f}.hdf5"
@@ -160,23 +161,5 @@ print("Accuracy: %.2f%%" % (scores[1]*100))
 
 
 # ===========================Ploting===========================================
-# list all data in history
-print(hist.history.keys())
-# summarize history for accuracy
-plt.plot(hist.history['acc'])
-plt.plot(hist.history['val_acc'])
-plt.title('model accuracy')
-plt.ylabel('accuracy')
-plt.xlabel('epoch')
-plt.legend(['train', 'test'], loc='upper left')
-plt.show()
-# summarize history for loss
-plt.plot(hist.history['loss'])
-plt.plot(hist.history['val_loss'])
-plt.title('model loss')
-plt.ylabel('loss')
-plt.xlabel('epoch')
-plt.legend(['train', 'test'], loc='upper left')
-plt.show()
-
+print_model(hist)
 # =============================================================================
