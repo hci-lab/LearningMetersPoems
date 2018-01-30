@@ -316,3 +316,59 @@ Save last epoch Done! ....
 Model Training and validation finished
 22762/22762 [==============================] - 165s 7ms/step
 Accuracy: 93.24%
+
+Model checkpoint defined to track val_acc
+Model tensorboard defined
+Add  checkpoint - tensorboard - last_epoch_saver
+_________________________________________________________________
+Layer (type)                 Output Shape              Param #   
+=================================================================
+lstm_1 (LSTM)                (None, 82, 50)            11800     
+_________________________________________________________________
+lstm_2 (LSTM)                (None, 82, 50)            20200     
+_________________________________________________________________
+lstm_3 (LSTM)                (None, 82, 50)            20200     
+_________________________________________________________________
+lstm_4 (LSTM)                (None, 50)                20200     
+_________________________________________________________________
+dense_1 (Dense)              (None, 11)                561       
+=================================================================
+Total params: 72,961
+Trainable params: 72,961
+Non-trainable params: 0
+_________________________________________________________________
+None
+Model Training and validation started
+Train on 184367 samples, validate on 20486 samples
+Epoch 1/4
+184352/184367 [============================>.] - ETA: 0s - loss: 0.1660 - acc: 0.9553     Epoch 00001: val_acc improved from -inf to 0.93215, saving model to ../checkpoints/Experiement_3_WITH_Tashkeel_ASIS_OldData_8bits_50units//weights-improvement-01-0.93.hdf5
+Save last epoch Done! ....
+184367/184367 [==============================] - 7272s 39ms/step - loss: 0.1660 - acc: 0.9553 - val_loss: 0.2534 - val_acc: 0.9321
+Epoch 2/4
+184352/184367 [============================>.] - ETA: 0s - loss: 0.1640 - acc: 0.9560     Epoch 00002: val_acc did not improve
+Save last epoch Done! ....
+184367/184367 [==============================] - 6412s 35ms/step - loss: 0.1640 - acc: 0.9560 - val_loss: 0.2619 - val_acc: 0.9284
+Epoch 3/4
+184352/184367 [============================>.] - ETA: 0s - loss: 0.1607 - acc: 0.9569     Epoch 00003: val_acc improved from 0.93215 to 0.93308, saving model to ../checkpoints/Experiement_3_WITH_Tashkeel_ASIS_OldData_8bits_50units//weights-improvement-03-0.93.hdf5
+Save last epoch Done! ....
+184367/184367 [==============================] - 11732s 64ms/step - loss: 0.1607 - acc: 0.9569 - val_loss: 0.2542 - val_acc: 0.9331
+Epoch 4/4
+184352/184367 [============================>.] - ETA: 0s - loss: 0.1580 - acc: 0.9575     Epoch 00004: val_acc did not improve
+Save last epoch Done! ....
+184367/184367 [==============================] - 6362s 35ms/step - loss: 0.1580 - acc: 0.9575 - val_loss: 0.2605 - val_acc: 0.9289
+
+model.save(checkpoints_path+"weights-improvement-last-epoch.hdf5")
+print("Save last epoch Done! ....")
+
+#==============================================================================
+print("Model Training and validation finished")
+#print(history.losses)
+
+#===========================Evaluate model=====================================
+# Final evaluation of the model
+scores = model.evaluate(X_test, Y_test, verbose=1)
+print("Accuracy: %.2f%%" % (scores[1]*100))
+Save last epoch Done! ....
+Model Training and validation finished
+22762/22762 [==============================] - 172s 8ms/step
+Accuracy: 93.27%

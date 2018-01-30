@@ -26,21 +26,21 @@ import tensorflow as tf
 import random as rn
 import re
 
-
+#13/20
 # =======================Program Parameters====================================
 load_weights_flag = 0     #0 or 1
 # 0-> last wait | 1 max val_acc
 last_or_max_val_acc = 0
 
-Experiement_Name = 'Experiment35'
-layer_number = 2
+Experiement_Name = 'Experiment55'
+layer_number = 7
 #if u need one number for all layers add number alone
-n_units = [20]
+n_units = [30]
 # 1->LSTM  , 2->GRU , 3->Bi-LSTM 
-cell_mode = 3 
+cell_mode = 2 
 
 # 0 if you don't need
-drop_out_rate = 0#0.1
+drop_out_rate = 0.1
 test_size_param = 0.1
 validation_split_param = 0.1
 batch_size_param = 64
@@ -88,8 +88,8 @@ except OSError as e:
 
     
 # =========================Data Loading========================================
-X = restore("../data/data_matrix_X_one_hot_encoding.h5","X")
-Y = restore("../data/data_matrix_Y_one_hot_encoding.h5","Y")
+X = restore("../data/new_downsample_merged_data_matrix_X_one_hot_encoding.h5","X")
+Y = restore("../data/new_downsample_merged_data_matrix_Y_one_hot_encoding.h5","Y")
 max_Bayt_length=X.shape[1]
 char_dimension=X.shape[2]
 numbber_of_bohor=Y.shape[1]
