@@ -200,7 +200,7 @@ def string_with_tashkeel_vectorizer(string, padding_length):
 
 # print(len(string_with_tashkeel_vectorizer('أنا')))
 
-def string_with_tashkeel_vectorizer_OneHot(string):
+def string_with_tashkeel_vectorizer_OneHot(string, padding_length):
     '''
         * encodes each letter in string with ont-hot vector
         * returns a list of one-hot vectors a list of (1*182) vectors
@@ -210,12 +210,39 @@ def string_with_tashkeel_vectorizer_OneHot(string):
     charCleanedString = separate_token_with_dicrites(cleanedString)
     vector = [[0 if char != letter else 1 for char in lettersTashkeelCombination]
                   for letter in charCleanedString]
-    vector = np.array(vector)
-    return vector
+
+    reminder = padding_length - len(vector)
+    for i in range(reminder):
+        vector.append([0] * len(lettersTashkeelCombination))
+
+    return np.array(vector) 
 
 '''
-x = 'ا ب'
-print(string_with_tashkeel_vectorizer_OneHot(x))
+encodedLetters = []
+for i in lettersTashkeelCombination:
+    x = string_with_tashkeel_vectorizer_OneHot(i, 1)
+    encodedLetters.append(x)
+    
+print("------")
+print(len(encodedLetters))
+print("------")
+print(encodedLetters)
+print("------")
+print("UNIQUE")
+print(len(np.unique(encodedLetters, axis=0)))
+
+
+print("--------------")
+osama = 'ألا ليت الشبابُ يعود يوماً'
+encoded = string_with_tashkeel_vectorizer_OneHot(osama, 40)
+print(encoded.shape)
+'''
+
+
+'''
+x = 'ا'
+print(string_with_tashkeel_vectorizer_OneHot(x, 2).shape)
+print(string_with_tashkeel_vectorizer_OneHot(x, 2))
 '''
 
 '''
@@ -225,4 +252,25 @@ for x in get_alphabet_tashkeel_combination():
     all_traing.append(x)
     print(string_with_tashkeel_vectorizer(x))
 print(len(all_traing))
+'''
+
+
+
+'''
+[ -1------------ ] -> (1, 183)
+[ -------------- ] -> (2, 183)
+[ -------------- ] -> (3, 183)
+[ -------------- ]
+[ ----------1--- ]
+[ -------------- ]
+[ ---1---------- ]
+[ --------1----- ]
+[ -------------- ]
+[ 0000000 .. 0000]
+[ 0000000 .. 0000]
+[ 0000000 .. 0000]
+[ 0000000 .. 0000]
+[ 0000000 .. 0000]
+[ 0000000 .. 0000]
+[ 0000000 .. 0000] -> (190, 183)
 '''
