@@ -4,6 +4,8 @@ Created on Fri Feb  2 14:51:52 2018
 
 @author: Mostafa Alaa
 """
+from __future__ import print_function
+
 import os,sys
 import keras
 import numpy as np
@@ -12,29 +14,31 @@ from keras.layers import Dense, LSTM,Bidirectional#
 from keras import backend as K
 from sklearn.preprocessing import LabelEncoder
 from numpy import argmax
-from functools import partial
+from functools import partial, update_wrapper
 
 #from keras.layers import Input, Lambda,Dropout
 #from keras.preprocessing import sequence
 #from keras.callbacks import ModelCheckpoint,TensorBoard#,TimeDistributed
 
+def wrapped_partial(func, *args, **kwargs):
+    """ Function to handle this error AttributeError: 'functools.partial' 
+    object has no attribute '__name__' """
+    partial_func = partial(func, *args, **kwargs)
+    update_wrapper(partial_func, func)
+    return partial_func
+
 
 #=============================================================================
 def w_categorical_crossentropy(y_true, y_pred,classes_dest,classes_encoder):
-  
-    print('y_true')
-    print(y_true.shape)
+    """ # Custom loss function with costs """
     inverted = classes_encoder.inverse_transform([argmax(y_true)])
-    inverted = np.stack(inverted,axis = 0)    
-    print('inverted.shape')
-    print(inverted.shape)
-    #n = classes_dest.loc[classes_dest['Bohor'] == 'البسيط' , 'Cnt'].iloc[0]
-    n = classes_dest.loc[classes_dest['Bohor'] == inverted , 'Cnt'].iloc[0]
+    #inverted = np.stack(inverted,axis = 0)
+    n = classes_dest.loc[classes_dest['Bohor'] == inverted[0] , 'Cnt'].iloc[0]
     return K.categorical_crossentropy(y_pred, y_true) * (1/n)
 
 
 #=============================================================================
-def get_model(num_layers_hidden,layers_type,n_units,max_Bayt_length,activation_output_function, load_weights_flag,checkpoints_path,last_or_max_val_acc,label_encoder_output,classes_freq):
+def get_model(num_layers_hidden,layers_type,n_units,max_Bayt_length,activation_output_function, load_weights_flag,checkpoints_path,last_or_max_val_acc,label_encoder_output,classes_freq,weighted_loss_flag):
         
     numbber_of_bohor = classes_freq['Bohor'].unique().size
 # =============================================================================
@@ -88,12 +92,13 @@ def get_model(num_layers_hidden,layers_type,n_units,max_Bayt_length,activation_o
     if(load_weights_flag == 1):
         print("Loading Old model")
         model = load_weights(load_weights_flag,checkpoints_path,last_or_max_val_acc,model)    
-    ncce = partial(w_categorical_crossentropy, classes_dest = classes_freq,classes_encoder = label_encoder_output)
+    w_categorical_crossentropy_Pfun = wrapped_partial(w_categorical_crossentropy, classes_dest = classes_freq,classes_encoder = label_encoder_output)
 
     
-    model.compile(optimizer = 'adam', loss=ncce, metrics = ['accuracy'])
-    #model.compile(optimizer = 'adam', loss=w_categorical_crossentropy,metrics = ['accuracy'])
-    #model.compile(optimizer = 'adam', loss='categorical_crossentropy',metrics = ['accuracy'])
+    if(weighted_loss_flag == 1):
+        model.compile(optimizer = 'adam', loss=w_categorical_crossentropy_Pfun, metrics = ['accuracy'])
+    else:
+        model.compile(optimizer = 'adam', loss='categorical_crossentropy',metrics = ['accuracy'])
     print('Model Compiled')
     print(model.summary())
     

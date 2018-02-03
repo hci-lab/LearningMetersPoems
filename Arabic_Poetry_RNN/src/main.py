@@ -23,30 +23,30 @@ print("Imports Done")
 # =============================================================================
 np.random.seed(7)
 set_random_seed(2)
-rn.seed(12345)
+rn.seed(7)
 arabic_alphabet = arabic.alphabet
 numberOfUniqueChars = len(arabic_alphabet)
 
 
 
 # =======================Program Parameters====================================
-num_layers_hidden = 1
-layers_type = 'LSTM'
-#layers_type = 'Bidirectional_LSTM'
+num_layers_hidden = 3
+#layers_type = 'LSTM'
+weighted_loss_flag = 1
+layers_type = 'Bidirectional_LSTM'
 activation_output_function = 'softmax'
 load_weights_flag = 0
 #Experiement_Name = 'Experiement_5_WITH_Tashkeel_ASIS_OldData_8bits_50units'
-Experiement_Name = 'Experiement_6_Test_weighted_Loss'
+Experiement_Name = 'Experiement_7_weighted_Loss'
 earlystopping_patience=-1  
 test_size_param=0.1
 validation_split_param = 0.1
 n_units = 50
 input_data_path = "../data/All_Data_cleaned.csv"
-#input_data_path = "../data/All_Data2Bahr.csv"
 # 0-> last wait | 1 max val_acc
 last_or_max_val_acc = 0
 #input_data_path = "./data/Almoso3a_Alshe3rya/cleaned_data/All_clean_data.csv"
-epochs_param = 1
+epochs_param = 20
 batch_size_param = 512
 old_date_flag = 1
 new_encoding_flag = 1
@@ -90,7 +90,8 @@ print("Input Train/Test Split done.")
 #K.set_learning_phase(1) #set learning phase
 #
 
-model = RNN_Model_Helper.get_model(num_layers_hidden,layers_type,n_units,max_Bayt_length,activation_output_function,load_weights_flag,checkpoints_path,last_or_max_val_acc,label_encoder_output,classes_freq)
+
+model = RNN_Model_Helper.get_model(num_layers_hidden,layers_type,n_units,max_Bayt_length,activation_output_function,load_weights_flag,checkpoints_path,last_or_max_val_acc,label_encoder_output,classes_freq,weighted_loss_flag)
 
 
 #===========================last_epoch_saver====================================
