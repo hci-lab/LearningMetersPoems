@@ -35,7 +35,7 @@ tashkeel.
 binary = [0,1]
 encoding_combination = [list(i) for i in product([0, 1], repeat=8)]
 
-def get_alphabet_tashkeel_combination(tashkeel=arabic.shortharakat+[arabic.shadda]):
+def get_alphabet_tashkeel_combination(tashkeel=arabic.shortharakat):
 
     '''
         * Creating Letters with (fatha, damma, kasra, sukun) combinations
@@ -53,7 +53,7 @@ def get_alphabet_tashkeel_combination(tashkeel=arabic.shortharakat+[arabic.shadd
     alphabet = [] + arabic.alphabet
     alphabet += ' '
     alphabet += '\n'
-    arabic_alphabet_tashkeel = alphabet + arabic_alphabet_tashkeel
+    arabic_alphabet_tashkeel = [''] + alphabet + arabic_alphabet_tashkeel
         
     return arabic_alphabet_tashkeel
  
@@ -101,7 +101,6 @@ def factor_shadda_tanwin(string):
     * factors tanwin to ?????????
     # Some redundancy is simpler. :"D
     '''
-    string = re.sub(r'ّ+', 'ّ', string)
     factoredString = ''
     charsList = separate_token_with_dicrites(string)
     # print(charsList)
@@ -165,7 +164,7 @@ def string_vectorizer(strng, alphabet=arabic.alphabet):
                   for letter in strng]
     return  np.array(vector)
 
-def string_with_tashkeel_vectorizer(string, tashkeel=arabic.shortharakat + [arabic.shadda]):
+def string_with_tashkeel_vectorizer(string, padding_length):
     '''
         return: 8*1 vector representation for each letter in string
     '''
@@ -194,14 +193,14 @@ def string_with_tashkeel_vectorizer(string, tashkeel=arabic.shortharakat + [arab
 
         representation.append(encoding_combination_[index])
 
-    reminder = 82 - len(representation)
+    reminder = padding_length - len(representation)
     for i in range(reminder):
         representation.append([0, 0, 0, 0, 0, 0, 0, 0])
     return np.asarray(representation)
 
 # print(len(string_with_tashkeel_vectorizer('أنا')))
 
-def string_with_tashkeel_vectorizer_OneHot(string):
+def string_with_tashkeel_vectorizer_OneHot(string, padding_length):
     '''
         * encodes each letter in string with ont-hot vector
         * returns a list of one-hot vectors a list of (1*182) vectors
@@ -211,12 +210,39 @@ def string_with_tashkeel_vectorizer_OneHot(string):
     charCleanedString = separate_token_with_dicrites(cleanedString)
     vector = [[0 if char != letter else 1 for char in lettersTashkeelCombination]
                   for letter in charCleanedString]
-    vector = np.array(vector)
-    return vector
+
+    reminder = padding_length - len(vector)
+    for i in range(reminder):
+        vector.append([0] * len(lettersTashkeelCombination))
+
+    return np.array(vector) 
 
 '''
-x = 'ا ب'
-print(string_with_tashkeel_vectorizer_OneHot(x))
+encodedLetters = []
+for i in lettersTashkeelCombination:
+    x = string_with_tashkeel_vectorizer_OneHot(i, 1)
+    encodedLetters.append(x)
+    
+print("------")
+print(len(encodedLetters))
+print("------")
+print(encodedLetters)
+print("------")
+print("UNIQUE")
+print(len(np.unique(encodedLetters, axis=0)))
+
+
+print("--------------")
+osama = 'ألا ليت الشبابُ يعود يوماً'
+encoded = string_with_tashkeel_vectorizer_OneHot(osama, 40)
+print(encoded.shape)
+'''
+
+
+'''
+x = 'ا'
+print(string_with_tashkeel_vectorizer_OneHot(x, 2).shape)
+print(string_with_tashkeel_vectorizer_OneHot(x, 2))
 '''
 
 '''
@@ -226,4 +252,25 @@ for x in get_alphabet_tashkeel_combination():
     all_traing.append(x)
     print(string_with_tashkeel_vectorizer(x))
 print(len(all_traing))
+'''
+
+
+
+'''
+[ -1------------ ] -> (1, 183)
+[ -------------- ] -> (2, 183)
+[ -------------- ] -> (3, 183)
+[ -------------- ]
+[ ----------1--- ]
+[ -------------- ]
+[ ---1---------- ]
+[ --------1----- ]
+[ -------------- ]
+[ 0000000 .. 0000]
+[ 0000000 .. 0000]
+[ 0000000 .. 0000]
+[ 0000000 .. 0000]
+[ 0000000 .. 0000]
+[ 0000000 .. 0000]
+[ 0000000 .. 0000] -> (190, 183)
 '''
