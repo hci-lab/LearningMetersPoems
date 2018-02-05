@@ -27,30 +27,26 @@ rn.seed(7)
 arabic_alphabet = arabic.alphabet
 numberOfUniqueChars = len(arabic_alphabet)
 
-
-
 # =======================Program Parameters====================================
-num_layers_hidden = 3
-#layers_type = 'LSTM'
-weighted_loss_flag = 1
-layers_type = 'Bidirectional_LSTM'
-activation_output_function = 'softmax'
-load_weights_flag = 0
-#Experiement_Name = 'Experiement_5_WITH_Tashkeel_ASIS_OldData_8bits_50units'
 Experiement_Name = 'Experiement_7_weighted_Loss'
-earlystopping_patience=-1  
+layers_type = 'Bidirectional_LSTM'
+num_layers_hidden = 3
+weighted_loss_flag = 1
+load_weights_flag = 1
+with_tashkeel_flag = 0
 test_size_param=0.1
 validation_split_param = 0.1
 n_units = 50
+epochs_param = 20
+batch_size_param = 512
 input_data_path = "../data/All_Data_cleaned.csv"
+activation_output_function = 'softmax'
 # 0-> last wait | 1 max val_acc
 last_or_max_val_acc = 0
 #input_data_path = "./data/Almoso3a_Alshe3rya/cleaned_data/All_clean_data.csv"
-epochs_param = 20
-batch_size_param = 512
 old_date_flag = 1
 new_encoding_flag = 1
-with_tashkeel_flag = 0
+earlystopping_patience=-1  
 old_data_col =  [0,2,3,5]
 new_data_col =  [0,1,2,3,4,6,7]
 checkpoints_path ="../checkpoints/"+Experiement_Name+"/"
@@ -173,7 +169,7 @@ scores = model.evaluate(X_test, Y_test, verbose=1)
 print("Accuracy: %.2f%%" % (scores[1]*100))
 y_pred = model.predict_classes(X_test)
 
-print(classification_report(Y_test, y_pred))
+#print(classification_report(Y_test, y_pred))
 
 
 #==============================================================================
