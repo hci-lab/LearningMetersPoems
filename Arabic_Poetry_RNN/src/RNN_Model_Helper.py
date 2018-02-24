@@ -28,13 +28,16 @@ def wrapped_partial(func, *args, **kwargs):
     return partial_func
 
 
+den_total_sample =  ((1/68601)  + ( 1/50574) + (1/37003 ) + ( 1/23238 ) + ( 1/17984 ) + ( 1/9075 ) + ( 1/7638 ) + ( 1/6662 ) + ( 1/4375 ) + ( 1/2085 ) + ( 1/380))
+
 #=============================================================================
 def w_categorical_crossentropy(y_true, y_pred,classes_dest,classes_encoder):
     """ # Custom loss function with costs """
     inverted = classes_encoder.inverse_transform([argmax(y_true)])
     #inverted = np.stack(inverted,axis = 0)
     n = classes_dest.loc[classes_dest['Bohor'] == inverted[0] , 'Cnt'].iloc[0]
-    return K.categorical_crossentropy(y_pred, y_true) * (1/n)
+#    return K.categorical_crossentropy(y_pred, y_true) * (1/n)
+    return K.categorical_crossentropy(y_pred, y_true) * ((1/n) / den_total_sample ) 
 
 
 #=============================================================================
