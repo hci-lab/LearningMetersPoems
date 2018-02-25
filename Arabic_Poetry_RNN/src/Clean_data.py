@@ -1,6 +1,8 @@
 import pandas as pd
 import re
 import sys
+import helpers
+from pyarabic.araby import strip_tatweel
 sys.path.append('.') # path of arabic file
 import arabic 
 vectoriz_function = helpers.string_with_tashkeel_vectorizer
@@ -86,17 +88,17 @@ def solve_conflect(s):
 def Clean_data(data_frame,verse_column_name='البيت'):
     our_alphabets = "".join(arabic.alphabet) + "".join(arabic.tashkeel)+" "
     our_alphabets = "".join(our_alphabets)
-    data[verse_column_name]    = data[verse_column_name] .apply(lambda x: re.sub(r'[^'+our_alphabets+']','',str(x))).apply(lambda x: re.sub(r'  *'," ",x))\
-    .apply(lambda x: re.sub(r'ّ+', 'ّ', x)).apply(lambda x: x.strip())
-    data[verse_column_name] = data[verse_column_name].apply(apply_cleaning)
-    return data
+    data_frame[verse_column_name]    = data_frame[verse_column_name] .apply(lambda x: re.sub(r'[^'+our_alphabets+']','',str(x))).apply(lambda x: re.sub(r'  *'," ",x)).apply(lambda x: re.sub(r'ّ+', 'ّ', x)).apply(lambda x: x.strip())
+    data_frame[verse_column_name] = data_frame[verse_column_name].apply(apply_cleaning)
+    return data_frame
 
 
 ################### how to use #############
-# 1 -  define path of 'arabic.py' ---> في اول الفيل
-# 2 -  set pramater 'vectoriz_function' = vectoriz_function that u will use.
-# 3 -  use 'Clean_data' function only and pass 'DataFrame' , it will return the cleaned on 
-# =D
+# Example::
+# 
+# un_clean_data = pd.read_csv('data.csv') 
+# clean_data = Clean_data(un_clean_data)
+#
 ##########################################3
 
     
