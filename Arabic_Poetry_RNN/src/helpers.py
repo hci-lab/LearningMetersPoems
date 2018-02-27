@@ -4,6 +4,7 @@ from pyarabic.araby import strip_tashkeel, strip_tatweel
 import numpy as np
 from numpy import array
 import re
+counter = 0
 
 
 
@@ -216,6 +217,70 @@ def string_with_tashkeel_vectorizer_OneHot(string, padding_length):
         vector.append([0] * len(lettersTashkeelCombination))
 
     return np.array(vector) 
+
+
+
+def Clean_data(data_frame,max_bayt_len,vectoriz_function=string_with_tashkeel_vectorizer,verse_column_name='البيت'):
+    global counter
+    counter = 0
+    
+    def apply_cleaning(s):
+        global counter
+        try:
+            vectoriz_function(s,max_bayt_len)
+            print(counter)
+            counter+=1
+            return s
+        except:
+            s = solve_conflect(s)
+            print(counter)
+            counter+=1
+            return s
+
+        
+
+    def clean_fun(s):
+        if " " in s:
+            return " "
+
+        non_remove = arabic.fatha+"|"+arabic.damma+"|"+arabic.kasra+"|"+arabic.sukun
+        remove = arabic.dammatan+"|"+arabic.fathatan+"|"+arabic.kasratan
+        tashkiel  = re.compile(r'('"("+non_remove+")"+arabic.shadda+")")
+        tanwine  =  re.compile(r'('"("+remove+")"+arabic.shadda+")")
+        tanwine_  =  re.compile(r'('+arabic.shadda+"("+remove+")"+")")
+        spaces_w_tshkieel = re.compile(r'( ('+"|".join(arabic.tashkeel)+'))')
+        tanwine_2 = re.compile(r'(('+non_remove+')('+remove+')'')')
+        tow_tashkeel = re.compile(r'(('+non_remove+')('+non_remove+')'')')
+        tow_tashkeel_ = re.compile(r'(('+remove+')('+remove+')'')')
+
+        lis=list(s)
+        for m in tashkiel.finditer(s):
+            lis[m.start()] , lis[m.start()+1] = lis[m.start()+1] , lis[m.start()]
+        for m in tanwine_.finditer(s):
+            del lis[m.start()]
+        for m in tanwine.finditer(s):
+            del lis[m.start()] 
+        for m in tow_tashkeel.finditer(s):
+            del lis[m.start()]
+        for m in tow_tashkeel_.finditer(s):
+            del lis[m.start()]
+        for m in spaces_w_tshkieel.finditer(s):
+            del lis[m.start()+1]
+        for m in tanwine_2.finditer(s):
+            del lis[m.start()+1]
+        return "".join(lis)
+
+
+    def solve_conflect(s):
+        return "".join([clean_fun(c) for c in separate_token_with_dicrites(s)])
+    
+    
+    our_alphabets = "".join(arabic.alphabet) + "".join(arabic.tashkeel)+" "
+    our_alphabets = "".join(our_alphabets)
+    data_frame[verse_column_name]    = data_frame[verse_column_name] .apply(lambda x: re.sub(r'[^'+our_alphabets+']','',str(x))).apply(lambda x: re.sub(r'  *'," ",x)).apply(lambda x: re.sub(r'ّ+', 'ّ', x)).apply(lambda x: x.strip())
+    data_frame[verse_column_name] = data_frame[verse_column_name].apply(apply_cleaning)
+    return data_frame
+
 
 '''
 encodedLetters = []
