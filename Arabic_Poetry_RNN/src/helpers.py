@@ -220,9 +220,11 @@ def string_with_tashkeel_vectorizer_OneHot(string, padding_length):
 
 
 
-def Clean_data(data_frame,max_bayt_len,vectoriz_function=string_with_tashkeel_vectorizer,verse_column_name='البيت'):
+def Clean_data(data_frame,max_bayt_len,inplace=False,vectoriz_function=string_with_tashkeel_vectorizer,verse_column_name='البيت'):
     global counter
     counter = 0
+    if not inplace:
+        data_frame = data_frame.copy()
     
     def apply_cleaning(s):
         global counter
