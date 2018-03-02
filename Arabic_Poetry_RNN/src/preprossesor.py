@@ -13,11 +13,25 @@ from numpy import array
 from numpy import argmax
 import pandas as pd
 import re
+import h5py
+
 from sklearn.preprocessing import OneHotEncoder
 from sklearn.preprocessing import LabelEncoder
 #drop_cols = old_data_col
 
-def get_input_encoded_date(input_data_path,drop_cols,with_tashkeel_flag):
+encoded_data_path = "../data/Encoded/8bits/WithoutTashkeel/Eliminated/eliminated_data_matrix_without_tashkeel_8bitsEncoding.h5"
+
+encoded_Y_data_path = "../data/Encoded/8bits/WithoutTashkeel/Eliminated/Eliminated_data_Y_Meters.h5"
+
+def get_input_encoded_data_h5(encoded_X_data_path,encoded_Y_data_path):
+    Bayt_Text = h5py.File(encoded_X_data_path, 'r')
+    Bayt_Text_Encoded = Bayt_Text['X']
+    Bohor = h5py.File(encoded_Y_data_path, 'r')
+    Bohor_Encoded = Bohor['Y']
+    return Bayt_Text_Encoded,Bohor_Encoded
+
+    
+def encode_input_data(input_data_path,drop_cols,with_tashkeel_flag):
     input_arabic_poetry_dataset = pd.read_csv(input_data_path, sep = ",")
     input_arabic_poetry_dataset.drop(input_arabic_poetry_dataset.columns[drop_cols], axis=1,inplace=True)
     input_arabic_poetry_dataset.columns = ['Bayt_Text', 'Category']
@@ -34,7 +48,7 @@ def get_input_encoded_date(input_data_path,drop_cols,with_tashkeel_flag):
     Bayt_Text_Encoded_Stacked = np.stack(Bayt_Text_Encoded,axis = 0)    
     
     numbber_of_bohor = input_arabic_poetry_dataset['Category'].unique().size
-    Bayt_Bahr_encoded,label_encoder_output = get_classes_encoded_date(input_arabic_poetry_dataset['Category'])
+    Bayt_Bahr_encoded,label_encoder_output = encode_classes_data(input_arabic_poetry_dataset['Category'])
     
     classes_freq = input_arabic_poetry_dataset['Category'].value_counts().reset_index()
     classes_freq.columns =['Bohor','Cnt']
@@ -43,9 +57,9 @@ def get_input_encoded_date(input_data_path,drop_cols,with_tashkeel_flag):
     #return  Bayt_Text_Encoded_Stacked, Bayt_Bahr_encoded, numbber_of_bohor, label_encoder_output, classes_freq
 
     return  Bayt_Text_Encoded_Stacked, Bayt_Bahr_encoded, max_Bayt_length, label_encoder_output, classes_freq
-        
+       
 
-def get_classes_encoded_date(input_category_datasets):
+def encode_classes_data(input_category_datasets):
     # integer encode
     label_encoder = LabelEncoder()
     integer_encoded = label_encoder.fit_transform(input_category_datasets)
