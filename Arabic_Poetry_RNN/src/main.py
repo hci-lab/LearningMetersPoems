@@ -1,8 +1,9 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 # =============================================================================
-import os,errno
-os.chdir("m://Learning/Master/CombinedWorkspace/Python/DeepLearningMaster/ArabicPoetry/ArabicPoetry-1/Arabic_Poetry_RNN/src/")
+import os#,errno
+#os.chdir("m://Learning/Master/CombinedWorkspace/Python/DeepLearningMaster/ArabicPoetry/ArabicPoetry-1/Arabic_Poetry_RNN/src/")
+os.chdir("/media/mostafaalaa/Main_Hard/Learning/Master/CombinedWorkspace/Python/DeepLearningMaster/ArabicPoetry/ArabicPoetry-1/Arabic_Poetry_RNN/src")
 # =============================================================================
 
 import numpy as np
@@ -32,6 +33,7 @@ test_size_param=[0.05,0.1]
 validation_split_param = [0.02,0.1]
 
 input_data_path = "../data/All_Data_cleaned.csv"
+
 encoded_X_paths = ["../data/Encoded/8bits/WithoutTashkeel/Eliminated/eliminated_data_matrix_without_tashkeel_8bitsEncoding.h5","../data/Encoded/8bits/WithoutTashkeel/Full_Data/full_data_matrix_without_tashkeel_8bitsEncoding.h5","../data/Encoded/8bits/WithTashkeel/Eliminated/eliminated_data_matrix_with_tashkeel_8bitsEncoding.h5","../data/Encoded/8bits/WithTashkeel/Full_Data/full_data_matrix_with_tashkeel_8bitsEncoding.h5"]
 
 encoded_Y_paths = ["../data/Encoded/8bits/WithoutTashkeel/Eliminated/Eliminated_data_Y_Meters.h5","../data/Encoded/8bits/WithoutTashkeel/Full_Data/full_data_Y_Meters.h5","../data/Encoded/8bits/WithTashkeel/Eliminated/Eliminated_data_Y_Meters.h5","../data/Encoded/8bits/WithTashkeel/Full_Data/full_data_Y_Meters.h5"]
@@ -40,7 +42,7 @@ encoded_Y_paths = ["../data/Encoded/8bits/WithoutTashkeel/Eliminated/Eliminated_
 # 0-> last wait | 1 max val_acc
 last_or_max_val_acc = 0
 activation_output_function = 'softmax'
-batch_size_param = 1024
+batch_size_param = 2048
 n_units = 50
 epochs_param = 50
 old_date_flag = 1
@@ -50,13 +52,34 @@ required_data_col =  [0,2,3,5]
 load_weights_flag = 0
 
 #new_data_col =  [0,1,2,3,4,6,7]
-Experiement_Name = 'Experiement_7_weighted_Loss'
+Experiement_Name = 'Experiement_test_full_data'
 checkpoints_path ="../checkpoints/"+Experiement_Name+"/"
 check_points_file_path = checkpoints_path+ "/weights-improvement-{epoch:02d}-{val_acc:.2f}.hdf5"
 board_log_dir="../logs/"+Experiement_Name+"/"#+.format(time())
 
 #===============================Concatinated Variables ========================
 
+Runner(encoded_X_paths[1],
+           encoded_Y_paths[1],
+           test_size_param[0],
+           num_layers_hidden[0],
+           layers_type[0],
+           validation_split_param[0],
+           epochs_param,
+           check_points_file_path,
+           n_units,         
+           #max_Bayt_length,
+           activation_output_function,
+           load_weights_flag,
+           checkpoints_path,
+           last_or_max_val_acc,
+           #label_encoder_output,
+           #classes_freq,
+           weighted_loss_flag[0],
+           board_log_dir,
+           #required_data_col,
+           batch_size_param,
+           earlystopping_patience)
 
 
 #print(classification_report(Y_test, y_pred))
@@ -66,5 +89,5 @@ board_log_dir="../logs/"+Experiement_Name+"/"#+.format(time())
 
 
 # ===========================Ploting===========================================
-print_model(hist)
+#print_model(hist)
 # =============================================================================

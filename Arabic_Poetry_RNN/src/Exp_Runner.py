@@ -4,12 +4,17 @@ Created on Fri Mar  2 14:53:53 2018
 
 @author: Mostafa Alaa
 """
-import preprossesor
-import RNN_Model_Helper
+#import preprossesor
+from preprossesor import get_input_encoded_data_h5
+#import RNN_Model_Helper
+from RNN_Model_Helper import get_model
 import os,errno
 import keras
+from keras.callbacks import ModelCheckpoint#,TensorBoard#,TimeDistributed
 from sklearn.model_selection import train_test_split
-def Runner(input_data_path,
+import numpy_indexed as npi
+
+def Runner(encoded_X_data_path,
            encoded_Y_data_path,
            test_size_param,
            num_layers_hidden,
@@ -18,16 +23,16 @@ def Runner(input_data_path,
            epochs_param,
            check_points_file_path,
            n_units,
-           max_Bayt_length,
+           #max_Bayt_length,
            activation_output_function,
            load_weights_flag,
            checkpoints_path,
            last_or_max_val_acc,
-           label_encoder_output,
-           classes_freq,
+           #label_encoder_output,
+           #classes_freq,
            weighted_loss_flag,
            board_log_dir,
-           required_data_col,
+           #required_data_col,
            batch_size_param,
            earlystopping_patience):
     try:
@@ -41,12 +46,24 @@ def Runner(input_data_path,
     
     # =========================Data Loading========================================
     #Bayt_Text_Encoded_Stacked, Bayt_Bahr_encoded,max_Bayt_length, label_encoder_output, classes_freq = preprossesor.get_input_encoded_date(input_data_path,required_data_col,with_tashkeel_flag)
-    Bayt_Text_Encoded_Stacked, Bayt_Bahr_encoded = get_input_encoded_data_h5(input_data_path,encoded_Y_data_path)
+    
+    encoded_X_data_path = "../data/Encoded/8bits/WithoutTashkeel/Eliminated/eliminated_data_matrix_without_tashkeel_8bitsEncoding.h5"
+ 
+    encoded_Y_data_path = "../data/Encoded/8bits/WithoutTashkeel/Eliminated/Eliminated_data_Y_Meters.h5"
+    test_size_param = 0.1
+    num_layers_hidden=3
+    layers_type='LSTM'
+    n_units=50
+    last_or_max_val_acc = 0
+    weighted_loss_flag=1
+    validation_split_param = .01
+    
+    Bayt_Text_Encoded_Stacked, Bayt_Bahr_encoded = get_input_encoded_data_h5(encoded_X_data_path , encoded_Y_data_path)
     
     # =============================================================================
     
     #==========================Data Spliting=======================================
-    #need to confirm the train/test distribution is the same ****
+    print("Start data splitting")
     X_train, X_test, Y_train, Y_test=train_test_split(Bayt_Text_Encoded_Stacked,
                                                         Bayt_Bahr_encoded, #classes
                                                         test_size=test_size_param, 
@@ -57,11 +74,27 @@ def Runner(input_data_path,
     
     # =========================Model Layers Preparations ==========================
     # create model
-    #K.set_learning_phase(1) #set learning phase
-    #
-    
-    
-    model = RNN_Model_Helper.get_model(num_layers_hidden,layers_type,n_units,max_Bayt_length,activation_output_function,load_weights_flag,checkpoints_path,last_or_max_val_acc,label_encoder_output,classes_freq,weighted_loss_flag)
+    unique_classes, classes_freq = npi.count(Bayt_Bahr_encoded, axis=0)
+# =============================================================================
+#     xxx = hash(tuple(unique_classes))
+#     dicts = dict(zip(, classes_freq))
+#     
+# =============================================================================
+    #classes_freq
+    #label_encoder_output
+
+    model = get_model(num_layers_hidden,
+                      layers_type,
+                      n_units,
+                      Bayt_Text_Encoded_Stacked.shape[1],
+                      Bayt_Text_Encoded_Stacked.shape[2],
+                      activation_output_function,
+                      load_weights_flag,
+                      checkpoints_path,
+                      last_or_max_val_acc,
+                      weighted_loss_flag,
+                      unique_classes, 
+                      classes_freq )
     
     
     #===========================last_epoch_saver====================================
@@ -141,4 +174,4 @@ def Runner(input_data_path,
     # Final evaluation of the model
     scores = model.evaluate(X_test, Y_test, verbose=1)
     print("Accuracy: %.2f%%" % (scores[1]*100))
-    y_pred = model.predict_classes(X_test)
+    #y_pred = model.predict_classes(X_test)
