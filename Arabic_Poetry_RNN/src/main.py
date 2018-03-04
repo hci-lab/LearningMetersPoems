@@ -53,10 +53,8 @@ load_weights_flag = 0
 
 #new_data_col =  [0,1,2,3,4,6,7]
 Experiement_Name = 'Experiement_test_full_data'
-checkpoints_path ="../checkpoints/"+Experiement_Name+"/"
-check_points_file_path = checkpoints_path+ "/weights-improvement-{epoch:02d}-{val_acc:.2f}.hdf5"
-board_log_dir="../logs/"+Experiement_Name+"/"#+.format(time())
-
+full_classes_encoder_path = "../data/Almoso3a_Alshe3rya/data/encoders_full_dat.pickle"
+eliminated_classes_encoder_path = "../data/Almoso3a_Alshe3rya/data/encoders_eliminated_data.pickle"
 #===============================Concatinated Variables ========================
 
 Runner(encoded_X_paths[1],
@@ -66,20 +64,24 @@ Runner(encoded_X_paths[1],
            layers_type[0],
            validation_split_param[0],
            epochs_param,
-           check_points_file_path,
            n_units,         
-           #max_Bayt_length,
            activation_output_function,
            load_weights_flag,
-           checkpoints_path,
            last_or_max_val_acc,
+           weighted_loss_flag[0],
+           batch_size_param,
+           earlystopping_patience,
+           Experiement_Name,
+           full_classes_encoder_path,
+           eliminated_classes_encoder_path
+           #board_log_dir,
+           #required_data_col,
            #label_encoder_output,
            #classes_freq,
-           weighted_loss_flag[0],
-           board_log_dir,
-           #required_data_col,
-           batch_size_param,
-           earlystopping_patience)
+           #max_Bayt_length,
+           #check_points_file_path,
+           #checkpoints_path,           
+           )
 
 
 #print(classification_report(Y_test, y_pred))

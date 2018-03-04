@@ -39,19 +39,36 @@ den_total_sample =  ((1/68601)  + ( 1/50574) + (1/37003 ) + ( 1/23238 ) + ( 1/17
 #=============================================================================
 #=============================================================================
 #=============================================================================
-def w_categorical_crossentropy(y_true, y_pred,classes_dest,unique_classes):
+def w_categorical_crossentropy(y_true, y_pred,classes_dest,encoder):
     """ # Custom loss function with costs """
-    classidx = np.where(np.all(unique_classes==y_true,axis=1))[0][0]
-    n = classes_dest[classidx]#
+    #print(type(y_true))
+    #print(y_true.shape)
+    #print(unique_classes.shape)
+    #b=K.cast(y_true,dtype='float64')
+    #x_t = K.tf.constant(classes_dest)
+    #a=K.cast(x_t,dtype='int64')
+    #wh = K.tf.argmax(K.tf.equal(unique_classes,b))
+    #wh = K.tf.argmax(unique_classes,b)
+    #print(wh.eval)
+    #print(wh.shape)
+    #masked = tf.greater(x,1)
+    #zeros = tf.zeros_like(x)
+    #new_tensor = tf.where(masked, y, zeros)
+    #.eval()
+    #classidx = np.where(np.all(unique_classes==y_true,axis=1))[0][0]
+    #apply the same idea to get the value from index
+    #n = classes_dest[wh]#
     #classes_dest[np.where(np.all(unique_classes==y_true,axis=1))[0][0]]
-    #inverted = classes_encoder.inverse_transform([argmax(y_true)])
-    #inverted = np.stack(inverted,axis = 0)
-    #n = classes_dest.loc[classes_dest['Bohor'] == inverted[0] , 'Cnt'].iloc[0]
-#    return K.categorical_crossentropy(y_pred, y_true) * (1/n)
+    #n = K.tf.gather(a, wh)
+    
+    inverted = encoder.inverse_transform([argmax(y_true)])
+    inverted = np.stack(inverted,axis = 0)
+    n = classes_dest.loc[classes_dest['Class'] == inverted[0] , 'Cnt'].iloc[0]
+    
     return K.categorical_crossentropy(y_pred, y_true) * ((1/n) / den_total_sample ) 
 # =============================================================================
 
-
+#type(classes_dest.loc[classes_dest['Class'] == "الطويل" , 'Cnt'].iloc[0])
 
 #=============================================================================
 #=============================================================================
@@ -66,10 +83,10 @@ def get_model(num_layers_hidden,
               checkpoints_path,
               last_or_max_val_acc,
               weighted_loss_flag,
-              unique_classes, 
-              classes_freq):
+              classes_dest,
+              classes_encoder):
         
-    numbber_of_bohor = unique_classes.shape[1]#classes_freq['Bohor'].unique().size
+    numbber_of_bohor = classes_dest.shape[0]#classes_freq['Bohor'].unique().size
     
     
 # =============================================================================
@@ -147,7 +164,7 @@ def get_model(num_layers_hidden,
 # =============================================================================
     #label_encoder_output = []
     print("define partial function w_categorical_crossentropy_Pfun")
-    w_categorical_crossentropy_Pfun = wrapped_partial(w_categorical_crossentropy, classes_dest = classes_freq,unique_classes = unique_classes)
+    w_categorical_crossentropy_Pfun = wrapped_partial(w_categorical_crossentropy, classes_dest = classes_dest,encoder = classes_encoder)
     print("partial function w_categorical_crossentropy_Pfun defined")
 
 # =============================================================================

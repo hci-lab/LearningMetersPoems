@@ -6,13 +6,20 @@ Created on Fri Mar  2 14:53:53 2018
 """
 #import preprossesor
 from preprossesor import get_input_encoded_data_h5
+from preprossesor import load_encoder
+from preprossesor import decode_classes
 #import RNN_Model_Helper
+import numpy as np
 from RNN_Model_Helper import get_model
 import os,errno
 import keras
 from keras.callbacks import ModelCheckpoint#,TensorBoard#,TimeDistributed
 from sklearn.model_selection import train_test_split
 import numpy_indexed as npi
+import pickle
+import pandas as pd
+
+
 
 def Runner(encoded_X_data_path,
            encoded_Y_data_path,
@@ -20,21 +27,30 @@ def Runner(encoded_X_data_path,
            num_layers_hidden,
            layers_type,
            validation_split_param,
-           epochs_param,
-           check_points_file_path,
-           n_units,
-           #max_Bayt_length,
+           epochs_param,          
+           n_units,           
            activation_output_function,
            load_weights_flag,
-           checkpoints_path,
            last_or_max_val_acc,
+           weighted_loss_flag,
+           batch_size_param,
+           earlystopping_patience,
+           Experiement_Name,
+           full_classes_encoder_path,
+           eliminated_classes_encoder_path
+           #max_Bayt_length,
+           #check_points_file_path,
+           #board_log_dir,
+           #required_data_col,
            #label_encoder_output,
            #classes_freq,
-           weighted_loss_flag,
-           board_log_dir,
-           #required_data_col,
-           batch_size_param,
-           earlystopping_patience):
+           #checkpoints_path,
+           ):
+    
+    checkpoints_path ="../checkpoints/"+Experiement_Name+"/"
+    check_points_file_path = checkpoints_path+ "/weights-improvement-{epoch:02d}-{val_acc:.2f}.hdf5"
+    board_log_dir="../logs/"+Experiement_Name+"/"#+.format(time())
+
     try:
         os.makedirs(board_log_dir)
         os.makedirs(checkpoints_path)
@@ -43,26 +59,64 @@ def Runner(encoded_X_data_path,
             print("Can't create file for checkpoints or for logs please check ")
             raise
     print("Input Parameters Defined and Experiement directory created")
+
     
-    # =========================Data Loading========================================
+# =============================================================================
+#     ### Some variables for local test 
+#     encoded_X_data_path = "../data/Encoded/8bits/WithoutTashkeel/Eliminated/eliminated_data_matrix_without_tashkeel_8bitsEncoding.h5" 
+#     encoded_Y_data_path = "../data/Encoded/8bits/WithoutTashkeel/Eliminated/Eliminated_data_Y_Meters.h5"
+#     test_size_param = 0.1
+#     num_layers_hidden=3
+#     layers_type='LSTM'
+#     n_units=50
+#     last_or_max_val_acc = 0
+#     weighted_loss_flag=1
+#     validation_split_param = .01
+#     full_classes_encoder_path = "../data/Almoso3a_Alshe3rya/data/encoders_full_dat.pickle"
+#     eliminated_classes_encoder_path = "../data/Almoso3a_Alshe3rya/data/encoders_eliminated_data.pickle"
+#     
+# =============================================================================
+
+
+    
+# =========================Data Loading========================================
     #Bayt_Text_Encoded_Stacked, Bayt_Bahr_encoded,max_Bayt_length, label_encoder_output, classes_freq = preprossesor.get_input_encoded_date(input_data_path,required_data_col,with_tashkeel_flag)
-    
-    encoded_X_data_path = "../data/Encoded/8bits/WithoutTashkeel/Eliminated/eliminated_data_matrix_without_tashkeel_8bitsEncoding.h5"
- 
-    encoded_Y_data_path = "../data/Encoded/8bits/WithoutTashkeel/Eliminated/Eliminated_data_Y_Meters.h5"
-    test_size_param = 0.1
-    num_layers_hidden=3
-    layers_type='LSTM'
-    n_units=50
-    last_or_max_val_acc = 0
-    weighted_loss_flag=1
-    validation_split_param = .01
-    
+
     Bayt_Text_Encoded_Stacked, Bayt_Bahr_encoded = get_input_encoded_data_h5(encoded_X_data_path , encoded_Y_data_path)
     
-    # =============================================================================
+# =============================================================================
+
+# ==============================================================================
+    unique_classes, classes_freq = npi.count(Bayt_Bahr_encoded, axis=0)
     
-    #==========================Data Spliting=======================================
+    
+    #get saved encoded data
+    
+    if "eliminated" not in Experiement_Name:     
+        print("working into full data")
+        classes_encoder = load_encoder(full_classes_encoder_path)
+        names_of_classes = np.apply_along_axis(decode_classes, 0, unique_classes,classes_encoder)
+    else:
+        print("working into eliminated data")
+        classes_encoder = load_encoder(eliminated_classes_encoder_path)
+        names_of_classes = np.apply_along_axis(decode_classes, 0, unique_classes,classes_encoder)
+
+
+
+# ==============================================================================
+    #Prepare the dataframe    
+    a = np.stack(names_of_classes,axis=0)
+    b = np.stack(classes_freq,axis=0).reshape((1,np.stack(classes_freq,axis=0).shape[0]))
+    classes_dest = pd.DataFrame(np.dstack((a,b)).reshape(np.dstack((a,b)).shape[1],np.dstack((a,b)).shape[2]),columns = ['Class','Cnt'])    
+    classes_dest['Cnt'] = classes_dest.Cnt.astype(int)
+    classes_dest.dtype = [str,int]
+    #test =int( xxx[xxx.Bahr == 'الوافر'].Cnt[0])
+
+# ==============================================================================
+    
+    
+    
+#==========================Data Spliting=======================================
     print("Start data splitting")
     X_train, X_test, Y_train, Y_test=train_test_split(Bayt_Text_Encoded_Stacked,
                                                         Bayt_Bahr_encoded, #classes
@@ -72,16 +126,14 @@ def Runner(encoded_X_data_path,
     #default padding need to check the paramters details
     print("Input Train/Test Split done.")
     
-    # =========================Model Layers Preparations ==========================
-    # create model
-    unique_classes, classes_freq = npi.count(Bayt_Bahr_encoded, axis=0)
+
 # =============================================================================
 #     xxx = hash(tuple(unique_classes))
 #     dicts = dict(zip(, classes_freq))
 #     
-# =============================================================================
-    #classes_freq
-    #label_encoder_output
+    
+# =========================Model Layers Preparations ===========================
+    # create model
 
     model = get_model(num_layers_hidden,
                       layers_type,
@@ -93,11 +145,11 @@ def Runner(encoded_X_data_path,
                       checkpoints_path,
                       last_or_max_val_acc,
                       weighted_loss_flag,
-                      unique_classes, 
-                      classes_freq )
+                      classes_dest,
+                      classes_encoder)
     
     
-    #===========================last_epoch_saver====================================
+#===========================last_epoch_saver====================================
     class last_epoch_saver(keras.callbacks.Callback):
         def on_epoch_end(self, epoch, logs={}):
             #save last epoch weghits 

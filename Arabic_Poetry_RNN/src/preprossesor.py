@@ -10,10 +10,11 @@ import helpers
 from helpers import string_with_tashkeel_vectorizer,string_vectorizer
 import numpy as np
 #from numpy import array
-#from numpy import argmax
+from numpy import argmax
 import pandas as pd
 import re
 import h5py
+import pickle
 import matplotlib as plt
 from sklearn.preprocessing import OneHotEncoder
 from sklearn.preprocessing import LabelEncoder
@@ -34,6 +35,8 @@ def get_input_encoded_data_h5(encoded_X_data_path,encoded_Y_data_path):
     print("Finish loading the data")
     return Bayt_Text_Encoded,Bohor_Encoded
 
+def decode_classes(a,encoder):
+    return encoder.inverse_transform([argmax(a)])
 
 
 
@@ -105,6 +108,17 @@ def print_model(hist):
     plt.xlabel('epoch')
     plt.legend(['train', 'test'], loc='upper left')
     plt.show()
+
+def load_encoder(encoder_path):
+    print("Start loading the encoder")
+    with open(encoder_path, 'rb') as f:
+        encoders = pickle.load(f)        
+    print("finish loading the encoder")
+    return encoders
+    
+#print('loading saved encoders from %s'%(encoders_file_name))
+
+    
 
 
 # =============================================================================
