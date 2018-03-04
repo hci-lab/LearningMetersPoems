@@ -81,13 +81,17 @@ def Runner(encoded_X_data_path,
     
 # =========================Data Loading========================================
     #Bayt_Text_Encoded_Stacked, Bayt_Bahr_encoded,max_Bayt_length, label_encoder_output, classes_freq = preprossesor.get_input_encoded_date(input_data_path,required_data_col,with_tashkeel_flag)
-
+    
+    
     Bayt_Text_Encoded_Stacked, Bayt_Bahr_encoded = get_input_encoded_data_h5(encoded_X_data_path , encoded_Y_data_path)
     
 # =============================================================================
 
 # ==============================================================================
     unique_classes, classes_freq = npi.count(Bayt_Bahr_encoded, axis=0)
+    #unique_classes_pd = pd.DataFrame(unique_classes)
+    #sss = unique_classes_pd.apply(decode_classes,args=(classes_encoder),axis = 0)
+    
     
     
     #get saved encoded data
@@ -96,6 +100,7 @@ def Runner(encoded_X_data_path,
         print("working into full data")
         classes_encoder = load_encoder(full_classes_encoder_path)
         names_of_classes = np.apply_along_axis(decode_classes, 0, unique_classes,classes_encoder)
+        
     else:
         print("working into eliminated data")
         classes_encoder = load_encoder(eliminated_classes_encoder_path)
@@ -109,7 +114,15 @@ def Runner(encoded_X_data_path,
     b = np.stack(classes_freq,axis=0).reshape((1,np.stack(classes_freq,axis=0).shape[0]))
     classes_dest = pd.DataFrame(np.dstack((a,b)).reshape(np.dstack((a,b)).shape[1],np.dstack((a,b)).shape[2]),columns = ['Class','Cnt'])    
     classes_dest['Cnt'] = classes_dest.Cnt.astype(int)
-    classes_dest.dtype = [str,int]
+    
+    #the below line removed to fix the below warning 
+    #__main__:1: UserWarning: Pandas doesn't allow 
+    #columns to be created via a new attribute name 
+    #see 
+    #https://pandas.pydata.org/pandas-docs/stable/indexing.html#attribute-access
+    
+    #classes_dest.dtype = [str,int]
+    
     #test =int( xxx[xxx.Bahr == 'الوافر'].Cnt[0])
 
 # ==============================================================================
@@ -227,3 +240,11 @@ def Runner(encoded_X_data_path,
     scores = model.evaluate(X_test, Y_test, verbose=1)
     print("Accuracy: %.2f%%" % (scores[1]*100))
     #y_pred = model.predict_classes(X_test)
+    
+    ##free some variables from memory  
+    del Bayt_Text_Encoded_Stacked
+    del X_train
+    del X_test 
+    del Y_train
+    del Y_test 
+    del Bayt_Bahr_encoded 
