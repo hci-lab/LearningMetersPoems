@@ -158,7 +158,7 @@ def get_model(num_layers_hidden,
     
     if(load_weights_flag == 1):
         print("Loading Old model")
-        model = load_weights(load_weights_flag,checkpoints_path,last_or_max_val_acc,model)    
+        model = load_weights(checkpoints_path,last_or_max_val_acc,model)    
 # =============================================================================
 
 # =============================================================================
