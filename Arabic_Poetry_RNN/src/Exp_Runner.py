@@ -11,6 +11,7 @@ from preprossesor import decode_classes
 #import RNN_Model_Helper
 import numpy as np
 from RNN_Model_Helper import get_model
+from RNN_Model_Helper import load_weights
 import os,errno
 import keras
 from keras.callbacks import ModelCheckpoint#,TensorBoard#,TimeDistributed
@@ -237,7 +238,9 @@ def Runner(encoded_X_data_path,
     
     #===========================Evaluate model=====================================
     # Final evaluation of the model
-    scores = model.evaluate(X_test, Y_test, verbose=1)
+    max_model = load_weights(checkpoints_path,last_or_max_val_acc)
+    
+    scores = max_model.evaluate(X_test, Y_test, verbose=1)
     print("Accuracy: %.2f%%" % (scores[1]*100))
     #y_pred = model.predict_classes(X_test)
     

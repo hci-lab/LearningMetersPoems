@@ -102,7 +102,7 @@ for X,Y in zip(encoded_X_paths,encoded_Y_paths):
                        #checkpoints_path,           
                        )
 
-                
+      
                     
                     
             

@@ -190,7 +190,7 @@ def get_model(num_layers_hidden,
 # =============================================================================
 # =============================================================================
     
-def load_weights(load_weights_flag,checkpoints_path,last_or_max_val_acc,model):
+def load_weights(checkpoints_path,last_or_max_val_acc):
     try:
         #List all avialble checkpoints into the directory
         checkpoints_path_list = os.listdir(checkpoints_path)
@@ -212,12 +212,13 @@ def load_weights(load_weights_flag,checkpoints_path,last_or_max_val_acc,model):
             print(max_checkpoint)
             #load weights
             model = keras.models.load_model(max_checkpoint)
-    
-        print (" max_weight_checkpoints")
-        print(all_checkpoints_list_sorted[-1])
-        max_weight_checkpoints =  all_checkpoints_list_sorted[-1]
-        # load weights
-        model.load_weights(max_weight_checkpoints)
+# =============================================================================
+#         print (" max_weight_checkpoints")
+#         print(all_checkpoints_list_sorted[-1])
+#         max_weight_checkpoints =  all_checkpoints_list_sorted[-1]
+#         # load weights
+#         model.load_weights(max_weight_checkpoints)
+# =============================================================================
     except IOError:
         print('An error occured trying to read the file.')
     except:
