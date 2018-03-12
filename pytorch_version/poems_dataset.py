@@ -3,10 +3,53 @@ import torch.utils.data.dataset as Dataset
 
 
 class POEMS(Dataset):
+    """Dataset Handler;
+        * Splits the dataset into (train, test).
+        * Performs encoding.
 
-    def __init__(self):
-        pass
-    
+        * It is used by the DataLoader.
+    """
+
+    train_csv_file = 'train_csv_data.csv'
+    test_csv_file  = 'test_csv_data.csv'
+    test_size      = 10
+    def __init__(self, csv_file, train=False, transform=None):
+        """
+            * Populates train_values or test_values.
+            
+        Args:
+            csv_file (string): On (Bayt & Bahr) Format.
+            transform : fucntion pointer, vectorizing method.
+            
+            
+        TODO:
+            * Padding length -> From the Hole dataset, before any splitting.
+        """
+        dataDF = pd.read_csv(csv_file, index_col=0)
+        
+        # Making those available for the rest methods.
+        self.len_maximum_bayt = np.max(dataDF['bayt'].apply(strip_tashkeel).apply(len))
+        self.transform = transform
+        self.train     = train
+        
+        
+        # Getting Unique Bohor
+        classic_bohor = dataDF.bahr.unique()
+        
+        
+        # Splitting the dataDF
+        self.split_dataDF(dataDF,
+                          self.train_csv_file,  # Outputs csv for training.
+                          self.test_csv_file)   # Outputs csv for testing.
+        
+        
+        if  self.train:
+            self.train_data = pd.read_csv(self.train_csv_file).values
+            print(len(self.train_data))
+        else:
+            self.test_data = pd.read_csv(self.test_csv_file).values
+            print(len(self.test_data))
+
 
     def __len__(self):
         if self.train:
@@ -20,7 +63,7 @@ class POEMS(Dataset):
         pass
 
 
-    def split_dataDF(self, dataDF, trainFileName, testFileName, test_size=10):
+    def split_dataDF(self, dataDF, trainFileName, testFileName):
         '''Splits the hole data to train/test.'''
     
         test_DF  = pd.DataFrame(columns=['bayt', 'bahr'])
@@ -34,7 +77,7 @@ class POEMS(Dataset):
 
             bahr_data = dataDF.loc[dataDF['bahr'] == x]
             bahr_size = len(bahr_data)
-            testing_number = int(bahr_size * (test_size / 100))
+            testing_number = int(bahr_size * (self.test_size / 100))
 
             #print(len(bahr_size))
             #print('{} -> {} '.format(bahr_size, int(testing_number)), bahr_size - int(testing_number))
