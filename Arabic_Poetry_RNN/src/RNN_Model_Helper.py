@@ -9,6 +9,7 @@ from __future__ import print_function
 import os,sys
 import keras
 import numpy as np
+import re
 from keras.models import Sequential
 from keras.layers import Dense, LSTM,Bidirectional#
 from keras import backend as K
@@ -20,54 +21,107 @@ from functools import partial, update_wrapper
 #from keras.preprocessing import sequence
 #from keras.callbacks import ModelCheckpoint,TensorBoard#,TimeDistributed
 
+# =============================================================================
+# =============================================================================
+# =============================================================================
 def wrapped_partial(func, *args, **kwargs):
     """ Function to handle this error AttributeError: 'functools.partial' 
     object has no attribute '__name__' """
     partial_func = partial(func, *args, **kwargs)
     update_wrapper(partial_func, func)
     return partial_func
+# =============================================================================
 
 
 den_total_sample =  ((1/68601)  + ( 1/50574) + (1/37003 ) + ( 1/23238 ) + ( 1/17984 ) + ( 1/9075 ) + ( 1/7638 ) + ( 1/6662 ) + ( 1/4375 ) + ( 1/2085 ) + ( 1/380))
 
+
 #=============================================================================
-def w_categorical_crossentropy(y_true, y_pred,classes_dest,classes_encoder):
+#=============================================================================
+#=============================================================================
+def w_categorical_crossentropy(y_true, y_pred,classes_dest,encoder):
     """ # Custom loss function with costs """
-    inverted = classes_encoder.inverse_transform([argmax(y_true)])
-    #inverted = np.stack(inverted,axis = 0)
-    n = classes_dest.loc[classes_dest['Bohor'] == inverted[0] , 'Cnt'].iloc[0]
-#    return K.categorical_crossentropy(y_pred, y_true) * (1/n)
+    #print(type(y_true))
+    #print(y_true.shape)
+    #print(unique_classes.shape)
+    #b=K.cast(y_true,dtype='float64')
+    #x_t = K.tf.constant(classes_dest)
+    #a=K.cast(x_t,dtype='int64')
+    #wh = K.tf.argmax(K.tf.equal(unique_classes,b))
+    #wh = K.tf.argmax(unique_classes,b)
+    #print(wh.eval)
+    #print(wh.shape)
+    #masked = tf.greater(x,1)
+    #zeros = tf.zeros_like(x)
+    #new_tensor = tf.where(masked, y, zeros)
+    #.eval()
+    #classidx = np.where(np.all(unique_classes==y_true,axis=1))[0][0]
+    #apply the same idea to get the value from index
+    #n = classes_dest[wh]#
+    #classes_dest[np.where(np.all(unique_classes==y_true,axis=1))[0][0]]
+    #n = K.tf.gather(a, wh)
+    
+    inverted = encoder.inverse_transform([argmax(y_true)])
+    inverted = np.stack(inverted,axis = 0)
+    n = classes_dest.loc[classes_dest['Class'] == inverted[0] , 'Cnt'].iloc[0]
+    
     return K.categorical_crossentropy(y_pred, y_true) * ((1/n) / den_total_sample ) 
+# =============================================================================
 
+#type(classes_dest.loc[classes_dest['Class'] == "الطويل" , 'Cnt'].iloc[0])
 
 #=============================================================================
-def get_model(num_layers_hidden,layers_type,n_units,max_Bayt_length,activation_output_function, load_weights_flag,checkpoints_path,last_or_max_val_acc,label_encoder_output,classes_freq,weighted_loss_flag):
+#=============================================================================
+#=============================================================================
+def get_model(num_layers_hidden,
+              layers_type,
+              n_units,
+              max_Bayt_length,
+              encoding_length,
+              activation_output_function,
+              load_weights_flag,
+              checkpoints_path,
+              last_or_max_val_acc,
+              weighted_loss_flag,
+              classes_dest,
+              classes_encoder):
         
-    numbber_of_bohor = classes_freq['Bohor'].unique().size
+    numbber_of_bohor = classes_dest.shape[0]#classes_freq['Bohor'].unique().size
+    
+    
 # =============================================================================
-#     print("num_layers_hidden %d" %num_layers_hidden)
-#     print("layers_type %s" %layers_type)
-#     print("n_units %d" %n_units)
-#     print("max_Bayt_length %d" %max_Bayt_length)
-#     print("activation_output_function %s" %activation_output_function)
-#     print("numbber_of_bohor %d" %numbber_of_bohor)
-#     print("load_weights_flag %d" %load_weights_flag)
-#     print("checkpoints_path %s" %checkpoints_path)
-#     print("last_or_max_val_acc %d" %last_or_max_val_acc)
+#     max_Bayt_length = Bayt_Text_Encoded_Stacked.shape[1]
+#     encoding_length = Bayt_Text_Encoded_Stacked.shape[2]
+#     
+# =============================================================================
+# =============================================================================
+    print("num_layers_hidden %d" %num_layers_hidden)
+    print("layers_type %s" %layers_type)
+    print("n_units %d" %n_units)
+    print("max_Bayt_length %d" %max_Bayt_length)
+    print("max_Bayt_length %d" %encoding_length)
+    print("activation_output_function %s" %activation_output_function)
+    print("load_weights_flag %d" %load_weights_flag)
+    print("checkpoints_path %s" %checkpoints_path)
+    print("last_or_max_val_acc %d" %last_or_max_val_acc)
+    print("last_or_max_val_acc %d" %weighted_loss_flag)
+    print("numbber_of_bohor %d" %numbber_of_bohor)
 #     
 # =============================================================================
     model = Sequential()
     print('Model Sequential defined')
     if(layers_type == 'LSTM'):
         print('Model LSTM Layer added')
-        model.add(LSTM(units = n_units, input_shape=(max_Bayt_length, 8), return_sequences=True))
+        model.add(LSTM(units = n_units, input_shape=(max_Bayt_length, encoding_length), return_sequences=True))
     elif  (layers_type == 'Bidirectional_LSTM'):
         print('Model input Bidirectional_LSTM Layer added')
-        model.add(Bidirectional(LSTM(n_units, return_sequences=True), input_shape=(max_Bayt_length, 8)))
+        model.add(Bidirectional(LSTM(n_units, return_sequences=True), input_shape=(max_Bayt_length, encoding_length)))
     else:
         print('Model Dense Layer added')
-        model.add(Dense(n_units,activation = 'relu',input_shape=(max_Bayt_length, 8)))
-    
+        model.add(Dense(n_units,activation = 'relu',input_shape=(max_Bayt_length, encoding_length)))
+# =============================================================================
+
+# =============================================================================
     for _ in range(num_layers_hidden-1):
         if(layers_type == 'LSTM'):
             print('Model LSTM Layer added')
@@ -78,6 +132,9 @@ def get_model(num_layers_hidden,layers_type,n_units,max_Bayt_length,activation_o
         else:
             print('Model Dense Layer added')
             model.add(Dense(n_units))
+# =============================================================================
+
+# =============================================================================
     
     if(layers_type == 'LSTM'):
         print('Model LSTM prefinal Layer added')
@@ -88,26 +145,52 @@ def get_model(num_layers_hidden,layers_type,n_units,max_Bayt_length,activation_o
     else:
         print('Model Dense prefinal Layer added')
         model.add(Dense(n_units))
+# =============================================================================
+
+# =============================================================================
         
     # Adding the output layer
     print('Model Dense final Layer added')
     model.add(Dense(units = numbber_of_bohor,activation = activation_output_function))
+# =============================================================================
+
+# =============================================================================
+    
     if(load_weights_flag == 1):
         print("Loading Old model")
-        model = load_weights(load_weights_flag,checkpoints_path,last_or_max_val_acc,model)    
-    w_categorical_crossentropy_Pfun = wrapped_partial(w_categorical_crossentropy, classes_dest = classes_freq,classes_encoder = label_encoder_output)
+        model = load_weights(checkpoints_path,last_or_max_val_acc,model)    
+# =============================================================================
 
+# =============================================================================
+    #label_encoder_output = []
+    print("define partial function w_categorical_crossentropy_Pfun")
+    w_categorical_crossentropy_Pfun = wrapped_partial(w_categorical_crossentropy, classes_dest = classes_dest,encoder = classes_encoder)
+    print("partial function w_categorical_crossentropy_Pfun defined")
+
+# =============================================================================
+
+# =============================================================================
     
     if(weighted_loss_flag == 1):
+        print("Model w_categorical_crossentropy_Pfun loss function defined")
         model.compile(optimizer = 'adam', loss=w_categorical_crossentropy_Pfun, metrics = ['accuracy'])
+        print("Model w_categorical_crossentropy_Pfun loss function finish")
     else:
         model.compile(optimizer = 'adam', loss='categorical_crossentropy',metrics = ['accuracy'])
     print('Model Compiled')
     print(model.summary())
     
     return model
+# =============================================================================
+
+# =============================================================================
+
+
+# =============================================================================
+# =============================================================================
+# =============================================================================
     
-def load_weights(load_weights_flag,checkpoints_path,last_or_max_val_acc,model):
+def load_weights(checkpoints_path,last_or_max_val_acc):
     try:
         #List all avialble checkpoints into the directory
         checkpoints_path_list = os.listdir(checkpoints_path)
@@ -129,12 +212,13 @@ def load_weights(load_weights_flag,checkpoints_path,last_or_max_val_acc,model):
             print(max_checkpoint)
             #load weights
             model = keras.models.load_model(max_checkpoint)
-    
-        print (" max_weight_checkpoints")
-        print(all_checkpoints_list_sorted[-1])
-        max_weight_checkpoints =  all_checkpoints_list_sorted[-1]
-        # load weights
-        model.load_weights(max_weight_checkpoints)
+# =============================================================================
+#         print (" max_weight_checkpoints")
+#         print(all_checkpoints_list_sorted[-1])
+#         max_weight_checkpoints =  all_checkpoints_list_sorted[-1]
+#         # load weights
+#         model.load_weights(max_weight_checkpoints)
+# =============================================================================
     except IOError:
         print('An error occured trying to read the file.')
     except:
@@ -144,3 +228,6 @@ def load_weights(load_weights_flag,checkpoints_path,last_or_max_val_acc,model):
              print("No wieghts avialable \n check the paths")
 
     return model
+# =============================================================================
+# =============================================================================
+# =============================================================================
