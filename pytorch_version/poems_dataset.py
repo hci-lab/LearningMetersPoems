@@ -3,6 +3,7 @@ import torch.utils.data as data
 from pyarabic.araby import strip_tashkeel
 import pandas as pd
 import numpy as np
+import torch
 import helpers
 import os
 
@@ -84,7 +85,8 @@ class POEMS(data.Dataset):
     
         # Encoding an item
         if self.transform:
-            item = [self.transform(item[0], self.len_maximum_bayt), item[1]]
+            encoded_obser = self.transform(item[0], self.len_maximum_bayt)
+            item = [torch.from_numpy(encoded_obser), item[1]]
         
         return item
 
