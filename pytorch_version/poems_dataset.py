@@ -60,7 +60,24 @@ class POEMS(Dataset):
 
 
     def __getitem__(self):
-        pass
+        """
+        Args:
+            Index: starts at 0
+            
+        Return:
+            list: (Bayt, Label)
+        """
+        # Picking an item
+        if self.train:
+            item = self.train_data[index]
+        else:
+            item = self.test_data[index]
+    
+        # Encoding an item
+        if self.transform:
+            item = [self.transform(item[0], self.len_maximum_bayt), item[1]]
+        
+        return item
 
 
     def split_dataDF(self, dataDF, trainFileName, testFileName):
