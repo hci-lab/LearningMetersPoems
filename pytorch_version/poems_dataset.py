@@ -15,3 +15,8 @@ class POEMS(Dataset):
 
     def __getitem__(self):
         pass
+
+
+    def check_existance(self):
+        return os.path.exists(self.train_csv_file) and\
+               os.path.exists(self.test_csv_file)
