@@ -9,7 +9,10 @@ class POEMS(Dataset):
     
 
     def __len__(self):
-        pass
+        if self.train:
+            return len(self.train_data)
+        else:
+            return len(self.test_data)
 
 
 
