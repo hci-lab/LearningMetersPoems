@@ -91,8 +91,8 @@ class POEMS(Dataset):
             if self.check_existance():
                 print('train/test already exist')
             else:
-                train_DF.to_csv(trainFileName)
-                test_DF.to_csv(testFileName)
+                train_DF.to_csv(trainFileName, index=False)
+                test_DF.to_csv(testFileName, index=False)
         except RuntimeError:
             raise RuntimeError('train/test csv are not created!')
 
