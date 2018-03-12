@@ -1,8 +1,13 @@
 """Dataset Module for Splitting and Ecnoding"""
-import torch.utils.data.dataset as Dataset
+import torch.utils.data as data
+from pyarabic.araby import strip_tashkeel
+import pandas as pd
+import numpy as np
+import helpers
+import os
 
 
-class POEMS(Dataset):
+class POEMS(data.Dataset):
     """Dataset Handler;
         * Splits the dataset into (train, test).
         * Performs encoding.
@@ -59,7 +64,7 @@ class POEMS(Dataset):
 
 
 
-    def __getitem__(self):
+    def __getitem__(self, index):
         """
         Args:
             Index: starts at 0
@@ -117,3 +122,15 @@ class POEMS(Dataset):
     def check_existance(self):
         return os.path.exists(self.train_csv_file) and\
                os.path.exists(self.test_csv_file)
+
+
+'''
+poems_train = POEMS('Diwan_X_Y_Raw_UNIQUE.csv', train=True)
+poems_test  = POEMS('Diwan_X_Y_Raw_UNIQUE.csv',
+                             train=False,
+                             transform=helpers.string_with_tashkeel_vectorizer)
+
+print(len(poems_test.__getitem__(9111)))
+print(poems_test.__getitem__(9111)[0])
+print(poems_test.__getitem__(9111)[1])
+'''
