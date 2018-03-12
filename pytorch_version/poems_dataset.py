@@ -50,10 +50,14 @@ class POEMS(data.Dataset):
         
         if  self.train:
             self.train_data = pd.read_csv(self.train_csv_file).values
-            print(len(self.train_data))
+            train_len = len(self.train_data)
+            ratio = round(train_len / len(dataDF) *100, 1)
+            print('Trains Data: {} obervations, {}% of the hole data.'.format(train_len, ratio))
         else:
             self.test_data = pd.read_csv(self.test_csv_file).values
-            print(len(self.test_data))
+            test_len = len(self.test_data)
+            ratio = round(test_len / len(dataDF) * 100, 1)
+            print('Testing Data: {} obervations, {}% of the hole data.'.format(test_len, ratio))
 
 
     def __len__(self):
