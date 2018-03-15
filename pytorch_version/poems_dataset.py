@@ -156,7 +156,6 @@ class POEMS(data.Dataset):
 
         return label_encoding_dict, encoding_label_dict
 
-
 '''
 poems_train = POEMS('Diwan_X_Y_Raw_UNIQUE.csv', train=True)
 poems_test  = POEMS('Diwan_X_Y_Raw_UNIQUE.csv',
@@ -166,4 +165,17 @@ poems_test  = POEMS('Diwan_X_Y_Raw_UNIQUE.csv',
 print(len(poems_test.__getitem__(9111)))
 print(poems_test.__getitem__(9111)[0])
 print(poems_test.__getitem__(9111)[1])
+
+for x in poems_test.label_encoding_dict:
+    print('{} {}'.format(x, poems_test.label_encoding_dict[x]))
+print('\n\n')
+for x in poems_test.encoding_label_dict:
+    print('{} {}'.format(x, poems_test.encoding_label_dict[x]))
+print('\n\n')
+print('\n\n')
+for x in poems_train.label_encoding_dict:
+    print('{} {}'.format(x, poems_train.label_encoding_dict[x]))
+print('\n\n')
+for x in poems_train.encoding_label_dict:
+    print('{} {}'.format(x, poems_train.encoding_label_dict[x]))
 '''
