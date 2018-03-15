@@ -12,6 +12,7 @@ class POEMS(data.Dataset):
     """Dataset Handler;
         * Splits the dataset into (train, test).
         * Performs encoding.
+        * Exports forward and backward dictionaries for classes/encodings.
 
         * It is used by the DataLoader.
     """
