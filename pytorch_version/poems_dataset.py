@@ -32,6 +32,8 @@ class POEMS(data.Dataset):
             * Padding length -> From the Hole dataset, before any splitting.
         """
         dataDF = pd.read_csv(csv_file, index_col=0)
+        # Getting Unique Bohor
+        classes = dataDF.bahr.unique()
         
         # Making those available for the rest methods.
         self.len_maximum_bayt = np.max(dataDF['bayt'].apply(strip_tashkeel).apply(len))
@@ -39,8 +41,14 @@ class POEMS(data.Dataset):
         self.train     = train
         
         
-        # Getting Unique Bohor
-        classic_bohor = dataDF.bahr.unique()
+        # dictionary that holds a unique integer for every class
+        self.label_encoding_dict, self.encoding_label_dict = self.label_encoder(classes)
+
+        '''
+        # Testing
+        print(self.label_encoding_dict['الخفيف'])
+        print(self.encoding_label_dict[2])
+        '''
         
         
         # Splitting the dataDF
@@ -79,6 +87,7 @@ class POEMS(data.Dataset):
         """
         # Picking an item
         if self.train:
+            # item: [bayt, bahr_name] *RAW in arabic
             item = self.train_data[index]
         else:
             item = self.test_data[index]
@@ -86,7 +95,8 @@ class POEMS(data.Dataset):
         # Encoding an item
         if self.transform:
             encoded_obser = self.transform(item[0], self.len_maximum_bayt)
-            item = [torch.from_numpy(encoded_obser), item[1]]
+            label_enc = self.label_encoding_dict[item[1]]
+            item = [torch.from_numpy(encoded_obser), label_enc]
         
         return item
 
@@ -128,6 +138,23 @@ class POEMS(data.Dataset):
     def check_existance(self):
         return os.path.exists(self.train_csv_file) and\
                os.path.exists(self.test_csv_file)
+
+
+    def label_encoder(self, classes):
+        """
+        Args:
+            classes [str]: a list of meters names.
+        """
+        label_encoding_dict = {}
+        encoding_label_dict = {}
+        label_num = 1
+
+        for class_ in classes:
+            label_encoding_dict.update({class_: label_num})
+            encoding_label_dict.update({label_num: class_})
+            label_num += 1
+
+        return label_encoding_dict, encoding_label_dict
 
 
 '''
