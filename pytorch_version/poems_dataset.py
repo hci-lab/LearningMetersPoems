@@ -42,6 +42,10 @@ class POEMS(data.Dataset):
         
         
         # dictionary that holds a unique integer for every class
+        '''
+            * label_encoding_dict: from meter name -> meter number
+            * encoding_label_dict: from meter number -> meter name
+        '''
         self.label_encoding_dict, self.encoding_label_dict = self.label_encoder(classes)
 
         '''
