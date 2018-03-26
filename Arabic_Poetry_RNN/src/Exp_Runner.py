@@ -4,22 +4,19 @@ Created on Fri Mar  2 14:53:53 2018
 
 @author: Mostafa Alaa
 """
-#import preprossesor
 from preprossesor import get_input_encoded_data_h5
 from preprossesor import load_encoder
 from preprossesor import decode_classes
-#import RNN_Model_Helper
 import numpy as np
 from RNN_Model_Helper import get_model
 from RNN_Model_Helper import load_weights
 import os,errno
 import keras
-from keras.callbacks import ModelCheckpoint#,TensorBoard#,TimeDistributed
+from keras.callbacks import ModelCheckpoint
 from sklearn.model_selection import train_test_split
 import numpy_indexed as npi
-import pickle
 import pandas as pd
-
+from sklearn.metrics import confusion_matrix    
 
 
 def Runner(encoded_X_data_path,
@@ -38,20 +35,16 @@ def Runner(encoded_X_data_path,
            earlystopping_patience,
            Experiement_Name,
            full_classes_encoder_path,
-           eliminated_classes_encoder_path
-           #max_Bayt_length,
-           #check_points_file_path,
-           #board_log_dir,
-           #required_data_col,
-           #label_encoder_output,
-           #classes_freq,
-           #checkpoints_path,
-           ):
+           eliminated_classes_encoder_path):
     
+#===============================================================================    
+    
+    #Experiement_Name = "Exp_1_eliminated_data_matrix_without_tashkeel_8bitsEncoding_LSTM_2_20_0"
     checkpoints_path ="../checkpoints/"+Experiement_Name+"/"
     check_points_file_path = checkpoints_path+ "/weights-improvement-{epoch:02d}-{val_acc:.2f}.hdf5"
-    board_log_dir="../logs/"+Experiement_Name+"/"#+.format(time())
+    board_log_dir="../logs/"+Experiement_Name+"/"
 
+#===============================================================================
     try:
         os.makedirs(board_log_dir)
         os.makedirs(checkpoints_path)
@@ -61,28 +54,17 @@ def Runner(encoded_X_data_path,
             raise
     print("Input Parameters Defined and Experiement directory created")
 
-    
+#===============================================================================
+
 # =============================================================================
-#     ### Some variables for local test 
 #     encoded_X_data_path = "../data/Encoded/8bits/WithoutTashkeel/Eliminated/eliminated_data_matrix_without_tashkeel_8bitsEncoding.h5" 
 #     encoded_Y_data_path = "../data/Encoded/8bits/WithoutTashkeel/Eliminated/Eliminated_data_Y_Meters.h5"
-#     test_size_param = 0.1
-#     num_layers_hidden=3
-#     layers_type='LSTM'
-#     n_units=50
-#     last_or_max_val_acc = 0
-#     weighted_loss_flag=1
-#     validation_split_param = .01
-#     full_classes_encoder_path = "../data/Almoso3a_Alshe3rya/data/encoders_full_dat.pickle"
-#     eliminated_classes_encoder_path = "../data/Almoso3a_Alshe3rya/data/encoders_eliminated_data.pickle"
-#     
+# # =============================================================================
 # =============================================================================
 
 
     
-# =========================Data Loading========================================
-    #Bayt_Text_Encoded_Stacked, Bayt_Bahr_encoded,max_Bayt_length, label_encoder_output, classes_freq = preprossesor.get_input_encoded_date(input_data_path,required_data_col,with_tashkeel_flag)
-    
+# =========================Data Loading========================================    
     
     Bayt_Text_Encoded_Stacked, Bayt_Bahr_encoded = get_input_encoded_data_h5(encoded_X_data_path , encoded_Y_data_path)
     
@@ -90,62 +72,43 @@ def Runner(encoded_X_data_path,
 
 # ==============================================================================
     unique_classes, classes_freq = npi.count(Bayt_Bahr_encoded, axis=0)
-    #unique_classes_pd = pd.DataFrame(unique_classes)
-    #sss = unique_classes_pd.apply(decode_classes,args=(classes_encoder),axis = 0)
-    
-    
     
     #get saved encoded data
     
     if "eliminated" not in Experiement_Name:     
         print("working into full data")
         classes_encoder = load_encoder(full_classes_encoder_path)
-        names_of_classes = np.apply_along_axis(decode_classes, 0, unique_classes,classes_encoder)
+        names_of_classes = np.apply_along_axis(decode_classes, 
+                                               0, 
+                                               unique_classes,
+                                               classes_encoder)
+        Bohor_Classes = ['الوافر', 'المنسرح', 'المديد', 'المجتث', 'المتقارب', 'الكامل', 'الطويل', 'السريع', 'الرمل', 'الرجز', 'الخفيف', 'البسيط']
         
     else:
         print("working into eliminated data")
         classes_encoder = load_encoder(eliminated_classes_encoder_path)
         names_of_classes = np.apply_along_axis(decode_classes, 0, unique_classes,classes_encoder)
-
-
-
+        Bohor_Classes = ['الوافر', 'المنسرح', 'المديد', 'المجتث', 'المتقارب', 'الكامل', 'الطويل', 'السريع', 'الرمل', 'الرجز', 'الخفيف', 'البسيط','المقتضب','الهزج','المضارع','المتدارك']
+        
 # ==============================================================================
+
     #Prepare the dataframe    
     a = np.stack(names_of_classes,axis=0)
     b = np.stack(classes_freq,axis=0).reshape((1,np.stack(classes_freq,axis=0).shape[0]))
-    classes_dest = pd.DataFrame(np.dstack((a,b)).reshape(np.dstack((a,b)).shape[1],np.dstack((a,b)).shape[2]),columns = ['Class','Cnt'])    
-    classes_dest['Cnt'] = classes_dest.Cnt.astype(int)
+    classes_dest = pd.DataFrame(np.dstack((a,b)).reshape(np.dstack((a,b)).shape[1],np.dstack((a,b)).shape[2]),columns = ['Class','Cnt'])
+    classes_dest['Cnt'] = classes_dest.Cnt.astype(int)        
     
-    #the below line removed to fix the below warning 
-    #__main__:1: UserWarning: Pandas doesn't allow 
-    #columns to be created via a new attribute name 
-    #see 
-    #https://pandas.pydata.org/pandas-docs/stable/indexing.html#attribute-access
-    
-    #classes_dest.dtype = [str,int]
-    
-    #test =int( xxx[xxx.Bahr == 'الوافر'].Cnt[0])
-
-# ==============================================================================
-    
-    
-    
-#==========================Data Spliting=======================================
+#==========================Data Spliting========================================
     print("Start data splitting")
     X_train, X_test, Y_train, Y_test=train_test_split(Bayt_Text_Encoded_Stacked,
-                                                        Bayt_Bahr_encoded, #classes
+                                                        Bayt_Bahr_encoded,
                                                         test_size=test_size_param, 
                                                         random_state=0)
     
-    #default padding need to check the paramters details
-    print("Input Train/Test Split done.")
-    
+    print("Input Train/Test Split done.")   
 
-# =============================================================================
-#     xxx = hash(tuple(unique_classes))
-#     dicts = dict(zip(, classes_freq))
-#     
-    
+# ==============================================================================
+
 # =========================Model Layers Preparations ===========================
     # create model
 
@@ -178,7 +141,7 @@ def Runner(encoded_X_data_path,
                                  mode='max')
     
     print("Model checkpoint defined to track val_acc")
-    #===========================tensorboard========================================
+    #===========================tensorboard=====================================
     tensorboard  = keras.callbacks.TensorBoard(log_dir=board_log_dir , 
                                                histogram_freq=0, 
                                                batch_size=batch_size_param, 
@@ -190,9 +153,9 @@ def Runner(encoded_X_data_path,
                                                embeddings_metadata=None)
     
     print("Model tensorboard defined")
-    #==============================================================================    
+    #===========================================================================    
     #
-    #===========================earlystopping======================================
+    #===========================earlystopping===================================
     earlystopping = keras.callbacks .EarlyStopping(monitor='val_acc',
                                                  min_delta=0,
                                                  patience=earlystopping_patience,
@@ -210,13 +173,23 @@ def Runner(encoded_X_data_path,
     else:
         callbacks_list = [checkpoint,tensorboard,earlystopping,last_epoch_saver_]
         print("Add  checkpoint - tensorboard - earlystopping - last_epoch_saver")
-    #==============================================================================    
+    #===========================================================================
         
     print(model.summary())
     
     print("Model Training and validation started")
+
+    print("Clear Variable Bayt_Text_Encoded_Stacked from memory")
+    del Bayt_Text_Encoded_Stacked
     
-    #=============================Fitting Model====================================
+    print("Clear Variable del Bayt_Bahr_encoded from memory")
+    
+    del Bayt_Bahr_encoded
+    import gc
+    gc.collect()
+
+    
+    #=============================Fitting Model=================================
     # Fitting the RNN to the Training set
     hist = model.fit(X_train, 
                      Y_train, 
@@ -225,29 +198,30 @@ def Runner(encoded_X_data_path,
                      batch_size=batch_size_param, 
                      callbacks=callbacks_list,
                      verbose=1)
-    #==============================================================================
+    #===========================================================================
     
-    #==============================================================================
+    #===========================================================================
     #save last epoch weghits 
     model.save(checkpoints_path+"weights-improvement-last-epoch.hdf5")
     print("Save last epoch Done! ....")
     
-    #==============================================================================
+    #===========================================================================
     print("Model Training and validation finished")
     #print(history.losses)
     
-    #===========================Evaluate model=====================================
+    #===========================Evaluate model==================================
     # Final evaluation of the model
     max_model = load_weights(checkpoints_path,last_or_max_val_acc)
     
     scores = max_model.evaluate(X_test, Y_test, verbose=1)
-    print("Accuracy: %.2f%%" % (scores[1]*100))
-    #y_pred = model.predict_classes(X_test)
+    print("Exp Results Accuracy : %.2f%%" % (scores[1]))
+    print("Exp Results Score : %.2f%%" % (scores[0]))
     
-    ##free some variables from memory  
-    del Bayt_Text_Encoded_Stacked
-    del X_train
-    del X_test 
-    del Y_train
-    del Y_test 
-    del Bayt_Bahr_encoded 
+    
+    predicted = max_model.predict(X_test) 
+    cmat = confusion_matrix(classes_encoder.inverse_transform(Y_test.argmax(1)), classes_encoder.inverse_transform(predicted.argmax(1)),labels= Bohor_Classes)
+    
+
+    cm_df = pd.DataFrame(cmat,index = labels, columns = Bohor_Classes)
+    
+    #===========================================================================

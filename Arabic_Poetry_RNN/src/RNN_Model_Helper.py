@@ -72,7 +72,8 @@ def w_categorical_crossentropy(y_true, y_pred,classes_dest,encoder):
 
 #=============================================================================
 #=============================================================================
-#=============================================================================
+#=============================================================================    
+
 def get_model(num_layers_hidden,
               layers_type,
               n_units,
@@ -158,7 +159,7 @@ def get_model(num_layers_hidden,
     
     if(load_weights_flag == 1):
         print("Loading Old model")
-        model = load_weights(checkpoints_path,last_or_max_val_acc,model)    
+        model = load_weights(checkpoints_path,last_or_max_val_acc)
 # =============================================================================
 
 # =============================================================================
@@ -200,9 +201,9 @@ def load_weights(checkpoints_path,last_or_max_val_acc):
         if(last_or_max_val_acc == 0):
             print ("last check point")
             print(checkpoints_path+'weights-improvement-last-epoch.hdf5')
-            max_weight_checkpoints = checkpoints_path+'weights-improvement-last-epoch.hdf5'#all_checkpoints_list_sorted[-1]
+            max_weight_checkpoints = checkpoints_path+'weights-improvement-last-epoch.hdf5'
             #load weights
-            model = keras.models.load_model(max_weight_checkpoints)
+            model_loaded = keras.models.load_model(max_weight_checkpoints)
         else:
             print ("max_weight_checkpoints")
             all_checkpoints_list_sorted.remove(checkpoints_path+'weights-improvement-last-epoch.hdf5')
@@ -211,7 +212,7 @@ def load_weights(checkpoints_path,last_or_max_val_acc):
             max_checkpoint = all_checkpoints_list_sorted[epochs_list.index(max(epochs_list))]
             print(max_checkpoint)
             #load weights
-            model = keras.models.load_model(max_checkpoint)
+            model_loaded = keras.models.load_model(max_checkpoint)
 # =============================================================================
 #         print (" max_weight_checkpoints")
 #         print(all_checkpoints_list_sorted[-1])
@@ -227,7 +228,7 @@ def load_weights(checkpoints_path,last_or_max_val_acc):
         else:
              print("No wieghts avialable \n check the paths")
 
-    return model
+    return model_loaded
 # =============================================================================
 # =============================================================================
 # =============================================================================
