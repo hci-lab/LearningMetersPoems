@@ -32,39 +32,43 @@ numberOfUniqueChars = len(arabic_alphabet)
 # =======================Program Parameters====================================
 
 # =============================================================================
-# layers_type = ["Bidirectional_LSTM","LSTM"]
-# num_layers_hidden = ["3","6"]
-# weighted_loss_flag = ["0","1"]
-# n_units = ["50","82"]
-# =============================================================================
-
-layers_type = ["Bidirectional_LSTM"]
-num_layers_hidden = ["3"]
-weighted_loss_flag = ["1"]
-n_units = ["50"]
-batch_size_param = 512
-encoded_X_paths = ["../data/Encoded/8bits/WithTashkeel/Full_Data/full_data_matrix_with_tashkeel_8bitsEncoding.h5"]
-encoded_Y_paths = ["../data/Encoded/8bits/WithTashkeel/Full_Data/full_data_Y_Meters.h5"]
-epochs_param = 20
-test_size_param = 0.1
-validation_split_param = 0.1
-
+layers_type = ["Bidirectional_LSTM","LSTM"]
+num_layers_hidden = ["3","6"]
+weighted_loss_flag = ["0","1"]
+n_units = ["50","82"]
 encoded_X_paths = ["../data/Encoded/8bits/WithoutTashkeel/Eliminated/eliminated_data_matrix_without_tashkeel_8bitsEncoding.h5","../data/Encoded/8bits/WithoutTashkeel/Full_Data/full_data_matrix_without_tashkeel_8bitsEncoding.h5","../data/Encoded/8bits/WithTashkeel/Eliminated/eliminated_data_matrix_with_tashkeel_8bitsEncoding.h5","../data/Encoded/8bits/WithTashkeel/Full_Data/full_data_matrix_with_tashkeel_8bitsEncoding.h5"]
 encoded_Y_paths = ["../data/Encoded/8bits/WithoutTashkeel/Eliminated/Eliminated_data_Y_Meters.h5","../data/Encoded/8bits/WithoutTashkeel/Full_Data/full_data_Y_Meters.h5",
                    "../data/Encoded/8bits/WithTashkeel/Eliminated/Eliminated_data_Y_Meters.h5","../data/Encoded/8bits/WithTashkeel/Full_Data/full_data_Y_Meters.h5"]
+epochs_param = 50
+# =============================================================================
 
-input_data_path = "./data/Almoso3a_Alshe3rya/cleaned_data/All_clean_data.csv"
+# =============================================================================
+## in case testing un comment the below and comment the above block
+#layers_type = ["Bidirectional_LSTM"]
+#num_layers_hidden = ["3"]
+#weighted_loss_flag = ["1"]
+#n_units = ["50"]
+#batch_size_param = 512
+#encoded_X_paths = ["../data/Encoded/8bits/WithTashkeel/Full_Data/full_data_matrix_with_tashkeel_8bitsEncoding.h5"]
+#encoded_Y_paths = ["../data/Encoded/8bits/WithTashkeel/Full_Data/full_data_Y_Meters.h5"]
+#epochs_param = 20
+
+# =============================================================================
+
+
+#input_data_path = "./data/Almoso3a_Alshe3rya/cleaned_data/All_clean_data.csv"
 
 # 0-> last wait | 1 max val_acc
-
 last_or_max_val_acc = 1
 activation_output_function = 'softmax'
 new_encoding_flag = 1
 earlystopping_patience = -1
 required_data_col = [0, 2, 3, 5]
+test_size_param = 0.1
+validation_split_param = 0.1
+
 load_weights_flag = 0
 
-# new_data_col =  [0,1,2,3,4,6,7]
 full_classes_encoder_path = "../data/encoders_full_dat.pickle"
 eliminated_classes_encoder_path = "../data/encoders_eliminated_data.pickle"
 
