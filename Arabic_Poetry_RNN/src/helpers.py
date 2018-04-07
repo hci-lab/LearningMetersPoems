@@ -4,9 +4,16 @@ from pyarabic.araby import strip_tashkeel, strip_tatweel
 import numpy as np
 from numpy import array
 import re
+import h5py
+
 counter = 0
 
 
+
+def save_h5(nameOfFile,nameOfDataset,dataVar):
+    h5f = h5py.File(nameOfFile, 'w')
+    h5f.create_dataset(nameOfDataset, data=dataVar)
+    h5f.close()
 
 def separate_token_with_dicrites(token):
     """gets a token(string) with taskeel, and returns a list of strings,
@@ -220,7 +227,7 @@ def string_with_tashkeel_vectorizer_OneHot(string, padding_length):
 
 
 
-def Clean_data(data_frame,max_bayt_len,inplace=False,vectoriz_function=string_with_tashkeel_vectorizer,verse_column_name='البيت'):
+def Clean_data(data_frame,max_bayt_len,inplace=False,vectoriz_function=string_with_tashkeel_vectorizer,verse_column_name='Bayt_Text'):
     global counter
     counter = 0
     if not inplace:
