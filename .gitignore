@@ -12,3 +12,5 @@ English_Poetry_RNN/src/.ipynb_checkpoints/
 English_Poetry_RNN/Experiement/
 English_Poetry_RNN/data
 English_Poetry_RNN/src/umar_Test.ipynb
+.gitattributes
+.gitignore
