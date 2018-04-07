@@ -1,3 +1,0 @@
-*.csv filter=lfs diff=lfs merge=lfs -text
-*.MOSTAFAALAA-LAB filter=lfs diff=lfs merge=lfs -text
-*.hdf5 filter=lfs diff=lfs merge=lfs -text
