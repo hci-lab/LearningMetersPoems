@@ -47,8 +47,117 @@ def w_categorical_crossentropy(y_true, y_pred, classes_dest, encoder, sum_of_cla
 # type(classes_dest.loc[classes_dest['Class'] == "الطويل" , 'Cnt'].iloc[0])
 
 # =============================================================================
+#def get_model(num_layers_hidden,
+#              layers_type,
+#              n_units,
+#              max_bayt_length,
+#              encoding_length,
+#              activation_output_function,
+#              load_weights_flag,
+#              checkpoints_path,
+#              last_or_max_val_acc,
+#              weighted_loss_flag,
+#              classes_dest,
+#              classes_encoder):
+#    numbber_of_bohor = classes_dest.shape[0]  # classes_freq['Bohor'].unique().size
+#
+#    # =============================================================================
+#    #     max_bayt_length = Bayt_Text_Encoded_Stacked.shape[1]
+#    #     encoding_length = Bayt_Text_Encoded_Stacked.shape[2]
+#    #      num_layers_hidden = int( num_layers_hidden[0])
+#    #      n_units= int( n_units[0])
+#    #      weighted_loss_flag= int( weighted_loss_flag[0])
+#    #      layers_type=layers_type[0]
+#    # =============================================================================
+#
+#    print("num_layers_hidden %d" % num_layers_hidden)
+#    print("layers_type %s" % layers_type)
+#    print("n_units %d" % n_units)
+#    print("max_bayt_length %d" % max_bayt_length)
+#    print("encoding_length %d" % encoding_length)
+#    print("activation_output_function %s" % activation_output_function)
+#    print("load_weights_flag %d" % load_weights_flag)
+#    print("checkpoints_path %s" % checkpoints_path)
+#    print("last_or_max_val_acc %d" % last_or_max_val_acc)
+#    print("weighted_loss_flag %d" % weighted_loss_flag)
+#    print("numbber_of_bohor %d" % numbber_of_bohor)
+#    # =============================================================================
+#
+#    model = Sequential()
+#    print('Model Sequential defined')
+#    if layers_type == 'LSTM':
+#        print('Model LSTM Layer added')
+#        model.add(LSTM(units=n_units, input_shape=(max_bayt_length, encoding_length),
+#                       return_sequences=True))
+#    elif layers_type == 'Bidirectional_LSTM':
+#        print('Model input Bidirectional_LSTM Layer added')
+#        model.add(Bidirectional(LSTM(n_units, return_sequences=True),
+#                                input_shape=(max_bayt_length, encoding_length)))
+#    else:
+#        print('Model Dense Layer added')
+#        model.add(Dense(n_units, activation='relu', input_shape=(max_bayt_length, encoding_length)))
+#    # =============================================================================
+#    for _ in range(num_layers_hidden - 1):
+#        if layers_type == 'LSTM':
+#            print('Model LSTM Layer added')
+#            model.add(LSTM(n_units, return_sequences=True))
+#        elif layers_type == 'Bidirectional_LSTM':
+#            print('Model Bidirectional_LSTM Layer added')
+#            model.add(Bidirectional(LSTM(n_units, return_sequences=True)))
+#        else:
+#            print('Model Dense Layer added')
+#            model.add(Dense(n_units))
+#    # =============================================================================
+#    if layers_type == 'LSTM':
+#        print('Model LSTM prefinal Layer added')
+#        model.add(LSTM(n_units))
+#    elif layers_type == 'Bidirectional_LSTM':
+#        print('Model Bidirectional_LSTM prefinal Layer added')
+#        model.add(Bidirectional(LSTM(n_units)))
+#    else:
+#        print('Model Dense prefinal Layer added')
+#        model.add(Dense(n_units))
+#    # =============================================================================
+#    # Adding the output layer
+#    print('Model Dense final Layer added')
+#    model.add(Dense(units=numbber_of_bohor, activation=activation_output_function))
+#    # =============================================================================
+#    print("define partial function w_categorical_crossentropy_pfun")
+#    sum_of_classes_denesity = classes_dest.Cnt.apply(lambda x: 1 / x).sum()
+#    w_categorical_crossentropy_pfun = wrapped_partial(w_categorical_crossentropy,
+#                                                      classes_dest=classes_dest,
+#                                                      encoder=classes_encoder,
+#                                                      sum_of_classes_denesity=sum_of_classes_denesity)
+#
+#    print("partial function w_categorical_crossentropy_pfun defined")
+#    # =============================================================================
+#
+#    if load_weights_flag == 1:
+#        print("Loading Old model")
+#        model = load_weights(checkpoints_path, last_or_max_val_acc, weighted_loss_flag,
+#                             w_categorical_crossentropy_pfun)
+#    # =============================================================================
+#    if weighted_loss_flag == 1:
+#        print("Model w_categorical_crossentropy_pfun loss function defined")
+#        model.compile(optimizer='adam',
+#                      loss=w_categorical_crossentropy_pfun,
+#                      metrics=['accuracy'])
+#
+#        print("Model w_categorical_crossentropy_pfun loss function finish")
+#    else:
+#        model.compile(optimizer='adam',
+#                      loss='categorical_crossentropy',
+#                      metrics=['accuracy'])
+#    print('Model Compiled')
+#    #print(model.summary())
+#    return model
+#
+# =============================================================================
 
 
+
+
+# ==================================umar - updated get_model===================
 def get_model(num_layers_hidden,
               layers_type,
               n_units,
@@ -72,92 +181,107 @@ def get_model(num_layers_hidden,
     #      layers_type=layers_type[0]
     # =============================================================================
 
-    print("num_layers_hidden %d" % num_layers_hidden)
-    print("layers_type %s" % layers_type)
-    print("n_units %d" % n_units)
-    print("max_bayt_length %d" % max_bayt_length)
-    print("max_bayt_length %d" % encoding_length)
-    print("activation_output_function %s" % activation_output_function)
-    print("load_weights_flag %d" % load_weights_flag)
-    print("checkpoints_path %s" % checkpoints_path)
-    print("last_or_max_val_acc %d" % last_or_max_val_acc)
-    print("weighted_loss_flag %d" % weighted_loss_flag)
-    print("numbber_of_bohor %d" % numbber_of_bohor)
-    # =============================================================================
+    #check if define new modle or load exist one.
+    if load_weights_flag == 0:
+        print("num_layers_hidden %d" % num_layers_hidden)
+        print("layers_type %s" % layers_type)
+        print("n_units %d" % n_units)
+        print("max_bayt_length %d" % max_bayt_length)
+        print("encoding_length %d" % encoding_length)
+        print("activation_output_function %s" % activation_output_function)
+        print("load_weights_flag %d" % load_weights_flag)
+        print("checkpoints_path %s" % checkpoints_path)
+        print("last_or_max_val_acc %d" % last_or_max_val_acc)
+        print("weighted_loss_flag %d" % weighted_loss_flag)
+        print("numbber_of_bohor %d" % numbber_of_bohor)
+        # =============================================================================
 
-    model = Sequential()
-    print('Model Sequential defined')
-    if layers_type == 'LSTM':
-        print('Model LSTM Layer added')
-        model.add(LSTM(units=n_units, input_shape=(max_bayt_length, encoding_length),
-                       return_sequences=True))
-    elif layers_type == 'Bidirectional_LSTM':
-        print('Model input Bidirectional_LSTM Layer added')
-        model.add(Bidirectional(LSTM(n_units, return_sequences=True),
-                                input_shape=(max_bayt_length, encoding_length)))
-    else:
-        print('Model Dense Layer added')
-        model.add(Dense(n_units, activation='relu', input_shape=(max_bayt_length, encoding_length)))
-    # =============================================================================
-    for _ in range(num_layers_hidden - 1):
+        model = Sequential()
+        print('Model Sequential defined')
         if layers_type == 'LSTM':
             print('Model LSTM Layer added')
-            model.add(LSTM(n_units, return_sequences=True))
+            model.add(LSTM(units=n_units, input_shape=(max_bayt_length, encoding_length),
+                           return_sequences=True))
         elif layers_type == 'Bidirectional_LSTM':
-            print('Model Bidirectional_LSTM Layer added')
-            model.add(Bidirectional(LSTM(n_units, return_sequences=True)))
+            print('Model input Bidirectional_LSTM Layer added')
+            model.add(Bidirectional(LSTM(n_units, return_sequences=True),
+                                    input_shape=(max_bayt_length, encoding_length)))
         else:
             print('Model Dense Layer added')
+            model.add(Dense(n_units, activation='relu', input_shape=(max_bayt_length, encoding_length)))
+        # =============================================================================
+        for _ in range(num_layers_hidden - 1):
+            if layers_type == 'LSTM':
+                print('Model LSTM Layer added')
+                model.add(LSTM(n_units, return_sequences=True))
+            elif layers_type == 'Bidirectional_LSTM':
+                print('Model Bidirectional_LSTM Layer added')
+                model.add(Bidirectional(LSTM(n_units, return_sequences=True)))
+            else:
+                print('Model Dense Layer added')
+                model.add(Dense(n_units))
+        # =============================================================================
+        if layers_type == 'LSTM':
+            print('Model LSTM prefinal Layer added')
+            model.add(LSTM(n_units))
+        elif layers_type == 'Bidirectional_LSTM':
+            print('Model Bidirectional_LSTM prefinal Layer added')
+            model.add(Bidirectional(LSTM(n_units)))
+        else:
+            print('Model Dense prefinal Layer added')
             model.add(Dense(n_units))
-    # =============================================================================
-    if layers_type == 'LSTM':
-        print('Model LSTM prefinal Layer added')
-        model.add(LSTM(n_units))
-    elif layers_type == 'Bidirectional_LSTM':
-        print('Model Bidirectional_LSTM prefinal Layer added')
-        model.add(Bidirectional(LSTM(n_units)))
-    else:
-        print('Model Dense prefinal Layer added')
-        model.add(Dense(n_units))
-    # =============================================================================
-    # Adding the output layer
-    print('Model Dense final Layer added')
-    model.add(Dense(units=numbber_of_bohor, activation=activation_output_function))
-    # =============================================================================
-    print("define partial function w_categorical_crossentropy_pfun")
-    sum_of_classes_denesity = classes_dest.Cnt.apply(lambda x: 1 / x).sum()
-    w_categorical_crossentropy_pfun = wrapped_partial(w_categorical_crossentropy,
-                                                      classes_dest=classes_dest,
-                                                      encoder=classes_encoder,
-                                                      sum_of_classes_denesity=sum_of_classes_denesity)
+        # =============================================================================
+        # Adding the output layer
+        print('Model Dense final Layer added')
+        model.add(Dense(units=numbber_of_bohor, activation=activation_output_function))
 
-    print("partial function w_categorical_crossentropy_pfun defined")
+        
+        print("compile model ....... ")
+        if weighted_loss_flag == 1:
+            #==========================================================================
+            print("define partial function w_categorical_crossentropy_pfun")
+            sum_of_classes_denesity = classes_dest.Cnt.apply(lambda x: 1 / x).sum()
+            w_categorical_crossentropy_pfun = wrapped_partial(w_categorical_crossentropy,
+                                                               classes_dest=classes_dest,
+                                                               encoder=classes_encoder,
+                                                               sum_of_classes_denesity=sum_of_classes_denesity)
+            print("partial function w_categorical_crossentropy_pfun defined")
+            #==========================================================================
+            print("adding  w_categorical_crossentropy_pfun loss function to Modle")
+            model.compile(optimizer='adam',
+                          loss=w_categorical_crossentropy_pfun,
+                          metrics=['accuracy'])
+            print("adding  w_categorical_crossentropy_pfun loss function to Modle finished")
+        else:
+            print('Adding normal categorical_crossentropy loss function')
+            model.compile(optimizer='adam',
+                          loss='categorical_crossentropy',
+                          metrics=['accuracy'])
+        print('Model Compiled')
     # =============================================================================
 
+        
+    # =============================================================================
+    #check to load exist model
     if load_weights_flag == 1:
+        sum_of_classes_denesity = classes_dest.Cnt.apply(lambda x: 1 / x).sum()
+        w_categorical_crossentropy_pfun = wrapped_partial(w_categorical_crossentropy,
+                                                          classes_dest=classes_dest,
+                                                          encoder=classes_encoder,
+                                                          sum_of_classes_denesity=sum_of_classes_denesity)
+        
         print("Loading Old model")
         model = load_weights(checkpoints_path, last_or_max_val_acc, weighted_loss_flag,
                              w_categorical_crossentropy_pfun)
     # =============================================================================
-    if weighted_loss_flag == 1:
-        print("Model w_categorical_crossentropy_pfun loss function defined")
-        model.compile(optimizer='adam',
-                      loss=w_categorical_crossentropy_pfun,
-                      metrics=['accuracy'])
 
-        print("Model w_categorical_crossentropy_pfun loss function finish")
-    else:
-        model.compile(optimizer='adam',
-                      loss='categorical_crossentropy',
-                      metrics=['accuracy'])
-    print('Model Compiled')
-    print(model.summary())
+    #print(model.summary())
     return model
 
 
 # =============================================================================
 
-# =============================================================================
+
 
 
 # =============================================================================
