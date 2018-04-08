@@ -5,6 +5,8 @@ import numpy as np
 from numpy import array
 import re
 import h5py
+import re
+import os
 
 counter = 0
 
@@ -348,3 +350,39 @@ print(len(all_traing))
 [ 0000000 .. 0000]
 [ 0000000 .. 0000] -> (190, 183)
 '''
+
+def remove_non_max(realtive_path):
+    #re.sub('<.*?>', '', string)
+    models = os.popen('find ' +  realtive_path + ' -maxdepth 1 -type f').readlines()
+    tuples = []
+    for i in range(len(models)):
+        x = models[i][len(realtive_path):].strip('\n')
+        y = re.sub('\S*-', '', x) 
+        y = re.sub('\.hdf', '', y)
+        try:
+            y = float(y)
+            tuples.append((x, y))
+        except:
+            continue
+
+    sorted_tuples = sorted(tuples, reverse=True, key=lambda tup: tup[1])
+
+    max_model = sorted_tuples[0]
+
+    # rm the rest
+    rmTheRestCommand = 'rm  '
+    # File names starts with /
+    for i in range(len(sorted_tuples)):
+        if i == 0:
+            continue
+        fileName, _ = sorted_tuples[i]
+        print(realtive_path + fileName)
+        rmTheRestCommand += realtive_path + fileName + '  '
+
+
+    # Executing the command:
+    if os.system(rmTheRestCommand) == 0:
+        print('Removing all checkpoints except the Last and the Max')
+    else:
+        print('Maybe there is no files other than the max and the Last!')
+
