@@ -136,7 +136,7 @@ print("Input Data Category encoded done.")
 
 
 # =============================================================================
-X_train, X_test, Y_train, Y_test=train_test_split(Bayt_Text_Encoded_Stacked, #bayts
+X_train, X_test, Y_train, Y_test= train_test_split(Bayt_Text_Encoded_Stacked, #bayts
                                                     Bayt_Bahr_encoded, #classes
                                                     test_size=test_size_param, 
                                                     random_state=0)

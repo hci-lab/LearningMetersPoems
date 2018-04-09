@@ -13,6 +13,7 @@ from RNN_Model_Helper import load_weights
 from RNN_Model_Helper import wrapped_partial
 from RNN_Model_Helper import w_categorical_crossentropy
 from RNN_Model_Helper import recall_precision_f1
+from helpers import update_log_file
 import os
 import errno
 import keras
@@ -47,11 +48,10 @@ def runner(encoded_x_data_path,
     #experiment_name = "Exp_1_eliminated_data_matrix_without_tashkeel_8bitsEncoding_LSTM_3_50_1"
     #encoded_x_data_path = "../data/Encoded/8bits/WithoutTashkeel/Eliminated/eliminated_data_matrix_without_tashkeel_8bitsEncoding.h5"
     #encoded_y_data_path = "../data/Encoded/8bits/WithoutTashkeel/Eliminated/Eliminated_data_Y_Meters.h5"
-
     # =============================================================================
 
     checkpoints_path = "../checkpoints/" + experiment_name + "/"
-    check_points_file_path = checkpoints_path + "/weights-improvement-{epoch:02d}-{val_acc:.2f}.hdf5"
+    check_points_file_path = checkpoints_path + "/weights-improvement-{epoch:03d}-{val_acc:.5f}.hdf5"
     board_log_dir = "../logs/" + experiment_name + "/"
     results_dir = "../Results/" + experiment_name + "/"
 
@@ -93,8 +93,9 @@ def runner(encoded_x_data_path,
         print("working into eliminated data")
         classes_encoder = load_encoder(eliminated_classes_encoder_path)
         names_of_classes = np.apply_along_axis(decode_classes, 0, unique_classes, classes_encoder)
-        bohor_classes = ['الوافر', 'المنسرح', 'المديد', 'المجتث', 'المتقارب', 'الكامل', 'الطويل', 'السريع', 'الرمل',
-                         'الرجز', 'الخفيف', 'البسيط']
+        # umar -> elminate el-Madide
+        #bohor_classes = ['الوافر', 'المنسرح', 'المديد', 'المجتث', 'المتقارب', 'الكامل', 'الطويل', 'السريع', 'الرمل', 'الرجز', 'الخفيف', 'البسيط']
+        bohor_classes = ['الوافر', 'المنسرح', 'المجتث', 'المتقارب', 'الكامل', 'الطويل', 'السريع', 'الرمل', 'الرجز', 'الخفيف', 'البسيط']
 
     # ==============================================================================
 
@@ -133,26 +134,33 @@ def runner(encoded_x_data_path,
                       classes_encoder)
 
     # =============================================================================
-    model = get_model(int(num_layers_hidden[0]),
-                                layers_type[0],
-                                int(n_units[0]),
-                                bayt_text_encoded_stacked.shape[1],
-                                bayt_text_encoded_stacked.shape[2],
-                                activation_output_function,
-                                load_weights_flag,
-                                checkpoints_path,
-                                last_or_max_val_acc,
-                                int(weighted_loss_flag[0]),
-                                classes_dest,
-                                classes_encoder)
+    #  umar -> remove that becouse it's redundant
+    #model = get_model(int(num_layers_hidden[0]),
+    #                            layers_type[0],
+    #                            int(n_units[0]),
+    #                            bayt_text_encoded_stacked.shape[1],
+    #                            bayt_text_encoded_stacked.shape[2],
+    #                            activation_output_function,
+    #                            load_weights_flag,
+    #                            checkpoints_path,
+    #                            last_or_max_val_acc,
+    #                            int(weighted_loss_flag[0]),
+    #                            classes_dest,
+    #                            classes_encoder)
+    # =============================================================================
 
 
     # ===========================lastEpochSaver====================================
     class LastEpochSaver(keras.callbacks.Callback):
         def on_epoch_end(self, epoch, logs={}):
+            #get expreiment name and update epoch number in log file
+            exp_name = checkpoints_path.split('/')[2]
+            update_log_file(exp_name,str(epoch),True)
             # save last epoch weghits
             self.model.save(checkpoints_path + "weights-improvement-last-epoch.hdf5")
             print("Save last epoch Done! ....")
+
+            helpers.remove_non_max(checkpoints_path)
 
     checkpoint = ModelCheckpoint(check_points_file_path,
                                  monitor='val_acc',
@@ -236,8 +244,9 @@ def runner(encoded_x_data_path,
     print("partial function w_categorical_crossentropy_pfun defined")
 
     # ===========================Evaluate model==================================
+    # umar -> make last_or_max_val_acc = 1 to evaluate max
     # Final evaluation of the model
-    max_model = load_weights(checkpoints_path, last_or_max_val_acc, weighted_loss_flag, w_categorical_crossentropy_pfun)
+    max_model = load_weights(checkpoints_path, 1, weighted_loss_flag, w_categorical_crossentropy_pfun)
 
     scores = max_model.evaluate(x_test, y_test, verbose=1)
     print("Exp Results Accuracy : %.2f%%" % (scores[1]))

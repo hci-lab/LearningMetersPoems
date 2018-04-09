@@ -114,6 +114,7 @@ def load_encoder(encoder_path):
     with open(encoder_path, 'rb') as f:
         encoders = pickle.load(f)        
     print("finish loading the encoder")
+    print(type(encoders))
     return encoders
     
 #print('loading saved encoders from %s'%(encoders_file_name))
