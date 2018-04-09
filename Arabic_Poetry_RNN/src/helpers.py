@@ -16,7 +16,7 @@ def update_log_file(exp_name,text,epoch_flage=False):
     
     def update(line,text,epoch_flage):
         if epoch_flage:
-                line = line.split("_")[0]+"_"+text
+                line = line.split("@")[0]+"@"+text
         else:
                 line = line = line.split(",")[0]+","+text
         return line

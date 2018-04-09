@@ -13,7 +13,7 @@ from RNN_Model_Helper import load_weights
 from RNN_Model_Helper import wrapped_partial
 from RNN_Model_Helper import w_categorical_crossentropy
 from RNN_Model_Helper import recall_precision_f1
-from helper import update_log_file
+from helpers import update_log_file
 import os
 import errno
 import keras
@@ -159,6 +159,8 @@ def runner(encoded_x_data_path,
             # save last epoch weghits
             self.model.save(checkpoints_path + "weights-improvement-last-epoch.hdf5")
             print("Save last epoch Done! ....")
+
+            helpers.remove_non_max(checkpoints_path)
 
     checkpoint = ModelCheckpoint(check_points_file_path,
                                  monitor='val_acc',
