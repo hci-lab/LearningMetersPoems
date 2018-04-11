@@ -1,7 +1,7 @@
 '''
     * The template file is called All_Experiments_Results_template.txt
-    * You should have it before running the main_test {to check the reducability 
-      of the code.
+    * You should have it before running the main_test {to check the 
+        reproducibility of the code.
     * After running the main_test 'All_Experiments_Results' is generated.
     * check reults compare the two files.
 '''
@@ -9,7 +9,7 @@ import pandas as pd
 
 def check_results():
     '''Compares the exp file with templated pre_generated results file.
-       To compare the reducability of the code.
+       To compare the reproducibility of the code.
 
         Args:
             exp_file: the file which is extracted after running main_test.
