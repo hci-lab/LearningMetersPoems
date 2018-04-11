@@ -4,6 +4,7 @@ Created on Fri Mar  2 14:53:53 2018
 
 @author: Mostafa Alaa
 """
+import sys
 from preprossesor import get_input_encoded_data_h5
 from preprossesor import load_encoder
 from preprossesor import decode_classes
@@ -57,14 +58,18 @@ def runner(encoded_x_data_path,
     results_dir = "test_folders/Results/" + experiment_name + "/"
 
     # ===============================================================================
+    print('Before ' * 8)
     try:
         os.makedirs(board_log_dir)
         os.makedirs(checkpoints_path)
         os.makedirs(results_dir)
+        print('After' * 8)
     except OSError as e:
         if e.errno != errno.EEXIST:
             print("Can't create file for checkpoints or for logs please check ")
             raise
+        print('1' * 100)
+        print(sys.exc_info()[0])
     print("Input Parameters Defined and Experiement directory created")
 
     # ===============================================================================
@@ -157,15 +162,11 @@ def runner(encoded_x_data_path,
     # ===========================lastEpochSaver====================================
     class LastEpochSaver(keras.callbacks.Callback):
         def on_epoch_end(self, epoch, logs={}):
-            #get expreiment name and update epoch number in log file
-            exp_name = checkpoints_path.split('/')[2]
-            print(exp_name)
-            print('***********************')
-            update_log_file(exp_name,str(epoch),True)
-            # Taha;
-            print('On_epoch is fired!!!!!!!!!!!!!!!')
             # save last epoch weghits
             self.model.save(checkpoints_path + "weights-improvement-last-epoch.hdf5")
+            #get expreiment name and update epoch number in log file
+            exp_name = checkpoints_path.split('/')[2]
+            update_log_file(exp_name,str(epoch),True)
             print("Save last epoch Done! ....")
 
             helpers.remove_non_max(checkpoints_path)
@@ -268,6 +269,12 @@ def runner(encoded_x_data_path,
     cm_df.to_csv(results_dir + 'CM_MATRIX.csv')
     recall_precision, f1 = recall_precision_f1(cm_df)
     recall_precision.to_csv(results_dir + 'recall_precision_MATRIX.csv')
+
+    # * Add the experiments' results in All_Experiments_Results
+    #   which is used to re-conducting the experiment.
+    f = open('All_Experiments_Results.txt', 'a')
+    f.write('{}, {}, {}\n'.format(experiment_name, f1, scores[1]))
+    f.close()
 
     # ===========================================================================
 
