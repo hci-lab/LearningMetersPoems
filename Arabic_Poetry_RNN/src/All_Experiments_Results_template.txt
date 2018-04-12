@@ -1,0 +1,4 @@
+Exp_1_eliminated_data_matrix_without_tashkeel_8bitsEncoding_LSTM_1_1_1, 0.025
+Exp_2_full_data_matrix_without_tashkeel_8bitsEncoding_LSTM_1_1_1, 0.09375
+Exp_3_eliminated_data_matrix_with_tashkeel_8bitsEncoding_LSTM_1_1_1, 0.075
+Exp_4_full_data_matrix_with_tashkeel_8bitsEncoding_LSTM_1_1_1, 0.0625
