@@ -92,6 +92,7 @@ def removeTestingFiles():
     rmCommand += ' test_folders/logs/*'
     rmCommand += ' test_folders/Results/*'
     rmCommand += ' log.txt'
+    rmCommand += ' All_Experiments_Results.txt'
     # Executing the command:
     if os.system(rmCommand) == 0:
         print('old testing files are removed!')
