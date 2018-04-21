@@ -26,6 +26,7 @@ import pandas as pd
 from sklearn.metrics import confusion_matrix
 import gc
 
+ 
 
 def runner(encoded_x_data_path,
            encoded_y_data_path,
@@ -43,7 +44,8 @@ def runner(encoded_x_data_path,
            earlystopping_patience,
            experiment_name,
            full_classes_encoder_path,
-           eliminated_classes_encoder_path):
+           eliminated_classes_encoder_path,
+           current_path):
     # ===============================================================================
 
     # =============================================================================
@@ -52,10 +54,10 @@ def runner(encoded_x_data_path,
     #encoded_y_data_path = "../data/Encoded/8bits/WithoutTashkeel/Eliminated/Eliminated_data_Y_Meters.h5"
     # =============================================================================
 
-    checkpoints_path = "test_folders/checkpoints/" + experiment_name + "/"
+    checkpoints_path = "lib/test_folders/checkpoints/" + experiment_name + "/"
     check_points_file_path = checkpoints_path + "weights-improvement-{epoch:03d}-{val_acc:.5f}.hdf5"
-    board_log_dir = "test_folders/logs/" + experiment_name + "/"
-    results_dir = "test_folders/Results/" + experiment_name + "/"
+    board_log_dir = "lib/test_folders/logs/" + experiment_name + "/"
+    results_dir = "lib/test_folders/Results/" + experiment_name + "/"
 
     # ===============================================================================
     print('Before ' * 8)
@@ -272,7 +274,7 @@ def runner(encoded_x_data_path,
 
     # * Add the experiments' results in All_Experiments_Results
     #   which is used to re-conducting the experiment.
-    f = open('All_Experiments_Results.txt', 'a')
+    f = open('All_Experiments_Results.csv', 'a')
     f.write('{}, {}\n'.format(experiment_name, scores[1]))
     f.close()
 

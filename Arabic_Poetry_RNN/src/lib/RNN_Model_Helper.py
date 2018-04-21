@@ -301,8 +301,7 @@ def load_weights(checkpoints_path, last_or_max_val_acc, weighted_loss_flag,
             print(checkpoints_path + 'weights-improvement-last-epoch.hdf5')
             max_weight_checkpoints = checkpoints_path + 'weights-improvement-last-epoch.hdf5'
             if weighted_loss_flag == 1:
-                model_loaded = keras.models.load_model(max_weight_checkpoints, custom_objects={
-                    "w_categorical_crossentropy": w_categorical_crossentropy_pfun})
+                model_loaded = keras.models.load_model(max_weight_checkpoints, custom_objects={ "w_categorical_crossentropy": w_categorical_crossentropy_pfun})
             else:
                 model_loaded = keras.models.load_model(max_weight_checkpoints)
 
@@ -337,6 +336,7 @@ def load_weights(checkpoints_path, last_or_max_val_acc, weighted_loss_flag,
                 "load the epoch has max val_acc")
         else:
             print("No wieghts avialable \n check the paths")
+            print(sys.exc_info()[0])
 
     return model_loaded
 

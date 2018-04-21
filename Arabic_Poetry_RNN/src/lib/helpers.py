@@ -258,13 +258,13 @@ def Clean_data(data_frame,max_bayt_len,inplace=False,vectoriz_function=string_wi
         global counter
         try:
             vectoriz_function(s,max_bayt_len)
-            print(counter)
             counter+=1
+            print(counter)
             return s
         except:
             s = solve_conflect(s)
-            print(counter)
             counter+=1
+            print(counter)
             return s
 
         
