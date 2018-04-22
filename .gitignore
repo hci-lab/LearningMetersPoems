@@ -14,3 +14,7 @@ English_Poetry_RNN/data
 English_Poetry_RNN/src/umar_Test.ipynb
 .gitattributes
 .gitignore
+Arabic_Poetry_RNN/data/
+Arabic_Poetry_RNN/*.pickle
+Arabic_Poetry_RNN/src/lib/.ipynb_checkpoints/
+Arabic_Poetry_RNN/src/lib/test_folders/
