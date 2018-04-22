@@ -248,7 +248,11 @@ def string_with_tashkeel_vectorizer_OneHot(string, padding_length):
 
 
 
-def Clean_data(data_frame,max_bayt_len,inplace=False,vectoriz_function=string_with_tashkeel_vectorizer,verse_column_name='Bayt_Text'):
+def Clean_data(data_frame,
+               max_bayt_len,
+               inplace=False,
+               vectoriz_function=string_with_tashkeel_vectorizer,
+               verse_column_name='Bayt_Text'):
     global counter
     counter = 0
     if not inplace:
@@ -259,7 +263,6 @@ def Clean_data(data_frame,max_bayt_len,inplace=False,vectoriz_function=string_wi
         try:
             vectoriz_function(s,max_bayt_len)
             counter+=1
-            print(counter)
             return s
         except:
             s = solve_conflect(s)
@@ -307,8 +310,25 @@ def Clean_data(data_frame,max_bayt_len,inplace=False,vectoriz_function=string_wi
     
     our_alphabets = "".join(arabic.alphabet) + "".join(arabic.tashkeel)+" "
     our_alphabets = "".join(our_alphabets)
-    data_frame[verse_column_name]    = data_frame[verse_column_name] .apply(lambda x: re.sub(r'[^'+our_alphabets+']','',str(x))).apply(lambda x: re.sub(r'  *'," ",x)).apply(lambda x: re.sub(r'ّ+', 'ّ', x)).apply(lambda x: x.strip())
+    
+    # خلصانة <3
+    def general_cleaning_composited_function(string):
+        string = re.sub(r'[^'+our_alphabets+']','',str(string))
+        string = re.sub(r'  *'," ",string)
+        string = re.sub(r'ّ+', 'ّ', string)
+        string = string.strip()
+        string = apply_cleaning(string)
+        return string
+    
+    '''
+    data_frame[verse_column_name]    = data_frame[verse_column_name].
+    apply(lambda x: re.sub(r'[^'+our_alphabets+']','',str(x))).
+    apply(lambda x: re.sub(r'  *'," ",x)).
+    apply(lambda x: re.sub(r'ّ+', 'ّ', x)).
+    apply(lambda x: x.strip())
     data_frame[verse_column_name] = data_frame[verse_column_name].apply(apply_cleaning)
+    '''
+    data_frame[verse_column_name] = data_frame[verse_column_name].apply(general_cleaning_composited_function)
     return data_frame
 
 
