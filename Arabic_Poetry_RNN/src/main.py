@@ -13,6 +13,15 @@
 state_of_multi_GPUS = False
 
 import os
+
+# before Keras / Tensorflow is imported.
+if len(sys.argv) == 2 and sys.argv[1] == '--cpu':
+    print('Running On CPU')
+    os.environ["CUDA_DEVICE_ORDER"] = "PCI_BUS_ID"
+    os.environ["CUDA_VISIBLE_DEVICES"] = ""
+    state_of_multi_GPUS = False
+
+
 from sys import path
 # Relative path to this modul's location in PyQuran.
 searchingPath = 'lib'
