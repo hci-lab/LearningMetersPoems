@@ -318,6 +318,9 @@ def Clean_data(data_frame,
         string = re.sub(r'ّ+', 'ّ', string)
         string = string.strip()
         string = apply_cleaning(string)
+        
+        string = strip_tatweel(string)
+        string = factor_shadda_tanwin(string)
         return string
     
     '''
