@@ -13,6 +13,7 @@
 MULTI_GPU_FLAG = False
 
 import os
+import sys
 
 # before Keras / Tensorflow is imported.
 if len(sys.argv) == 2 and sys.argv[1] == '--cpu':
@@ -41,7 +42,6 @@ import random as rn
 from tensorflow import set_random_seed
 from Exp_Runner import runner
 import warnings
-import sys
 import comparing_
 import helpers
 import tensorflow as tf
@@ -136,9 +136,9 @@ def removeTestingFiles():
         3 Return True | False
         4 Remove the testing Results, Checkpoints, Logs
 '''
-test = false
+test = False
 if len(sys.argv) == 2 and sys.argv[1] == '--test':
-    test = true
+    test = True
     # Removing the mess (if there were!)
     removeTestingFiles()
 
