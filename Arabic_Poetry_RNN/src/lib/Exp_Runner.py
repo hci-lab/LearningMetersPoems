@@ -58,7 +58,7 @@ def runner(encoded_x_data_path,
     checkpoints_path = "../Experiements_Info/checkpoints/" + experiment_name + "/"
     check_points_file_path = checkpoints_path + "/weights-improvement-{epoch:03d}-{val_acc:.5f}.hdf5"
     board_log_dir = "../Experiements_Info/logs/" + experiment_name + "/"
-    results_dir = ".../Experiements_Info/Results/" + experiment_name + "/"
+    results_dir = "../Experiements_Info/Results/" + experiment_name + "/"
 
     if test:
         checkpoints_path = "lib/test_folders/checkpoints/" + experiment_name + "/"
