@@ -18,6 +18,7 @@ from keras import backend as K
 # from sklearn.preprocessing import LabelEncoder
 from numpy import argmax
 from functools import partial, update_wrapper
+from keras.utils import multi_gpu_model
 
 
 # =============================================================================
@@ -169,7 +170,8 @@ def get_model(num_layers_hidden,
               last_or_max_val_acc,
               weighted_loss_flag,
               classes_dest,
-              classes_encoder):
+              classes_encoder,
+              MULTI_GPU_FLAG=False):
     numbber_of_bohor = classes_dest.shape[0]  # classes_freq['Bohor'].unique().size
 
     # =============================================================================
@@ -236,7 +238,7 @@ def get_model(num_layers_hidden,
         model.add(Dense(units=numbber_of_bohor, activation=activation_output_function))
 
         
-        print("compile model ....... ")
+        print("compiling model ....... ")
         if weighted_loss_flag == 1:
             #==========================================================================
             print("define partial function w_categorical_crossentropy_pfun")
@@ -248,11 +250,19 @@ def get_model(num_layers_hidden,
             print("partial function w_categorical_crossentropy_pfun defined")
             #==========================================================================
             print("adding  w_categorical_crossentropy_pfun loss function to Modle")
+
+            if MULTI_GPU_FLAG:
+                model = multi_gpu_model(model, gpus=2)
+
             model.compile(optimizer='adam',
                           loss=w_categorical_crossentropy_pfun,
                           metrics=['accuracy'])
             print("adding  w_categorical_crossentropy_pfun loss function to Modle finished")
         else:
+
+            if MULTI_GPU_FLAG:
+                model = multi_gpu_model(model, gpus=2)
+
             print('Adding normal categorical_crossentropy loss function')
             model.compile(optimizer='adam',
                           loss='categorical_crossentropy',

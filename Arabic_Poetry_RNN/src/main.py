@@ -8,6 +8,10 @@
 # /DeepLearningMaster/ArabicPoetry/ArabicPoetry-1/Arabic_Poetry_RNN/src")
 # =============================================================================
 
+
+# Multi_GPU_Flag
+state_of_multi_GPUS = False
+
 import os
 from sys import path
 # Relative path to this modul's location in PyQuran.
@@ -34,8 +38,11 @@ import helpers
 print("Imports Done")
 
 # =============================================================================
+import tensorflow as tf
 np.random.seed(123456)
-set_random_seed(123456)
+tf.reset_default_graph()
+with tf.Graph().as_default():
+    set_random_seed(123456)
 rn.seed(123456)
 arabic_alphabet = arabic.alphabet
 numberOfUniqueChars = len(arabic_alphabet)
@@ -228,7 +235,8 @@ for X, Y in zip(encoded_X_paths, encoded_Y_paths):
                                Experiement_Name,
                                full_classes_encoder_path,
                                eliminated_classes_encoder_path,
-                               path_)
+                               path_,
+                               MULTI_GPU_FLAG=state_of_multi_GPUS)
 
                         #update experiment_state to done 
                         helpers.update_log_file(Experiement_Name,"done@0", False)

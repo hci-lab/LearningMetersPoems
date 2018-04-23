@@ -45,7 +45,8 @@ def runner(encoded_x_data_path,
            experiment_name,
            full_classes_encoder_path,
            eliminated_classes_encoder_path,
-           current_path):
+           current_path,
+           MULTI_GPU_FLAG):
     # ===============================================================================
 
     # =============================================================================
@@ -142,7 +143,8 @@ def runner(encoded_x_data_path,
                       last_or_max_val_acc,
                       weighted_loss_flag,
                       classes_dest,
-                      classes_encoder)
+                      classes_encoder,
+                      MULTI_GPU_FLAG)
 
     # =============================================================================
     #  umar -> remove that becouse it's redundant
