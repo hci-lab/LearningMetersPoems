@@ -67,18 +67,14 @@ def runner(encoded_x_data_path,
         results_dir = "lib/test_folders/Results/" + experiment_name + "/"
 
     # ===============================================================================
-    print('Before ' * 8)
     try:
         os.makedirs(board_log_dir)
         os.makedirs(checkpoints_path)
         os.makedirs(results_dir)
-        print('After' * 8)
     except OSError as e:
         if e.errno != errno.EEXIST:
             print("Can't create file for checkpoints or for logs please check ")
             raise
-        print('1' * 100)
-        print(sys.exc_info()[0])
     print("Input Parameters Defined and Experiement directory created")
 
     # ===============================================================================

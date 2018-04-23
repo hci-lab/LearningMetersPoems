@@ -84,9 +84,6 @@ epochs_param = 50
 # umar -> it wasn't found
 batch_size_param = 1024
 
-
-# 0-> last wait | 1 max val_acc
-last_or_max_val_acc = 1
 activation_output_function = 'softmax'
 # umar -> not used
 #new_encoding_flag = 1
@@ -96,6 +93,8 @@ earlystopping_patience = -1
 test_size_param = 0.1
 validation_split_param = 0.1
 
+# 0-> last wait | 1 max val_acc
+last_or_max_val_acc = 1
 load_weights_flag = 0
 
 # =============================================================================
