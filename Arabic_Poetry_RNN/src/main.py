@@ -1,7 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 # =============================================================================
-import os
 
 #os.chdir("m://Learning/Master/CombinedWorkspace/Python/DeepLearningMaster/ArabicPoetry
 # /ArabicPoetry-1/Arabic_Poetry_RNN/src/")
@@ -9,38 +8,83 @@ import os
 # /DeepLearningMaster/ArabicPoetry/ArabicPoetry-1/Arabic_Poetry_RNN/src")
 # =============================================================================
 
+
+# Multi_GPU_Flag
+MULTI_GPU_FLAG = False
+
+import os
+
+# before Keras / Tensorflow is imported.
+if len(sys.argv) == 2 and sys.argv[1] == '--cpu':
+    print('Running On CPU')
+    os.environ["CUDA_DEVICE_ORDER"] = "PCI_BUS_ID"
+    os.environ["CUDA_VISIBLE_DEVICES"] = ""
+    MULTI_GPU_FLAG = False
+
+
+from sys import path
+# Relative path to this modul's location in PyQuran.
+searchingPath = 'lib'
+
+# The current path of the current module.
+current_path  = os.path.dirname(os.path.abspath(__file__))
+# Joining this module's path with the relative path of the corpus
+path_ = os.path.join(current_path, searchingPath)
+path.append(path_)
+
 import numpy as np
 import arabic
 import random as rn
 from tensorflow import set_random_seed
 from Exp_Runner import runner
 import warnings
-from helper import update_log_file 
-warnings.filterwarnings("ignore")
+import sys
+import comparing_
+import helpers
+import tensorflow as tf
 
 # ==============================================================================
 
 print("Imports Done")
 
 # =============================================================================
+import tensorflow as tf
 np.random.seed(123456)
+<<<<<<< HEAD
+tf.reset_default_graph()
+with tf.Graph().as_default():
+    set_random_seed(123456)
+||||||| merged common ancestors
 set_random_seed(123456)
+=======
+#set_random_seed(123456)
+with tf.Graph().as_default():
+    set_random_seed(123456)
+>>>>>>> 04b9dc60d54db66a7c6dcdae9478f7f8ba6e8bc8
 rn.seed(123456)
 arabic_alphabet = arabic.alphabet
 numberOfUniqueChars = len(arabic_alphabet)
 # =======================Program Parameters====================================
 
 # =============================================================================
-layers_type = ["Bidirectional_LSTM","LSTM"]
+layers_type = ["Bidirectional_LSTM" , "LSTM"]
 num_layers_hidden = ["3","6"]
 weighted_loss_flag = ["0","1"]
 n_units = ["50","82"]
-encoded_X_paths = ["../data/Encoded/8bits/WithoutTashkeel/Eliminated/eliminated_data_matrix_without_tashkeel_8bitsEncoding.h5","../data/Encoded/8bits/WithoutTashkeel/Full_Data/full_data_matrix_without_tashkeel_8bitsEncoding.h5","../data/Encoded/8bits/WithTashkeel/Eliminated/eliminated_data_matrix_with_tashkeel_8bitsEncoding.h5","../data/Encoded/8bits/WithTashkeel/Full_Data/full_data_matrix_with_tashkeel_8bitsEncoding.h5"]
-encoded_Y_paths = ["../data/Encoded/8bits/WithoutTashkeel/Eliminated/Eliminated_data_Y_Meters.h5","../data/Encoded/8bits/WithoutTashkeel/Full_Data/full_data_Y_Meters.h5",
-                   "../data/Encoded/8bits/WithTashkeel/Eliminated/Eliminated_data_Y_Meters.h5","../data/Encoded/8bits/WithTashkeel/Full_Data/full_data_Y_Meters.h5"]
+encoded_X_paths = ["../data/Encoded/8bits/WithoutTashkeel/Eliminated/eliminated_data_matrix_without_tashkeel_8bitsEncoding.h5",
+                   "../data/Encoded/8bits/WithoutTashkeel/Full_Data/full_data_matrix_without_tashkeel_8bitsEncoding.h5",
+                   "../data/Encoded/8bits/WithTashkeel/Eliminated/eliminated_data_matrix_with_tashkeel_8bitsEncoding.h5",
+                   "../data/Encoded/8bits/WithTashkeel/Full_Data/full_data_matrix_with_tashkeel_8bitsEncoding.h5"]
+
+
+encoded_Y_paths = ["../data/Encoded/8bits/WithoutTashkeel/Eliminated/Eliminated_data_Y_Meters.h5",
+                   "../data/Encoded/8bits/WithoutTashkeel/Full_Data/full_data_Y_Meters.h5",
+                   "../data/Encoded/8bits/WithTashkeel/Eliminated/Eliminated_data_Y_Meters.h5",
+                   "../data/Encoded/8bits/WithTashkeel/Full_Data/full_data_Y_Meters.h5"]
+
 epochs_param = 50
 # umar -> it wasn't found
-batch_size_param = 512
+batch_size_param = 2048
 # =============================================================================
 
 # =============================================================================
@@ -76,6 +120,62 @@ full_classes_encoder_path = "../data/encoders_full_dat.pickle"
 eliminated_classes_encoder_path = "../data/encoders_eliminated_data.pickle"
 
 
+
+# Remove the mess
+def removeTestingFiles():
+    rmCommand = 'rm -rf'
+    rmCommand += ' lib/test_folders/*'
+    rmCommand += ' log.txt'
+#    rmCommand += ' All_Experiments_Results.txt'
+    # Executing the command:
+    if os.system(rmCommand) == 0:
+        print('old testing files are removed!')
+    else:
+        print('there is no testing files to remove!')
+
+# Command line arguemnt option; --test
+'''
+    TODO
+        0 Removes old testing paths (not encoding h5)
+        2 Remove log.txt, Results, Checkpoints, Logs
+        3 Return True | False
+        4 Remove the testing Results, Checkpoints, Logs
+'''
+test = false
+if len(sys.argv) == 2 and sys.argv[1] == '--test':
+    test = true
+    # Removing the mess (if there were!)
+    removeTestingFiles()
+
+    # Testing Setup
+    layers_type = ["LSTM"]
+    num_layers_hidden = ["1"]
+    weighted_loss_flag = ["1"]
+    n_units = ["1"]
+    encoded_X_paths = [
+    "lib/data_testing/Encoded/8bits/WithoutTashkeel/Eliminated/eliminated_data_matrix_without_tashkeel_8bitsEncoding.h5",
+    "lib/data_testing/Encoded/8bits/WithoutTashkeel/Full_Data/full_data_matrix_without_tashkeel_8bitsEncoding.h5",
+    "lib/data_testing/Encoded/8bits/WithTashkeel/Eliminated/eliminated_data_matrix_with_tashkeel_8bitsEncoding.h5",
+    "lib/data_testing/Encoded/8bits/WithTashkeel/Full_Data/full_data_matrix_with_tashkeel_8bitsEncoding.h5"]
+    encoded_Y_paths = [
+    "lib/data_testing/Encoded/8bits/WithoutTashkeel/Eliminated/Eliminated_data_Y_Meters.h5",
+    "lib/data_testing/Encoded/8bits/WithoutTashkeel/Full_Data/full_data_Y_Meters.h5",
+    "lib/data_testing/Encoded/8bits/WithTashkeel/Eliminated/Eliminated_data_Y_Meters.h5",
+    "lib/data_testing/Encoded/8bits/WithTashkeel/Full_Data/full_data_Y_Meters.h5"]
+    epochs_param = 1
+    batch_size_param = 1024
+    last_or_max_val_acc = 1
+    activation_output_function = 'softmax'
+    earlystopping_patience = -1
+    test_size_param = 0.1
+    validation_split_param = 0.1
+    load_weights_flag = 0
+    full_classes_encoder_path = "lib/data_testing/encoders_full_dat.pickle"
+    eliminated_classes_encoder_path = "lib/data_testing/encoders_eliminated_data.pickle"
+
+
+
+
 def checking_experiment_run(exp_name):
     '''
     this function is responsible for continue experiments running if running
@@ -94,12 +194,12 @@ def checking_experiment_run(exp_name):
         lines[exp_n] = exp_state
         line = file.readline()
     if exp_name not in lines.keys():
-        file.write(exp_name+","+"runing_0\n")
+        file.write(exp_name+","+"running@0\n")
         file.close()
         return "added",0
     else:
-        state, last_epoch = lines[exp_name].split('_')[0] , lines[exp_name].split('_')[1] 
-        return state , last_epoch.split('\n')[0]
+        state, last_epoch = lines[exp_name].split('@')[0] , lines[exp_name].split('@')[1] 
+        return state , int(last_epoch.split('\n')[0])
 
     
 #save name of previous experiment
@@ -108,7 +208,7 @@ previous_experiment_name = ""
 # ===============================Concatinated Variables ========================
 counter = 0
 for X, Y in zip(encoded_X_paths, encoded_Y_paths):
-    file_name = X.split("/")[6].split(".")[0]
+    file_name = X.split("/")[7 -1].split(".")[0]
     # print(file_name)
     for l_type in layers_type:
         exp_l_type = file_name + "_" + l_type
@@ -154,9 +254,20 @@ for X, Y in zip(encoded_X_paths, encoded_Y_paths):
                                earlystopping_patience,
                                Experiement_Name,
                                full_classes_encoder_path,
-                               eliminated_classes_encoder_path)
+                               eliminated_classes_encoder_path,
+                               path_,
+                               MULTI_GPU_FLAG,
+                               test)
 
                         #update experiment_state to done 
-                        update_log_file(Experiement_Name,"done_0")
+                        helpers.update_log_file(Experiement_Name,"done@0", False)
                         
                     print(Experiement_Name,"   Done !!")
+                    print("=" * 80)
+
+if len(sys.argv) == 2 and sys.argv[1] == '--test':
+
+    print('End Testing '*20)
+    os.system('clear')
+    print(comparing_.check_results())
+    removeTestingFiles()
