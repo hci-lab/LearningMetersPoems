@@ -10,7 +10,7 @@
 
 
 # Multi_GPU_Flag
-state_of_multi_GPUS = False
+MULTI_GPU_FLAG = False
 
 import os
 
@@ -19,7 +19,7 @@ if len(sys.argv) == 2 and sys.argv[1] == '--cpu':
     print('Running On CPU')
     os.environ["CUDA_DEVICE_ORDER"] = "PCI_BUS_ID"
     os.environ["CUDA_VISIBLE_DEVICES"] = ""
-    state_of_multi_GPUS = False
+    MULTI_GPU_FLAG = False
 
 
 from sys import path
@@ -41,6 +41,7 @@ import warnings
 import sys
 import comparing_
 import helpers
+import tensorflow as tf
 
 # ==============================================================================
 
@@ -49,32 +50,41 @@ print("Imports Done")
 # =============================================================================
 import tensorflow as tf
 np.random.seed(123456)
+<<<<<<< HEAD
 tf.reset_default_graph()
 with tf.Graph().as_default():
     set_random_seed(123456)
+||||||| merged common ancestors
+set_random_seed(123456)
+=======
+#set_random_seed(123456)
+with tf.Graph().as_default():
+    set_random_seed(123456)
+>>>>>>> 04b9dc60d54db66a7c6dcdae9478f7f8ba6e8bc8
 rn.seed(123456)
 arabic_alphabet = arabic.alphabet
 numberOfUniqueChars = len(arabic_alphabet)
 # =======================Program Parameters====================================
 
 # =============================================================================
-layers_type = ["LSTM"]
-num_layers_hidden = ["1"]
-weighted_loss_flag = ["1"]
-n_units = ["1"]
-encoded_X_paths = [
-"lib/data_testing/Encoded/8bits/WithoutTashkeel/Eliminated/eliminated_data_matrix_without_tashkeel_8bitsEncoding.h5",
-"lib/data_testing/Encoded/8bits/WithoutTashkeel/Full_Data/full_data_matrix_without_tashkeel_8bitsEncoding.h5",
-"lib/data_testing/Encoded/8bits/WithTashkeel/Eliminated/eliminated_data_matrix_with_tashkeel_8bitsEncoding.h5",
-"lib/data_testing/Encoded/8bits/WithTashkeel/Full_Data/full_data_matrix_with_tashkeel_8bitsEncoding.h5"]
-encoded_Y_paths = [
-"lib/data_testing/Encoded/8bits/WithoutTashkeel/Eliminated/Eliminated_data_Y_Meters.h5",
-"lib/data_testing/Encoded/8bits/WithoutTashkeel/Full_Data/full_data_Y_Meters.h5",
-"lib/data_testing/Encoded/8bits/WithTashkeel/Eliminated/Eliminated_data_Y_Meters.h5",
-"lib/data_testing/Encoded/8bits/WithTashkeel/Full_Data/full_data_Y_Meters.h5"]
-epochs_param = 1
+layers_type = ["Bidirectional_LSTM" , "LSTM"]
+num_layers_hidden = ["3","6"]
+weighted_loss_flag = ["0","1"]
+n_units = ["50","82"]
+encoded_X_paths = ["../data/Encoded/8bits/WithoutTashkeel/Eliminated/eliminated_data_matrix_without_tashkeel_8bitsEncoding.h5",
+                   "../data/Encoded/8bits/WithoutTashkeel/Full_Data/full_data_matrix_without_tashkeel_8bitsEncoding.h5",
+                   "../data/Encoded/8bits/WithTashkeel/Eliminated/eliminated_data_matrix_with_tashkeel_8bitsEncoding.h5",
+                   "../data/Encoded/8bits/WithTashkeel/Full_Data/full_data_matrix_with_tashkeel_8bitsEncoding.h5"]
+
+
+encoded_Y_paths = ["../data/Encoded/8bits/WithoutTashkeel/Eliminated/Eliminated_data_Y_Meters.h5",
+                   "../data/Encoded/8bits/WithoutTashkeel/Full_Data/full_data_Y_Meters.h5",
+                   "../data/Encoded/8bits/WithTashkeel/Eliminated/Eliminated_data_Y_Meters.h5",
+                   "../data/Encoded/8bits/WithTashkeel/Full_Data/full_data_Y_Meters.h5"]
+
+epochs_param = 50
 # umar -> it wasn't found
-batch_size_param = 512
+batch_size_param = 2048
 # =============================================================================
 
 # =============================================================================
@@ -106,8 +116,8 @@ validation_split_param = 0.1
 
 load_weights_flag = 0
 
-full_classes_encoder_path = "lib/data_testing/encoders_full_dat.pickle"
-eliminated_classes_encoder_path = "lib/data_testing/encoders_eliminated_data.pickle"
+full_classes_encoder_path = "../data/encoders_full_dat.pickle"
+eliminated_classes_encoder_path = "../data/encoders_eliminated_data.pickle"
 
 
 
@@ -131,8 +141,9 @@ def removeTestingFiles():
         3 Return True | False
         4 Remove the testing Results, Checkpoints, Logs
 '''
+test = false
 if len(sys.argv) == 2 and sys.argv[1] == '--test':
-
+    test = true
     # Removing the mess (if there were!)
     removeTestingFiles()
 
@@ -245,7 +256,8 @@ for X, Y in zip(encoded_X_paths, encoded_Y_paths):
                                full_classes_encoder_path,
                                eliminated_classes_encoder_path,
                                path_,
-                               MULTI_GPU_FLAG=state_of_multi_GPUS)
+                               MULTI_GPU_FLAG,
+                               test)
 
                         #update experiment_state to done 
                         helpers.update_log_file(Experiement_Name,"done@0", False)

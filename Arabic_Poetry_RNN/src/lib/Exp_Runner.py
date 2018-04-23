@@ -46,7 +46,8 @@ def runner(encoded_x_data_path,
            full_classes_encoder_path,
            eliminated_classes_encoder_path,
            current_path,
-           MULTI_GPU_FLAG):
+           MULTI_GPU_FLAG,
+           test):
     # ===============================================================================
 
     # =============================================================================
@@ -54,11 +55,16 @@ def runner(encoded_x_data_path,
     #encoded_x_data_path = "../data/Encoded/8bits/WithoutTashkeel/Eliminated/eliminated_data_matrix_without_tashkeel_8bitsEncoding.h5"
     #encoded_y_data_path = "../data/Encoded/8bits/WithoutTashkeel/Eliminated/Eliminated_data_Y_Meters.h5"
     # =============================================================================
+    checkpoints_path = "../../Experiements_Info/checkpoints/" + experiment_name + "/"
+    check_points_file_path = checkpoints_path + "/weights-improvement-{epoch:03d}-{val_acc:.5f}.hdf5"
+    board_log_dir = "../../Experiements_Info/logs/" + experiment_name + "/"
+    results_dir = ".../../Experiements_Info/Results/" + experiment_name + "/"
 
-    checkpoints_path = "lib/test_folders/checkpoints/" + experiment_name + "/"
-    check_points_file_path = checkpoints_path + "weights-improvement-{epoch:03d}-{val_acc:.5f}.hdf5"
-    board_log_dir = "lib/test_folders/logs/" + experiment_name + "/"
-    results_dir = "lib/test_folders/Results/" + experiment_name + "/"
+    if test:
+        checkpoints_path = "lib/test_folders/checkpoints/" + experiment_name + "/"
+        check_points_file_path = checkpoints_path + "weights-improvement-{epoch:03d}-{val_acc:.5f}.hdf5"
+        board_log_dir = "lib/test_folders/logs/" + experiment_name + "/"
+        results_dir = "lib/test_folders/Results/" + experiment_name + "/"
 
     # ===============================================================================
     print('Before ' * 8)
@@ -261,7 +267,7 @@ def runner(encoded_x_data_path,
     # Final evaluation of the model
     max_model = load_weights(checkpoints_path, 1, weighted_loss_flag, w_categorical_crossentropy_pfun)
 
-    scores = max_model.evaluate(x_test, y_test, verbose=1)
+    scores = max_model.evaluate(x_test, y_test, verbose=1 , batch_size=2048)
     print("Exp Results Accuracy : %.2f%%" % (scores[1]))
     print("Exp Results Score : %.2f%%" % (scores[0]))
 
