@@ -119,8 +119,9 @@ def removeTestingFiles():
         3 Return True | False
         4 Remove the testing Results, Checkpoints, Logs
 '''
+test = false
 if len(sys.argv) == 2 and sys.argv[1] == '--test':
-    
+    test = true
     # Removing the mess (if there were!)
     removeTestingFiles()
 
@@ -232,7 +233,8 @@ for X, Y in zip(encoded_X_paths, encoded_Y_paths):
                                Experiement_Name,
                                full_classes_encoder_path,
                                eliminated_classes_encoder_path,
-                               path_)
+                               path_,
+                               test)
 
                         #update experiment_state to done 
                         helpers.update_log_file(Experiement_Name,"done@0", False)
