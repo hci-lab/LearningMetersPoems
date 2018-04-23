@@ -66,20 +66,38 @@ layers_type = ["Bidirectional_LSTM" , "LSTM"]
 num_layers_hidden = ["3","6"]
 weighted_loss_flag = ["0","1"]
 n_units = ["50","82"]
-encoded_X_paths = ["../data/Encoded/8bits/WithoutTashkeel/Eliminated/eliminated_data_matrix_without_tashkeel_8bitsEncoding.h5",
-                   "../data/Encoded/8bits/WithoutTashkeel/Full_Data/full_data_matrix_without_tashkeel_8bitsEncoding.h5",
-                   "../data/Encoded/8bits/WithTashkeel/Eliminated/eliminated_data_matrix_with_tashkeel_8bitsEncoding.h5",
-                   "../data/Encoded/8bits/WithTashkeel/Full_Data/full_data_matrix_with_tashkeel_8bitsEncoding.h5"]
+encoded_X_paths = ["../data/Encoded_Ali/8bits/WithoutTashkeel/Eliminated/eliminated_data_matrix_without_tashkeel_8bitsEncoding.h5",
+                   "../data/Encoded_Ali/8bits/WithoutTashkeel/Full_Data/full_data_matrix_without_tashkeel_8bitsEncoding.h5",
+                   "../data/Encoded_Ali/8bits/WithTashkeel/Eliminated/eliminated_data_matrix_with_tashkeel_8bitsEncoding.h5",
+                   "../data/Encoded_Ali/8bits/WithTashkeel/Full_Data/full_data_matrix_with_tashkeel_8bitsEncoding.h5"]
 
 
-encoded_Y_paths = ["../data/Encoded/8bits/WithoutTashkeel/Eliminated/Eliminated_data_Y_Meters.h5",
-                   "../data/Encoded/8bits/WithoutTashkeel/Full_Data/full_data_Y_Meters.h5",
-                   "../data/Encoded/8bits/WithTashkeel/Eliminated/Eliminated_data_Y_Meters.h5",
-                   "../data/Encoded/8bits/WithTashkeel/Full_Data/full_data_Y_Meters.h5"]
+encoded_Y_paths = ["../data/Encoded_Ali/8bits/WithoutTashkeel/Eliminated/Eliminated_data_Y_Meters.h5",
+                   "../data/Encoded_Ali/8bits/WithoutTashkeel/Full_Data/full_data_Y_Meters.h5",
+                   "../data/Encoded_Ali/8bits/WithTashkeel/Eliminated/Eliminated_data_Y_Meters.h5",
+                   "../data/Encoded_Ali/8bits/WithTashkeel/Full_Data/full_data_Y_Meters.h5"]
+
+full_classes_encoder_path = "../data/Encoded_Ali/8bits/encoders_full_dat.pickle"
+eliminated_classes_encoder_path = "../data/Encoded_Ali/8bits/encoders_eliminated_data.pickle"
 
 epochs_param = 50
 # umar -> it wasn't found
-batch_size_param = 2048
+batch_size_param = 1024
+
+
+# 0-> last wait | 1 max val_acc
+last_or_max_val_acc = 1
+activation_output_function = 'softmax'
+# umar -> not used
+#new_encoding_flag = 1
+earlystopping_patience = -1
+# umar -> not used
+#required_data_col = [0, 2, 3, 5]
+test_size_param = 0.1
+validation_split_param = 0.1
+
+load_weights_flag = 0
+
 # =============================================================================
 
 # =============================================================================
@@ -98,21 +116,6 @@ batch_size_param = 2048
 
 #input_data_path = "./data/Almoso3a_Alshe3rya/cleaned_data/All_clean_data.csv"
 
-# 0-> last wait | 1 max val_acc
-last_or_max_val_acc = 1
-activation_output_function = 'softmax'
-# umar -> not used
-#new_encoding_flag = 1
-earlystopping_patience = -1
-# umar -> not used
-#required_data_col = [0, 2, 3, 5]
-test_size_param = 0.1
-validation_split_param = 0.1
-
-load_weights_flag = 0
-
-full_classes_encoder_path = "../data/Encoded/8bits/encoders_full_dat.pickle"
-eliminated_classes_encoder_path = "../data/Encoded/8bits/encoders_eliminated_data.pickle"
 
 
 
