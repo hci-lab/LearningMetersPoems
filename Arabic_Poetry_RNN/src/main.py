@@ -50,17 +50,9 @@ print("Imports Done")
 # =============================================================================
 import tensorflow as tf
 np.random.seed(123456)
-<<<<<<< HEAD
 tf.reset_default_graph()
 with tf.Graph().as_default():
     set_random_seed(123456)
-||||||| merged common ancestors
-set_random_seed(123456)
-=======
-#set_random_seed(123456)
-with tf.Graph().as_default():
-    set_random_seed(123456)
->>>>>>> 04b9dc60d54db66a7c6dcdae9478f7f8ba6e8bc8
 rn.seed(123456)
 arabic_alphabet = arabic.alphabet
 numberOfUniqueChars = len(arabic_alphabet)
