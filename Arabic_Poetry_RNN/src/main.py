@@ -45,7 +45,7 @@ numberOfUniqueChars = len(arabic_alphabet)
 # =======================Program Parameters====================================
 
 # =============================================================================
-layers_type = ["Bidirectional_LSTM","LSTM"]
+layers_type = ["Bidirectional_LSTM" , "LSTM"]
 num_layers_hidden = ["3","6"]
 weighted_loss_flag = ["0","1"]
 n_units = ["50","82"]
@@ -62,7 +62,7 @@ encoded_Y_paths = ["../data/Encoded/8bits/WithoutTashkeel/Eliminated/Eliminated_
 
 epochs_param = 50
 # umar -> it wasn't found
-batch_size_param = 512
+batch_size_param = 2048
 # =============================================================================
 
 # =============================================================================
