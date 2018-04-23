@@ -21,6 +21,9 @@ if len(sys.argv) == 2 and sys.argv[1] == '--cpu':
     os.environ["CUDA_VISIBLE_DEVICES"] = ""
     MULTI_GPU_FLAG = False
 
+# before Keras / Tensorflow is imported.
+if len(sys.argv) == 2 and sys.argv[1] == '--multgpu':
+    MULTI_GPU_FLAG = True
 
 from sys import path
 # Relative path to this modul's location in PyQuran.
