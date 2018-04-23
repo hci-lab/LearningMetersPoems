@@ -55,10 +55,10 @@ def runner(encoded_x_data_path,
     #encoded_x_data_path = "../data/Encoded/8bits/WithoutTashkeel/Eliminated/eliminated_data_matrix_without_tashkeel_8bitsEncoding.h5"
     #encoded_y_data_path = "../data/Encoded/8bits/WithoutTashkeel/Eliminated/Eliminated_data_Y_Meters.h5"
     # =============================================================================
-    checkpoints_path = "../../Experiements_Info/checkpoints/" + experiment_name + "/"
+    checkpoints_path = "../Experiements_Info/checkpoints/" + experiment_name + "/"
     check_points_file_path = checkpoints_path + "/weights-improvement-{epoch:03d}-{val_acc:.5f}.hdf5"
-    board_log_dir = "../../Experiements_Info/logs/" + experiment_name + "/"
-    results_dir = ".../../Experiements_Info/Results/" + experiment_name + "/"
+    board_log_dir = "../Experiements_Info/logs/" + experiment_name + "/"
+    results_dir = ".../Experiements_Info/Results/" + experiment_name + "/"
 
     if test:
         checkpoints_path = "lib/test_folders/checkpoints/" + experiment_name + "/"
