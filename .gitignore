@@ -1,3 +1,4 @@
+.gitignore
 __pycache__/
 .DS_Store
 scraping\ the\ web\ for\ poems/dataset.csv
@@ -14,3 +15,4 @@ English_Poetry_RNN/data
 English_Poetry_RNN/src/umar_Test.ipynb
 .gitattributes
 .gitignore
+*.hdf5
