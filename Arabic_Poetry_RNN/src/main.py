@@ -111,8 +111,8 @@ validation_split_param = 0.1
 
 load_weights_flag = 0
 
-full_classes_encoder_path = "../data/encoders_full_dat.pickle"
-eliminated_classes_encoder_path = "../data/encoders_eliminated_data.pickle"
+full_classes_encoder_path = "../data/Encoded/8bits/encoders_full_dat.pickle"
+eliminated_classes_encoder_path = "../data/Encoded/8bits/encoders_eliminated_data.pickle"
 
 
 
