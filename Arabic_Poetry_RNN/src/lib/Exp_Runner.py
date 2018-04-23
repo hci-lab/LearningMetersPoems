@@ -259,7 +259,7 @@ def runner(encoded_x_data_path,
     # Final evaluation of the model
     max_model = load_weights(checkpoints_path, 1, weighted_loss_flag, w_categorical_crossentropy_pfun)
 
-    scores = max_model.evaluate(x_test, y_test, verbose=1)
+    scores = max_model.evaluate(x_test, y_test, verbose=1 , batch_size=2048)
     print("Exp Results Accuracy : %.2f%%" % (scores[1]))
     print("Exp Results Score : %.2f%%" % (scores[0]))
 
