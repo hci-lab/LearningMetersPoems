@@ -71,7 +71,7 @@ num_layers_hidden = ["3","6"]
 weighted_loss_flag = ["0","1"]
 n_units = ["50","82"]
 
-epochs_param = 50
+epochs_param = 40
 # umar -> it wasn't found
 batch_size_param = 2048
 
@@ -89,6 +89,7 @@ last_or_max_val_acc = 1
 load_weights_flag = 0
 
 vectoriz_fun = helpers.string_with_tashkeel_vectorizer_OneHot
+#vectoriz_fun = helpers.string_with_tashkeel_vectorizer
 
 expermen_names = ["eliminated_data_matrix_without_tashkeel_One_hot_encoding",
                   "full_data_matrix_without_tashkeel_One_hot_encoding",
