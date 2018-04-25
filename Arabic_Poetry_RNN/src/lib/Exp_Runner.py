@@ -171,12 +171,14 @@ def runner(encoded_x_data_path,
             # save last epoch weghits
             self.model.save(checkpoints_path + "weights-improvement-last-epoch.hdf5")
             #get expreiment name and update epoch number in log file
-            exp_name = checkpoints_path.split('/')[2]
-            update_log_file(exp_name,str(epoch),True)
-            print("Save last epoch Done! ....")
-
+            exp_name = checkpoints_path.split('/')[3]
+            staus = update_log_file(exp_name,str(epoch+1),True)
+            print("Save last epoch Done! ...." , staus)
             helpers.remove_non_max(checkpoints_path)
 
+
+
+            
     checkpoint = ModelCheckpoint(check_points_file_path,
                                  monitor='val_acc',
                                  verbose=1,

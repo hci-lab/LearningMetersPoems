@@ -234,7 +234,8 @@ for X, Y in zip(encoded_X_paths, encoded_Y_paths):
                            new_last_or_max_val_acc = 0
                            #claculate remain epoch num
                            new_epochs_param = new_epochs_param - last_epoch
-                           
+                           if last_epoch == 0:
+                               new_load_weights_flag = 0
                         runner(X,
                                Y,
                                test_size_param,
