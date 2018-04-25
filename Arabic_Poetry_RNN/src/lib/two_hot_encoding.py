@@ -75,7 +75,6 @@ def encode_one_hot(values):
 
 
 #-------------------------Program Constants---------------------------
-dataPath="C:\\Users\\ali\\Documents\\GitHub\\ArabicPoetry-1\\Arabic_Poetry_RNN\\data\\All_Data.csv"
 
 #One Hot Encoding Dict For All Alphabet
 #generate one hot for alphabet and save it in dictionary +" "
@@ -135,7 +134,8 @@ def two_hot_encoding(string, maxLength, asTwoHotPadding=False):
                 twoHotVec=list(oneHotAlphapetDict.get(
                     indx))+list(oneHotDiacriticsDict.get("$"))#[1,0,0,0,0]
                           #+oneHotDiacriticsDict.get( "$")
-            else #if len(indx)==2::
+            else: 
+                #if len(indx)==2::
                 twoHotVec=list(oneHotAlphapetDict.get(indx[0]))+list(oneHotDiacriticsDict.get(indx[1]))
             lineEncoded.append(twoHotVec)
     #incase you striped tashkel and want two encode each char as two hot vector
@@ -148,37 +148,3 @@ def two_hot_encoding(string, maxLength, asTwoHotPadding=False):
     # and P equals len(alphabet)+ len(diacritics)+ 1
     return lineEncoded
 
-
-
-
-#apply it on each payt "PREPROCESS EL-BYT BEFORE PASS IT"
-'''
-twoHotMatrix=[]
-for verse in coulmn:
-    #preprocess your verse before encoding 
-    
-    lineEncoded=two_hot_encoding(verse)
-    twoHotMatrix.append(lineEncoded)
-'''
-
-
-
-#This part for test
-#print(dataset.head())
-print("--------------")
-byt="وَكانَ في الباطِلِ اِبتِهالي وَاِبتَهَلَ الدَهرُ في أَذاتي"
-print(byt[0])
-print(two_hot_encoding(byt))
-x=separate_token_with_dicrites(byt)[0]
-print(len(arabic.alphabet))
-#print(list(oneHotAlphapetDict.get(x[0]))+[1, 0])
-#print(oneHotDiacriticsDict.get("$"))
-'''
-print(oneHotAlphapetDict.get("ب"))
-print(oneHotAlphapetDict.get("ت"))
-print(oneHotAlphapetDict.get("ث"))
-print(oneHotAlphapetDict.get("ج"))
-'''
-print(alphabet)
-print(two_hot_encoding(byt))
-#print(len(byt))
