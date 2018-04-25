@@ -59,18 +59,14 @@ tashkeel.
 
 
 def encode_one_hot(values):
-
-
     # integer encode
     label_encoder = LabelEncoder()
     integer_encoded = label_encoder.fit_transform(values)
-    #print(integer_encoded)
 
     # binary encode
     onehot_encoder = OneHotEncoder(sparse=False, dtype=int)
     integer_encoded = integer_encoded.reshape(len(integer_encoded), 1)
     onehot_encoded = onehot_encoder.fit_transform(integer_encoded)
-    #print(onehot_encoded)
     return onehot_encoded
 
 
@@ -81,7 +77,6 @@ def encode_one_hot(values):
     #alphabet+space
 alphabet=[" "]+sorted(list(arabic.alphabet))
 alphabetEncoded=encode_one_hot(alphabet)
-print(alphabetEncoded)
 #save One hot encoding in a dict
 i=0
 oneHotAlphapetDict = {}
@@ -105,11 +100,6 @@ for hot in diacriticsEncoded:
 
 maxLength=83
 
-# -------------------Importing the Data set----------------------------------
-dataset = pd.read_csv(dataPath)# encoding = "ISO-8859-1", encoding='utf_8'
-dataset.head()
-#dataset.iloc[:,3].value_counts()
-
 
 
 
@@ -122,7 +112,6 @@ def two_hot_encoding(string, maxLength, asTwoHotPadding=False):
 
     #   separate each char with it's tashkel
     separatedAlphabetWithDicrites= separate_token_with_dicrites(string)
-    print(separatedAlphabetWithDicrites)
     lineEncoded=[]
 
 
@@ -146,5 +135,5 @@ def two_hot_encoding(string, maxLength, asTwoHotPadding=False):
 
     # it will return N*P , N is the max length ,
     # and P equals len(alphabet)+ len(diacritics)+ 1
-    return lineEncoded
+    return np.asarray(lineEncoded)
 
