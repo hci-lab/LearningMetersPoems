@@ -261,7 +261,7 @@ def two_hot_encoding(text , max_bayt_len):
     tashkeel = {tashkeel:i for i,tashkeel in enumerate(arabic.shortharakat)} 
     alpha_len = len(arabic.alphabet)
     tash_len = len(arabic.shortharakat)
-    tokens = helpers.separate_token_with_dicrites(text)
+    tokens = separate_token_with_dicrites(text)
     text_encoding = []
     for token in tokens:
         token = list(token)
