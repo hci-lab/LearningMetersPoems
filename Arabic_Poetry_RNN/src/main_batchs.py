@@ -50,7 +50,6 @@ import math
 sys.path.append("lib/")
 import helpers
 import pyarabic
-import two_hot_encoding
 # ==============================================================================
 
 print("Imports Done")
@@ -91,7 +90,7 @@ load_weights_flag = 0
 
 #vectoriz_fun = helpers.string_with_tashkeel_vectorizer_OneHot
 #vectoriz_fun = helpers.string_with_tashkeel_vectorizer
-vectoriz_fun = two_hot_encoding.two_hot_encoding
+vectoriz_fun = helpers.two_hot_encoding
 
 expermen_names = ["eliminated_data_matrix_without_tashkeel_two_hot_encoding",
                   "full_data_matrix_without_tashkeel_two_hot_encoding",
