@@ -48,18 +48,41 @@ import tensorflow as tf
 
 # ==============================================================================
 
-print("Imports Done")
 
-# =============================================================================
-import tensorflow as tf
-np.random.seed(123456)
 tf.reset_default_graph()
 with tf.Graph().as_default():
     set_random_seed(123456)
-rn.seed(123456)
+
 arabic_alphabet = arabic.alphabet
 numberOfUniqueChars = len(arabic_alphabet)
 # =======================Program Parameters====================================
+
+
+# ==============================================================================
+
+print("Imports Done")
+
+# ===================Tensorflow Config and Gpu settings=========================
+import tensorflow as tf
+tf.reset_default_graph()
+with tf.Graph().as_default():
+    set_random_seed(123456)
+config = tf.ConfigProto()
+config.gpu_options.allow_growth = True
+session = tf.Session(config=config)
+print("Tensorflow Config and Gpu settings Done")
+
+# =====================Random seeds settings ===================================
+np.random.seed(123456)
+rn.seed(123456)
+print("Random seeds settings Done")
+# =============================================================================
+
+# =============================================================================
+arabic_alphabet = arabic.alphabet
+numberOfUniqueChars = len(arabic_alphabet)
+# =============================================================================
+
 
 # =============================================================================
 layers_type = ["Bidirectional_LSTM" , "LSTM"]

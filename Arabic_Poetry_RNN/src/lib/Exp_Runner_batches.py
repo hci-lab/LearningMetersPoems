@@ -328,7 +328,7 @@ def runner(dataset,
     # Final evaluation of the model
     max_model = load_weights(checkpoints_path, 1, weighted_loss_flag, w_categorical_crossentropy_pfun)
 
-    x_test = x_test.apply(lambda x : vectorize_fun(x , max_bayt_len))
+    x_test = x_test.apply(lambda x : vectoriz_fun(x , max_bayt_len))
     x_test = np.stack(x_test,axis=0)
     
     scores = max_model.evaluate(x_test, y_test, verbose=1 , batch_size=2048)
