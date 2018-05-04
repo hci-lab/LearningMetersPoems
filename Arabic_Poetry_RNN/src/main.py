@@ -13,6 +13,7 @@
 MULTI_GPU_FLAG = False
 
 import os
+import sys
 
 # before Keras / Tensorflow is imported.
 if len(sys.argv) == 2 and sys.argv[1] == '--cpu':
@@ -21,6 +22,9 @@ if len(sys.argv) == 2 and sys.argv[1] == '--cpu':
     os.environ["CUDA_VISIBLE_DEVICES"] = ""
     MULTI_GPU_FLAG = False
 
+# before Keras / Tensorflow is imported.
+if len(sys.argv) == 2 and sys.argv[1] == '--multgpu':
+    MULTI_GPU_FLAG = True
 
 from sys import path
 # Relative path to this modul's location in PyQuran.
@@ -38,34 +42,38 @@ import random as rn
 from tensorflow import set_random_seed
 from Exp_Runner import runner
 import warnings
-import sys
 import comparing_
 import helpers
 import tensorflow as tf
 
 # ==============================================================================
 
+
 print("Imports Done")
 
-# =============================================================================
+# ===================Tensorflow Config and Gpu settings=========================
 import tensorflow as tf
-np.random.seed(123456)
-<<<<<<< HEAD
 tf.reset_default_graph()
 with tf.Graph().as_default():
     set_random_seed(123456)
-||||||| merged common ancestors
-set_random_seed(123456)
-=======
-#set_random_seed(123456)
-with tf.Graph().as_default():
-    set_random_seed(123456)
->>>>>>> 04b9dc60d54db66a7c6dcdae9478f7f8ba6e8bc8
+config = tf.ConfigProto()
+config.gpu_options.allow_growth = True
+session = tf.Session(config=config)
+print("Tensorflow Config and Gpu settings Done")
+
+# =====================Random seeds settings ===================================
+np.random.seed(123456)
 rn.seed(123456)
+print("Random seeds settings Done")
+# =============================================================================
+
+# =============================================================================
 arabic_alphabet = arabic.alphabet
 numberOfUniqueChars = len(arabic_alphabet)
-# =======================Program Parameters====================================
+# =============================================================================
 
+
+# =======================Program Parameters====================================
 # =============================================================================
 layers_type = ["Bidirectional_LSTM" , "LSTM"]
 num_layers_hidden = ["3","6"]
@@ -82,9 +90,26 @@ encoded_Y_paths = ["../data/Encoded/8bits/WithoutTashkeel/Eliminated/Eliminated_
                    "../data/Encoded/8bits/WithTashkeel/Eliminated/Eliminated_data_Y_Meters.h5",
                    "../data/Encoded/8bits/WithTashkeel/Full_Data/full_data_Y_Meters.h5"]
 
-epochs_param = 50
+full_classes_encoder_path = "../data/Encoded/8bits/encoders_full_dat.pickle"
+eliminated_classes_encoder_path = "../data/Encoded/8bits/encoders_eliminated_data.pickle"
+
+epochs_param = 40
 # umar -> it wasn't found
 batch_size_param = 2048
+
+activation_output_function = 'softmax'
+# umar -> not used
+#new_encoding_flag = 1
+earlystopping_patience = -1
+# umar -> not used
+#required_data_col = [0, 2, 3, 5]
+test_size_param = 0.1
+validation_split_param = 0.1
+
+# 0-> last wait | 1 max val_acc
+last_or_max_val_acc = 1
+load_weights_flag = 0
+
 # =============================================================================
 
 # =============================================================================
@@ -103,21 +128,6 @@ batch_size_param = 2048
 
 #input_data_path = "./data/Almoso3a_Alshe3rya/cleaned_data/All_clean_data.csv"
 
-# 0-> last wait | 1 max val_acc
-last_or_max_val_acc = 1
-activation_output_function = 'softmax'
-# umar -> not used
-#new_encoding_flag = 1
-earlystopping_patience = -1
-# umar -> not used
-#required_data_col = [0, 2, 3, 5]
-test_size_param = 0.1
-validation_split_param = 0.1
-
-load_weights_flag = 0
-
-full_classes_encoder_path = "../data/encoders_full_dat.pickle"
-eliminated_classes_encoder_path = "../data/encoders_eliminated_data.pickle"
 
 
 
@@ -141,9 +151,9 @@ def removeTestingFiles():
         3 Return True | False
         4 Remove the testing Results, Checkpoints, Logs
 '''
-test = false
+test = False
 if len(sys.argv) == 2 and sys.argv[1] == '--test':
-    test = true
+    test = True
     # Removing the mess (if there were!)
     removeTestingFiles()
 
@@ -237,7 +247,8 @@ for X, Y in zip(encoded_X_paths, encoded_Y_paths):
                            new_last_or_max_val_acc = 0
                            #claculate remain epoch num
                            new_epochs_param = new_epochs_param - last_epoch
-                           
+                           if last_epoch == 0:
+                               new_load_weights_flag = 0
                         runner(X,
                                Y,
                                test_size_param,
