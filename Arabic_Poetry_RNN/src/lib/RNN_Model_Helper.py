@@ -13,7 +13,7 @@ import numpy as np
 import pandas as pd
 import re
 from keras.models import Sequential
-from keras.layers import Dense, LSTM, Bidirectional
+from keras.layers import Dense, Bidirectional, CuDNNLSTM
 from keras import backend as K
 # from sklearn.preprocessing import LabelEncoder
 from numpy import argmax
@@ -23,7 +23,7 @@ from keras.utils import multi_gpu_model
 
 # =============================================================================
 def wrapped_partial(func, *args, **kwargs):
-    """ Function to handle this error AttributeError: 'functools.partial' 
+    """ Function to handle this error AttributeError: 'functools.partial'
     object has no attribute '__name__' """
     partial_func = partial(func, *args, **kwargs)
     update_wrapper(partial_func, func)
@@ -48,7 +48,7 @@ def w_categorical_crossentropy(y_true, y_pred, classes_dest, encoder, sum_of_cla
 # type(classes_dest.loc[classes_dest['Class'] == "الطويل" , 'Cnt'].iloc[0])
 
 # =============================================================================
-#def get_model(num_layers_hidden,
+# def get_model(num_layers_hidden,
 #              layers_type,
 #              n_units,
 #              max_bayt_length,
@@ -156,8 +156,6 @@ def w_categorical_crossentropy(y_true, y_pred, classes_dest, encoder, sum_of_cla
 # =============================================================================
 
 
-
-
 # ==================================umar - updated get_model===================
 def get_model(num_layers_hidden,
               layers_type,
@@ -173,7 +171,8 @@ def get_model(num_layers_hidden,
               classes_encoder,
               MULTI_GPU_FLAG=False):
     numbber_of_bohor = classes_dest.shape[0]  # classes_freq['Bohor'].unique().size
-
+    print("*" * 100)
+    print("using cuDNN LSTM")
     # =============================================================================
     #     max_bayt_length = Bayt_Text_Encoded_Stacked.shape[1]
     #     encoding_length = Bayt_Text_Encoded_Stacked.shape[2]
@@ -183,7 +182,7 @@ def get_model(num_layers_hidden,
     #      layers_type=layers_type[0]
     # =============================================================================
 
-    #check if define new modle or load exist one.
+    # check if define new modle or load exist one.
     if load_weights_flag == 0:
         print("num_layers_hidden %d" % num_layers_hidden)
         print("layers_type %s" % layers_type)
@@ -202,11 +201,11 @@ def get_model(num_layers_hidden,
         print('Model Sequential defined')
         if layers_type == 'LSTM':
             print('Model LSTM Layer added')
-            model.add(LSTM(units=n_units, input_shape=(max_bayt_length, encoding_length),
-                           return_sequences=True))
+            model.add(CuDNNLSTM(units=n_units, input_shape=(max_bayt_length, encoding_length),
+                                return_sequences=True))
         elif layers_type == 'Bidirectional_LSTM':
             print('Model input Bidirectional_LSTM Layer added')
-            model.add(Bidirectional(LSTM(n_units, return_sequences=True),
+            model.add(Bidirectional(CuDNNLSTM(n_units, return_sequences=True),
                                     input_shape=(max_bayt_length, encoding_length)))
         else:
             print('Model Dense Layer added')
@@ -215,20 +214,20 @@ def get_model(num_layers_hidden,
         for _ in range(num_layers_hidden - 1):
             if layers_type == 'LSTM':
                 print('Model LSTM Layer added')
-                model.add(LSTM(n_units, return_sequences=True))
+                model.add(CuDNNLSTM(n_units, return_sequences=True))
             elif layers_type == 'Bidirectional_LSTM':
                 print('Model Bidirectional_LSTM Layer added')
-                model.add(Bidirectional(LSTM(n_units, return_sequences=True)))
+                model.add(Bidirectional(CuDNNLSTM(n_units, return_sequences=True)))
             else:
                 print('Model Dense Layer added')
                 model.add(Dense(n_units))
         # =============================================================================
         if layers_type == 'LSTM':
             print('Model LSTM prefinal Layer added')
-            model.add(LSTM(n_units))
+            model.add(CuDNNLSTM(n_units))
         elif layers_type == 'Bidirectional_LSTM':
             print('Model Bidirectional_LSTM prefinal Layer added')
-            model.add(Bidirectional(LSTM(n_units)))
+            model.add(Bidirectional(CuDNNLSTM(n_units)))
         else:
             print('Model Dense prefinal Layer added')
             model.add(Dense(n_units))
@@ -237,18 +236,17 @@ def get_model(num_layers_hidden,
         print('Model Dense final Layer added')
         model.add(Dense(units=numbber_of_bohor, activation=activation_output_function))
 
-        
         print("compiling model ....... ")
         if weighted_loss_flag == 1:
-            #==========================================================================
+            # ==========================================================================
             print("define partial function w_categorical_crossentropy_pfun")
             sum_of_classes_denesity = classes_dest.Cnt.apply(lambda x: 1 / x).sum()
             w_categorical_crossentropy_pfun = wrapped_partial(w_categorical_crossentropy,
-                                                               classes_dest=classes_dest,
-                                                               encoder=classes_encoder,
-                                                               sum_of_classes_denesity=sum_of_classes_denesity)
+                                                              classes_dest=classes_dest,
+                                                              encoder=classes_encoder,
+                                                              sum_of_classes_denesity=sum_of_classes_denesity)
             print("partial function w_categorical_crossentropy_pfun defined")
-            #==========================================================================
+            # ==========================================================================
             print("adding  w_categorical_crossentropy_pfun loss function to Modle")
 
             if MULTI_GPU_FLAG:
@@ -270,28 +268,25 @@ def get_model(num_layers_hidden,
         print('Model Compiled')
     # =============================================================================
 
-        
     # =============================================================================
-    #check to load exist model
+    # check to load exist model
     if load_weights_flag == 1:
         sum_of_classes_denesity = classes_dest.Cnt.apply(lambda x: 1 / x).sum()
         w_categorical_crossentropy_pfun = wrapped_partial(w_categorical_crossentropy,
                                                           classes_dest=classes_dest,
                                                           encoder=classes_encoder,
                                                           sum_of_classes_denesity=sum_of_classes_denesity)
-        
+
         print("Loading Old model")
         model = load_weights(checkpoints_path, last_or_max_val_acc, weighted_loss_flag,
                              w_categorical_crossentropy_pfun)
     # =============================================================================
 
-    #print(model.summary())
+    # print(model.summary())
     return model
 
 
 # =============================================================================
-
-
 
 
 # =============================================================================
@@ -311,7 +306,8 @@ def load_weights(checkpoints_path, last_or_max_val_acc, weighted_loss_flag,
             print(checkpoints_path + 'weights-improvement-last-epoch.hdf5')
             max_weight_checkpoints = checkpoints_path + 'weights-improvement-last-epoch.hdf5'
             if weighted_loss_flag == 1:
-                model_loaded = keras.models.load_model(max_weight_checkpoints, custom_objects={ "w_categorical_crossentropy": w_categorical_crossentropy_pfun})
+                model_loaded = keras.models.load_model(max_weight_checkpoints, custom_objects={
+                    "w_categorical_crossentropy": w_categorical_crossentropy_pfun})
             else:
                 model_loaded = keras.models.load_model(max_weight_checkpoints)
 
@@ -360,11 +356,11 @@ def recall_precision_f1(confusion_matrix_df):
     '''
     Args:
         confusion_matrix_df: a datafram with index_col=0
-        
+
     returns: (x, y)
         x: is a datafrom of recall and precision for every class
         y: is the f1 score for the model.
-        
+
     '''
 
     confusion_matrix_np = confusion_matrix_df.values
