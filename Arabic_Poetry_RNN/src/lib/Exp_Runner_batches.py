@@ -281,7 +281,7 @@ def runner(dataset,
 
     Bayt_batch_generator = generate_one_batch(batch_size=batch_size_param, dataset=x_train)
     Bhore_encoded_batch_generator = generate_one_batch(batch_size=batch_size_param, dataset=y_train)
-    steps_per_epoch = math.ceil(len(dataset) / batch_size_param)
+    steps_per_epoch = math.ceil(len(x_train) / batch_size_param)
 
     Bayt_batch_generator_val = generate_one_batch(batch_size=batch_size_param, dataset=x_val)
     Bhore_encoded_batch_generator_val = generate_one_batch(batch_size=batch_size_param, dataset=y_val)
