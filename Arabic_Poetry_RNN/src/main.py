@@ -49,17 +49,6 @@ import tensorflow as tf
 # ==============================================================================
 
 
-tf.reset_default_graph()
-with tf.Graph().as_default():
-    set_random_seed(123456)
-
-arabic_alphabet = arabic.alphabet
-numberOfUniqueChars = len(arabic_alphabet)
-# =======================Program Parameters====================================
-
-
-# ==============================================================================
-
 print("Imports Done")
 
 # ===================Tensorflow Config and Gpu settings=========================
@@ -84,6 +73,7 @@ numberOfUniqueChars = len(arabic_alphabet)
 # =============================================================================
 
 
+# =======================Program Parameters====================================
 # =============================================================================
 layers_type = ["Bidirectional_LSTM" , "LSTM"]
 num_layers_hidden = ["3","6"]
