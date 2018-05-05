@@ -11,7 +11,7 @@
 
 # Multi_GPU_Flag
 MULTI_GPU_FLAG = False
-
+use_CPU = False
 import os
 import sys
 
@@ -21,6 +21,7 @@ if len(sys.argv) == 2 and sys.argv[1] == '--cpu':
     os.environ["CUDA_DEVICE_ORDER"] = "PCI_BUS_ID"
     os.environ["CUDA_VISIBLE_DEVICES"] = ""
     MULTI_GPU_FLAG = False
+    use_CPU = True
 
 # before Keras / Tensorflow is imported.
 if len(sys.argv) == 2 and sys.argv[1] == '--multgpu':
@@ -198,7 +199,8 @@ for file_name in expermen_names:
                                earlystopping_patience,
                                Experiement_Name,
                                path_,
-                               MULTI_GPU_FLAG)
+                               MULTI_GPU_FLAG,
+                               use_CPU)
 
                         #update experiment_state to done 
                         helpers.update_log_file(Experiement_Name,"done@0", False)
