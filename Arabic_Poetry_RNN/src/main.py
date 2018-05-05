@@ -76,7 +76,7 @@ numberOfUniqueChars = len(arabic_alphabet)
 
 # =======================Program Parameters====================================
 # =============================================================================
-layers_type = ["Bidirectional_LSTM"]
+layers_type = ["Bidirectional_LSTM", "LSTM"]
 num_layers_hidden = ["3","6"]
 weighted_loss_flag = ["0","1"]
 n_units = ["50","82"]
