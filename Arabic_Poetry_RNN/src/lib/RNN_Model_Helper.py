@@ -13,7 +13,7 @@ import numpy as np
 import pandas as pd
 import re
 from keras.models import Sequential
-from keras.layers import Dense, LSTM, Bidirectional
+from keras.layers import Dense, Bidirectional, CuDNNLSTM ,LSTM
 from keras import backend as K
 # from sklearn.preprocessing import LabelEncoder
 from numpy import argmax
@@ -171,6 +171,7 @@ def get_model(num_layers_hidden,
               weighted_loss_flag,
               classes_dest,
               classes_encoder,
+              use_CPU,
               MULTI_GPU_FLAG=False):
     numbber_of_bohor = classes_dest.shape[0]  # classes_freq['Bohor'].unique().size
 
@@ -198,46 +199,89 @@ def get_model(num_layers_hidden,
         print("numbber_of_bohor %d" % numbber_of_bohor)
         # =============================================================================
 
-        model = Sequential()
-        print('Model Sequential defined')
-        if layers_type == 'LSTM':
-            print('Model LSTM Layer added')
-            model.add(LSTM(units=n_units, input_shape=(max_bayt_length, encoding_length),
-                           return_sequences=True))
-        elif layers_type == 'Bidirectional_LSTM':
-            print('Model input Bidirectional_LSTM Layer added')
-            model.add(Bidirectional(LSTM(n_units, return_sequences=True),
-                                    input_shape=(max_bayt_length, encoding_length)))
-        else:
-            print('Model Dense Layer added')
-            model.add(Dense(n_units, activation='relu', input_shape=(max_bayt_length, encoding_length)))
-        # =============================================================================
-        for _ in range(num_layers_hidden - 1):
+        if use_CPU:
+            model = Sequential()
+            print('Model Sequential defined   ---CPU')
             if layers_type == 'LSTM':
                 print('Model LSTM Layer added')
-                model.add(LSTM(n_units, return_sequences=True))
+                model.add(LSTM(units=n_units, input_shape=(max_bayt_length, encoding_length),
+                               return_sequences=True))
             elif layers_type == 'Bidirectional_LSTM':
-                print('Model Bidirectional_LSTM Layer added')
-                model.add(Bidirectional(LSTM(n_units, return_sequences=True)))
+                print('Model input Bidirectional_LSTM Layer added')
+                model.add(Bidirectional(LSTM(n_units, return_sequences=True),
+                                        input_shape=(max_bayt_length, encoding_length)))
             else:
                 print('Model Dense Layer added')
+                model.add(Dense(n_units, activation='relu', input_shape=(max_bayt_length, encoding_length)))
+            # =============================================================================
+            for _ in range(num_layers_hidden - 1):
+                if layers_type == 'LSTM':
+                    print('Model LSTM Layer added')
+                    model.add(LSTM(n_units, return_sequences=True))
+                elif layers_type == 'Bidirectional_LSTM':
+                    print('Model Bidirectional_LSTM Layer added')
+                    model.add(Bidirectional(LSTM(n_units, return_sequences=True)))
+                else:
+                    print('Model Dense Layer added')
+                    model.add(Dense(n_units))
+            # =============================================================================
+            if layers_type == 'LSTM':
+                print('Model LSTM prefinal Layer added')
+                model.add(LSTM(n_units))
+            elif layers_type == 'Bidirectional_LSTM':
+                print('Model Bidirectional_LSTM prefinal Layer added')
+                model.add(Bidirectional(LSTM(n_units)))
+            else:
+                print('Model Dense prefinal Layer added')
                 model.add(Dense(n_units))
-        # =============================================================================
-        if layers_type == 'LSTM':
-            print('Model LSTM prefinal Layer added')
-            model.add(LSTM(n_units))
-        elif layers_type == 'Bidirectional_LSTM':
-            print('Model Bidirectional_LSTM prefinal Layer added')
-            model.add(Bidirectional(LSTM(n_units)))
-        else:
-            print('Model Dense prefinal Layer added')
-            model.add(Dense(n_units))
-        # =============================================================================
-        # Adding the output layer
-        print('Model Dense final Layer added')
-        model.add(Dense(units=numbber_of_bohor, activation=activation_output_function))
-
+            # =============================================================================
+            # Adding the output layer
+            print('Model Dense final Layer added')
+            model.add(Dense(units=numbber_of_bohor, activation=activation_output_function))
         
+        else:
+            model = Sequential()
+            print('Model Sequential defined --GPU')
+            if layers_type == 'LSTM':
+                print('Model LSTM Layer added')
+                model.add(CuDNNLSTM(units=n_units, input_shape=(max_bayt_length, encoding_length),
+                                    return_sequences=True))
+            elif layers_type == 'Bidirectional_LSTM':
+                print('Model input Bidirectional_LSTM Layer added')
+                model.add(Bidirectional(CuDNNLSTM(n_units, return_sequences=True),
+                                        input_shape=(max_bayt_length, encoding_length)))
+            else:
+                print('Model Dense Layer added')
+                model.add(Dense(n_units, activation='relu', input_shape=(max_bayt_length, encoding_length)))
+            # =============================================================================
+            for _ in range(num_layers_hidden - 1):
+                if layers_type == 'LSTM':
+                    print('Model LSTM Layer added')
+                    model.add(CuDNNLSTM(n_units, return_sequences=True))
+                elif layers_type == 'Bidirectional_LSTM':
+                    print('Model Bidirectional_LSTM Layer added')
+                    model.add(Bidirectional(CuDNNLSTM(n_units, return_sequences=True)))
+                else:
+                    print('Model Dense Layer added')
+                    model.add(Dense(n_units))
+            # =============================================================================
+            if layers_type == 'LSTM':
+                print('Model LSTM prefinal Layer added')
+                model.add(CuDNNLSTM(n_units))
+            elif layers_type == 'Bidirectional_LSTM':
+                print('Model Bidirectional_LSTM prefinal Layer added')
+                model.add(Bidirectional(CuDNNLSTM(n_units)))
+            else:
+                print('Model Dense prefinal Layer added')
+                model.add(Dense(n_units))
+            # =============================================================================
+            # Adding the output layer
+            print('Model Dense final Layer added')
+            model.add(Dense(units=numbber_of_bohor, activation=activation_output_function))
+
+
+
+            
         print("compiling model ....... ")
         if weighted_loss_flag == 1:
             #==========================================================================

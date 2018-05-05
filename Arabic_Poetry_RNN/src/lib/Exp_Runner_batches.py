@@ -19,6 +19,7 @@ import helpers
 import os
 import errno
 import keras
+from keras.utils import Sequence
 from keras.callbacks import ModelCheckpoint
 from sklearn.model_selection import train_test_split
 import numpy_indexed as npi
@@ -48,16 +49,17 @@ def runner(dataset,
            earlystopping_patience,
            experiment_name,
            current_path,
-           MULTI_GPU_FLAG):
+           MULTI_GPU_FLAG,
+           use_CPU):
     # ===============================================================================
 
     bayt_text = None
-    bayt_bahr_encoded =  None
+    bayt_bahr_encoded = None
     
     # =============================================================================
-    #experiment_name = "Exp_1_eliminated_data_matrix_without_tashkeel_8bitsEncoding_LSTM_3_50_1"
-    #encoded_x_data_path = "../data/Encoded/8bits/WithoutTashkeel/Eliminated/eliminated_data_matrix_without_tashkeel_8bitsEncoding.h5"
-    #encoded_y_data_path = "../data/Encoded/8bits/WithoutTashkeel/Eliminated/Eliminated_data_Y_Meters.h5"
+    # experiment_name = "Exp_1_eliminated_data_matrix_without_tashkeel_8bitsEncoding_LSTM_3_50_1"
+    # encoded_x_data_path = "../data/Encoded/8bits/WithoutTashkeel/Eliminated/eliminated_data_matrix_without_tashkeel_8bitsEncoding.h5"
+    # encoded_y_data_path = "../data/Encoded/8bits/WithoutTashkeel/Eliminated/Eliminated_data_Y_Meters.h5"
     # =============================================================================
     checkpoints_path = "../Experiements_Info/checkpoints/" + experiment_name + "/"
     check_points_file_path = checkpoints_path + "/weights-improvement-{epoch:03d}-{val_acc:.5f}.hdf5"
@@ -83,12 +85,12 @@ def runner(dataset,
     
     # =========================Data Loading========================================
 
-    #encode Bhore full data
-    if "eliminated" not in experiment_name:        
+    # encode Bhore full data
+    if "eliminated" not in experiment_name:
         print("working into full data")
         filtered_data = dataset.loc[dataset['Bahr'].isin(full_bohor_classes)]
         bohor_classes = full_bohor_classes
-    #encode Bhore elminated data
+    # encode Bhore elminated data
     else:
         print("working into eliminated data")
         filtered_data = dataset.loc[dataset['Bahr'].isin(elminated_classic_bohor)]
@@ -102,16 +104,16 @@ def runner(dataset,
     data_bohor_encoded = data_onehot_encoder.fit_transform(data_integer_encoded)
 
 
-    #check if with taskeel or not
+    # check if with taskeel or not
     if "without_tashkeel" in experiment_name:
         print("work on data without tashkeel")
         bayt_text = filtered_data.Bayt_Text.apply(pyarabic.araby.strip_tashkeel)
     else:
         print("work on data with tashkeel")
-        #get text of Abyate array
+        # get text of Abyate array
         bayt_text = filtered_data.Bayt_Text
 
-    bayt_bahr_encoded =  data_bohor_encoded
+    bayt_bahr_encoded = data_bohor_encoded
     all_filtered_data = None
     # =============================================================================
 
@@ -152,7 +154,7 @@ def runner(dataset,
     # =========================Model Layers Preparations ===========================
     # create model
 
-    one_bayt_text_encoded = vectoriz_fun(bayt_text.iloc[0],max_bayt_len)
+    one_bayt_text_encoded = vectoriz_fun(bayt_text.iloc[0], max_bayt_len)
 
     model = get_model(num_layers_hidden,
                       layers_type,
@@ -166,6 +168,7 @@ def runner(dataset,
                       weighted_loss_flag,
                       classes_dest,
                       classes_encoder,
+                      use_CPU,
                       MULTI_GPU_FLAG)
 
     # =============================================================================
@@ -176,7 +179,7 @@ def runner(dataset,
         def on_epoch_end(self, epoch, logs={}):
             # save last epoch weghits
             self.model.save(checkpoints_path + "weights-improvement-last-epoch.hdf5")
-            #get expreiment name and update epoch number in log file
+            # get expreiment name and update epoch number in log file
             exp_name = checkpoints_path.split('/')[3]
             state = update_log_file(exp_name,str(epoch+1),True)
             print("Save last epoch Done! ....")
@@ -237,73 +240,123 @@ def runner(dataset,
     
     # =============================Batch generator=================================
     
-    class generate_one_batch:
-        def __init__(self,batch_size,dataset):
-            self.batch_size = batch_size
-            self.dataset = dataset
-            self.start = 0
+    class ShaarSequence(Sequence):
 
-        def get_batch(self):
-            end = self.start+self.batch_size 
-            diff = end - len(self.dataset)
-            if diff > 0 :
-                if diff < self.batch_size :
-                    end = len(self.dataset)
+        def __init__(self, batch_size, bayt_dataset,
+                     bhore_dataset,
+                     vectorize_fun,
+                     max_bayt_len):
+            self.batch_size = batch_size
+            self.bayt_dataset = bayt_dataset
+            self.bhore_dataset = bhore_dataset
+            self.start = 0
+            self.vectorize_fun = vectorize_fun
+            self.max_bayt_len = max_bayt_len
+
+        def __get_batch(self, dataset):
+            end = self.start + self.batch_size
+            diff = end - len(dataset)
+            if diff > 0:
+                if diff < self.batch_size:
+                    end = len(dataset)
                 else:
                     self.start = 0
                     end = self.batch_size
-            returned_batch = self.dataset[self.start:end]
-            self.start +=  self.batch_size
-            return returned_batch 
+            returned_batch = dataset[self.start:end]
+            return returned_batch
 
-    def data_generator(Bayt_text_batch_generator,
-                       Bhore_encoded_batch_generator,
-                       vectorize_fun,
-                       max_bayt_len):
-        while True:
-            x = Bayt_text_batch_generator.get_batch()
-            x = x.apply(lambda x : vectorize_fun(x , max_bayt_len))
-            x = np.stack(x,axis=0)
-            y = Bhore_encoded_batch_generator.get_batch()
-            yield (x, y)
+        def Bayt_text_batch_generator(self):
+            return self.__get_batch(self.bayt_dataset)
 
+        def Bhore_encoded_batch_generator(self):
+            return self.__get_batch(self.bhore_dataset)
 
-    print("====" * 20)
-    x = generate_one_batch(batch_size=batch_size_param, dataset=x_train)
-    x = x.get_batch()
-    x = x.apply(lambda x : vectoriz_fun(x , max_bayt_len))
-    x = np.stack(x,axis=0)
-    print(x.shape)
-    print(y_train.shape)
-    print("====" *20)
+        def __len__(self):
+            return int(np.ceil(len(self.bayt_dataset) / float(self.batch_size)))
+
+        def __getitem__(self, idx):
+            x = self.Bayt_text_batch_generator()
+            x = x.apply(lambda x: self.vectorize_fun(x, self.max_bayt_len))
+            x = np.stack(x, axis=0)
+            y = self.Bhore_encoded_batch_generator()
+            self.start += self.batch_size
+            return (x, y)
+
+        
+    # class generate_one_batch:
+    #     def __init__(self,batch_size):
+    #         self.batch_size = batch_size
+    #         self.start = 0
+    #
+    #     def get_batch(self):
+    #         end = self.start+self.batch_size
+    #         diff = end - len(self.dataset)
+    #         if diff > 0 :
+    #             if diff < self.batch_size :
+    #                 end = len(self.dataset)
+    #             else:
+    #                 self.start = 0
+    #                 end = self.batch_size
+    #         returned_batch = self.dataset[self.start:end]
+    #         self.start +=  self.batch_size
+    #         return returned_batch
+
+    # def data_generator(Bayt_text_batch_generator,
+    #                    Bhore_encoded_batch_generator,
+    #                    vectorize_fun,
+    #                    max_bayt_len):
+    #     while True:
+    #         x = self.get_batch()
+    #         x = x.apply(lambda x : vectorize_fun(x , max_bayt_len))
+    #         x = np.stack(x,axis=0)
+    #         y = Bhore_encoded_batch_generator.get_batch()
+    #         yield (x, y)
+
 
     # ===========================================================================
 
-    Bayt_batch_generator = generate_one_batch(batch_size=batch_size_param, dataset=x_train)
-    Bhore_encoded_batch_generator = generate_one_batch(batch_size=batch_size_param, dataset=y_train)
-    steps_per_epoch = math.ceil(len(dataset) / batch_size_param)
+    # Bayt_batch_generator = generate_one_batch(batch_size=batch_size_param, dataset=x_train)
+    # Bhore_encoded_batch_generator = generate_one_batch(batch_size=batch_size_param, dataset=y_train)
+    # steps_per_epoch = math.ceil(len(x_train) / batch_size_param)
 
-    Bayt_batch_generator_val = generate_one_batch(batch_size=batch_size_param, dataset=x_val)
-    Bhore_encoded_batch_generator_val = generate_one_batch(batch_size=batch_size_param, dataset=y_val)
-    validation_steps = math.ceil(x_val.shape[0] / batch_size_param)
-    
+    # Bayt_batch_generator_val = generate_one_batch(batch_size=batch_size_param, dataset=x_val)
+    # Bhore_encoded_batch_generator_val = generate_one_batch(batch_size=batch_size_param, dataset=y_val)
+    # validation_steps = math.ceil(x_val.shape[0] / batch_size_param)
+
     # =============================Fitting Model=================================
-    hist = model.fit_generator(generator = data_generator(Bayt_batch_generator,
-                                                          Bhore_encoded_batch_generator,
-                                                          vectoriz_fun,
-                                                          max_bayt_len),
-                               steps_per_epoch=steps_per_epoch,
-                               validation_data = data_generator(Bayt_batch_generator_val,
-                                                                Bhore_encoded_batch_generator_val,
-                                                                vectoriz_fun,
-                                                                max_bayt_len),
-                               validation_steps=validation_steps,
+    # hist = model.fit_generator(generator = data_generator(Bayt_batch_generator,
+    #                                                       Bhore_encoded_batch_generator,
+    #                                                       vectoriz_fun,
+    #                                                       max_bayt_len),
+    #                            steps_per_epoch=steps_per_epoch,
+    #                            validation_data = data_generator(Bayt_batch_generator_val,
+    #                                                             Bhore_encoded_batch_generator_val,
+    #                                                             vectoriz_fun,
+    #                                                             max_bayt_len),
+    #                            validation_steps=validation_steps,
+    #                            epochs=epochs_param,
+    #                            use_multiprocessing=True,
+    #                            callbacks=callbacks_list,
+    #                            verbose=1)
+    # ===========================================================================
+
+    train_seq = ShaarSequence(batch_size_param, x_train, y_train, vectoriz_fun, max_bayt_len)
+    val_seq = ShaarSequence(batch_size_param, x_val, y_val, vectoriz_fun, max_bayt_len)
+
+
+    # =============================Fitting Model=================================
+    hist = model.fit_generator(generator=train_seq,
+                               # steps_per_epoch=steps_per_epoch,
+                               validation_data=val_seq,
+                               # validation_steps=validation_steps,
                                epochs=epochs_param,
+                               workers=30,
+                               max_queue_size=30,
                                use_multiprocessing=True,
                                callbacks=callbacks_list,
                                verbose=1)
     # ===========================================================================
-
+    
     
     # ===========================================================================
     # save last epoch weghits
@@ -328,10 +381,10 @@ def runner(dataset,
     # Final evaluation of the model
     max_model = load_weights(checkpoints_path, 1, weighted_loss_flag, w_categorical_crossentropy_pfun)
 
-    x_test = x_test.apply(lambda x : vectoriz_fun(x , max_bayt_len))
-    x_test = np.stack(x_test,axis=0)
+    x_test = x_test.apply(lambda x: vectoriz_fun(x, max_bayt_len))
+    x_test = np.stack(x_test, axis=0)
     
-    scores = max_model.evaluate(x_test, y_test, verbose=1 , batch_size=2048)
+    scores = max_model.evaluate(x_test ,y_test, verbose=1, batch_size=2048)
     print("Exp Results Accuracy : %.2f%%" % (scores[1]))
     print("Exp Results Score : %.2f%%" % (scores[0]))
 

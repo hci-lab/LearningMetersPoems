@@ -11,7 +11,7 @@
 
 # Multi_GPU_Flag
 MULTI_GPU_FLAG = False
-
+use_CPU = False
 import os
 import sys
 
@@ -21,6 +21,7 @@ if len(sys.argv) == 2 and sys.argv[1] == '--cpu':
     os.environ["CUDA_DEVICE_ORDER"] = "PCI_BUS_ID"
     os.environ["CUDA_VISIBLE_DEVICES"] = ""
     MULTI_GPU_FLAG = False
+    use_CPU = True
 
 # before Keras / Tensorflow is imported.
 if len(sys.argv) == 2 and sys.argv[1] == '--multgpu':
@@ -75,7 +76,7 @@ numberOfUniqueChars = len(arabic_alphabet)
 
 # =======================Program Parameters====================================
 # =============================================================================
-layers_type = ["Bidirectional_LSTM" , "LSTM"]
+layers_type = ["Bidirectional_LSTM", "LSTM"]
 num_layers_hidden = ["3","6"]
 weighted_loss_flag = ["0","1"]
 n_units = ["50","82"]
@@ -268,7 +269,8 @@ for X, Y in zip(encoded_X_paths, encoded_Y_paths):
                                eliminated_classes_encoder_path,
                                path_,
                                MULTI_GPU_FLAG,
-                               test)
+                               test,
+                               use_CPU)
 
                         #update experiment_state to done 
                         helpers.update_log_file(Experiement_Name,"done@0", False)

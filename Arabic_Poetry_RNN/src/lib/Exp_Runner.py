@@ -47,7 +47,8 @@ def runner(encoded_x_data_path,
            eliminated_classes_encoder_path,
            current_path,
            MULTI_GPU_FLAG,
-           test):
+           test,
+           use_CPU):
     # ===============================================================================
 
     # =============================================================================
@@ -146,6 +147,7 @@ def runner(encoded_x_data_path,
                       weighted_loss_flag,
                       classes_dest,
                       classes_encoder,
+                      use_CPU,
                       MULTI_GPU_FLAG)
 
     # =============================================================================
