@@ -16,9 +16,9 @@ def update_log_file(exp_name,text,epoch_flage=False):
     
     def update(line,text,epoch_flage):
         if epoch_flage:
-                line = line.split("@")[0]+"@"+text
+                line = line.split("@")[0]+"@"+str(1+int(line.split("@")[1]))
         else:
-                line = line = line.split(",")[0]+","+text
+                line = line.split(",")[0]+","+text
         return line
     try:
         lines = open("log.txt").read().split('\n')
@@ -245,6 +245,43 @@ def string_with_tashkeel_vectorizer_OneHot(string, padding_length):
         vector.append([0] * len(lettersTashkeelCombination))
 
     return np.array(vector) 
+
+
+
+def two_hot_encoding(text , max_bayt_len):
+    def make_vector(index , vec_len):
+        vec = [0] * vec_len
+        if len(index) == 0:
+            return vec
+        for i in index:
+            vec[i] = 1
+        return vec
+    
+    alphabets = {char:i for i,char in enumerate(arabic.alphabet)}
+    tashkeel = {tashkeel:i for i,tashkeel in enumerate(arabic.shortharakat)} 
+    alpha_len = len(arabic.alphabet)
+    tash_len = len(arabic.shortharakat)
+    tokens = separate_token_with_dicrites(text)
+    text_encoding = []
+    for token in tokens:
+        token = list(token)
+        if len(token) == 1:
+            if token[0] == " ":
+                text_encoding.append(make_vector([],alpha_len)+make_vector([],tash_len))
+            else:
+                text_encoding.append(make_vector([alphabets[token[0]]],alpha_len)+make_vector([],tash_len))
+        else:
+            alpha = 0
+            tash = []
+            for char in token:
+                if char in arabic.alphabet:
+                    alpha = alphabets[char]
+                else:
+                    tash.append(tashkeel[char])
+            text_encoding.append(make_vector([alpha],alpha_len)+make_vector(tash,tash_len))
+    vec_len = alpha_len + tash_len
+    text_encoding += [[0]*vec_len for i in range(max_bayt_len - len(text_encoding))]
+    return np.array(text_encoding)
 
 
 

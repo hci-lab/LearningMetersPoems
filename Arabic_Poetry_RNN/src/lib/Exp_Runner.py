@@ -47,7 +47,8 @@ def runner(encoded_x_data_path,
            eliminated_classes_encoder_path,
            current_path,
            MULTI_GPU_FLAG,
-           test):
+           test,
+           use_CPU):
     # ===============================================================================
 
     # =============================================================================
@@ -55,10 +56,10 @@ def runner(encoded_x_data_path,
     #encoded_x_data_path = "../data/Encoded/8bits/WithoutTashkeel/Eliminated/eliminated_data_matrix_without_tashkeel_8bitsEncoding.h5"
     #encoded_y_data_path = "../data/Encoded/8bits/WithoutTashkeel/Eliminated/Eliminated_data_Y_Meters.h5"
     # =============================================================================
-    checkpoints_path = "../../Experiements_Info/checkpoints/" + experiment_name + "/"
+    checkpoints_path = "../Experiements_Info/checkpoints/" + experiment_name + "/"
     check_points_file_path = checkpoints_path + "/weights-improvement-{epoch:03d}-{val_acc:.5f}.hdf5"
-    board_log_dir = "../../Experiements_Info/logs/" + experiment_name + "/"
-    results_dir = ".../../Experiements_Info/Results/" + experiment_name + "/"
+    board_log_dir = "../Experiements_Info/logs/" + experiment_name + "/"
+    results_dir = "../Experiements_Info/Results/" + experiment_name + "/"
 
     if test:
         checkpoints_path = "lib/test_folders/checkpoints/" + experiment_name + "/"
@@ -67,18 +68,14 @@ def runner(encoded_x_data_path,
         results_dir = "lib/test_folders/Results/" + experiment_name + "/"
 
     # ===============================================================================
-    print('Before ' * 8)
     try:
         os.makedirs(board_log_dir)
         os.makedirs(checkpoints_path)
         os.makedirs(results_dir)
-        print('After' * 8)
     except OSError as e:
         if e.errno != errno.EEXIST:
             print("Can't create file for checkpoints or for logs please check ")
             raise
-        print('1' * 100)
-        print(sys.exc_info()[0])
     print("Input Parameters Defined and Experiement directory created")
 
     # ===============================================================================
@@ -150,6 +147,7 @@ def runner(encoded_x_data_path,
                       weighted_loss_flag,
                       classes_dest,
                       classes_encoder,
+                      use_CPU,
                       MULTI_GPU_FLAG)
 
     # =============================================================================
@@ -175,12 +173,14 @@ def runner(encoded_x_data_path,
             # save last epoch weghits
             self.model.save(checkpoints_path + "weights-improvement-last-epoch.hdf5")
             #get expreiment name and update epoch number in log file
-            exp_name = checkpoints_path.split('/')[2]
-            update_log_file(exp_name,str(epoch),True)
-            print("Save last epoch Done! ....")
-
+            exp_name = checkpoints_path.split('/')[3]
+            staus = update_log_file(exp_name,str(epoch+1),True)
+            print("Save last epoch Done! ...." , staus)
             helpers.remove_non_max(checkpoints_path)
 
+
+
+            
     checkpoint = ModelCheckpoint(check_points_file_path,
                                  monitor='val_acc',
                                  verbose=1,

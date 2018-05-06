@@ -22,8 +22,3 @@ Arabic_Poetry_RNN/src/lib/test_folders/
 Arabic_Poetry_RNN/src/log.txt
 Arabic_Poetry_RNN/src/.ipynb_checkpoints/
 Arabic_Poetry_RNN/src/*.ipynb
-*.out
-*.log
-*.skim
-*.aux
-*.bbl
