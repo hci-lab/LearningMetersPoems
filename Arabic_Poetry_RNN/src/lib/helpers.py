@@ -287,7 +287,7 @@ def oneHot_per_batch(batch_strings, padding_length):
     # loops on every string in the batch
     for i in range(len(batch_strings)):
         # putting ones
-        cleanedString = factor_shadda_tanwin(batch_strings[1])
+        cleanedString = factor_shadda_tanwin(batch_strings[i])
         charCleanedString = separate_token_with_dicrites(cleanedString)
 
         letter = 0
