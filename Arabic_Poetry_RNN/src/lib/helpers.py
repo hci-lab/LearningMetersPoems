@@ -276,6 +276,40 @@ print(np.array_equal(x1, x2))
 print(x1[0][53])
 '''
 
+def oneHot_per_batch(batch_strings, padding_length):
+
+    # * Initializing a matrix
+    encodedBatch = np.zeros((len(batch_strings),
+                            padding_length,
+                            len(lettersTashkeelCombination)))
+
+    # i starts at zero
+    # loops on every string in the batch
+    for i in range(len(batch_strings)):
+        # putting ones
+        cleanedString = factor_shadda_tanwin(batch_strings[1])
+        charCleanedString = separate_token_with_dicrites(cleanedString)
+
+        letter = 0
+        for char in charCleanedString:
+            one_index = lettersTashkeelCombination.index(char)
+            # * add 1 for the current letter in one_index
+            encodedBatch[i][letter][one_index] = 1
+            letter +=1
+
+    return encodedBatch
+
+'''
+text = 'اطه'
+x = [text] * 2
+b = oneHot_per_batch(x, 3)
+print(b)
+print(b[0][0][53])
+print(b[0].shape)
+print(b[0])
+'''
+
+
 
 def two_hot_encoding(text , max_bayt_len):
     def make_vector(index , vec_len):
