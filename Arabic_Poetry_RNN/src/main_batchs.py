@@ -123,6 +123,7 @@ last_or_max_val_acc = 1
 load_weights_flag = 0
 
 vectoriz_fun = ''
+vectoriz_fun_batch = ''
 encoding_mark = ''
 if '--encoding' in sys.argv:
     error = False
@@ -146,15 +147,19 @@ if '--encoding' in sys.argv:
 
     if option == options[0]:
         vectoriz_fun = vectorize_funs[0]
+        vectoriz_fun_batch = helpers.oneHot_per_batch
         encoding_mark = "_one_hot_encoding"
     if option == options[1]:
         vectoriz_fun = vectorize_funs[1]
+        vectoriz_fun_batch = helpers.string_with_tashkeel_vectorizer_per_batch
         encoding_mark = '_8bitsEncoding'
     if option == options[2]:
         vectoriz_fun = vectorize_funs[2]
+        vectoriz_fun_batch = helpers.two_hot_encoding_per_batch
         encoding_mark = '_two_hot_encoding'
 else:
     vectoriz_fun = helpers.string_with_tashkeel_vectorizer_OneHot
+    vectoriz_fun_batch = helpers.oneHot_per_batch
     encoding_mark = "_one_hot_encoding"
 
 
@@ -201,6 +206,7 @@ else:
 
 print("types of experiments :   ",  expermen_names)
 print("encoding function :   " , vectoriz_fun)
+print("function to batch :    ", vectoriz_fun_batch)
 print("fraction :     ",fraction)
 
     
@@ -276,6 +282,7 @@ for file_name in expermen_names:
                            
                         runner(dataset,
                                vectoriz_fun,
+                               vectoriz_fun_batch,
                                max_bayt_len,
                                test_size_param,
                                int(l_num),
