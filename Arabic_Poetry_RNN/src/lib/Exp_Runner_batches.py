@@ -34,6 +34,7 @@ import math
 
 def runner(dataset,
            vectoriz_fun,
+           vectoriz_fun_batch,
            max_bayt_len,
            test_size_param,
            num_layers_hidden,
@@ -276,8 +277,7 @@ def runner(dataset,
 
         def __getitem__(self, idx):
             x = self.Bayt_text_batch_generator()
-            x = x.apply(lambda x: self.vectorize_fun(x, self.max_bayt_len))
-            x = np.stack(x, axis=0)
+            x = self.vectorize_fun(x, self.max_bayt_len)
             y = self.Bhore_encoded_batch_generator()
             self.start += self.batch_size
             return (x, y)
@@ -340,8 +340,8 @@ def runner(dataset,
     #                            verbose=1)
     # ===========================================================================
 
-    train_seq = ShaarSequence(batch_size_param, x_train, y_train, vectoriz_fun, max_bayt_len)
-    val_seq = ShaarSequence(batch_size_param, x_val, y_val, vectoriz_fun, max_bayt_len)
+    train_seq = ShaarSequence(batch_size_param, x_train, y_train, vectoriz_fun_batch, max_bayt_len)
+    val_seq = ShaarSequence(batch_size_param, x_val, y_val, vectoriz_fun_batch, max_bayt_len)
 
 
     # =============================Fitting Model=================================
@@ -381,8 +381,7 @@ def runner(dataset,
     # Final evaluation of the model
     max_model = load_weights(checkpoints_path, 1, weighted_loss_flag, w_categorical_crossentropy_pfun)
 
-    x_test = x_test.apply(lambda x: vectoriz_fun(x, max_bayt_len))
-    x_test = np.stack(x_test, axis=0)
+    x_test = vectoriz_fun_batch(x_test, max_bayt_len)
     
     scores = max_model.evaluate(x_test ,y_test, verbose=1, batch_size=2048)
     print("Exp Results Accuracy : %.2f%%" % (scores[1]))

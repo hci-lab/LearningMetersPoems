@@ -226,6 +226,14 @@ def string_with_tashkeel_vectorizer(string, padding_length):
         representation.append([0, 0, 0, 0, 0, 0, 0, 0])
     return np.asarray(representation)
 
+
+
+
+def string_with_tashkeel_vectorizer_per_batch(batch_list , max_bayt_len):
+    batch_list = batch_list.apply(lambda x : string_with_tashkeel_vectorizer(x, max_bayt_len))
+    return np.stack(batch_list, axis=0)
+
+
 # print(len(string_with_tashkeel_vectorizer('أنا')))
 
 def string_with_tashkeel_vectorizer_OneHot(string, padding_length):
@@ -287,7 +295,7 @@ def oneHot_per_batch(batch_strings, padding_length):
     # loops on every string in the batch
     for i in range(len(batch_strings)):
         # putting ones
-        cleanedString = factor_shadda_tanwin(batch_strings[i])
+        cleanedString = factor_shadda_tanwin(batch_strings.iloc[i])
         charCleanedString = separate_token_with_dicrites(cleanedString)
 
         letter = 0
@@ -345,6 +353,10 @@ def two_hot_encoding(text , max_bayt_len):
     vec_len = alpha_len + tash_len
     text_encoding += [[0]*vec_len for i in range(max_bayt_len - len(text_encoding))]
     return np.array(text_encoding)
+
+def two_hot_encoding_per_batch(batch_list,max_bayt_len):
+    batch_list = batch_list.apply(lambda x :two_hot_encoding(x, max_bayt_len))
+    return np.stack(batch_list, axis=0)
 
 
 
