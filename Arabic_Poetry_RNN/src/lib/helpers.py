@@ -81,7 +81,6 @@ def get_alphabet_tashkeel_combination(tashkeel=arabic.shortharakat):
     '''
     alphabet = [] + arabic.alphabet
     alphabet += ' '
-    alphabet += '\n'
     arabic_alphabet_tashkeel = [''] + alphabet + arabic_alphabet_tashkeel
         
     return arabic_alphabet_tashkeel
