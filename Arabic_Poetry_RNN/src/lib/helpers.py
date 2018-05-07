@@ -289,8 +289,7 @@ def oneHot_per_batch(batch_strings, padding_length):
         # putting ones
         cleanedString = factor_shadda_tanwin(batch_strings[1])
         charCleanedString = separate_token_with_dicrites(cleanedString)
-        #print("2" *20)
-        #print(charCleanedString)
+
         letter = 0
         for char in charCleanedString:
             one_index = lettersTashkeelCombination.index(char)
