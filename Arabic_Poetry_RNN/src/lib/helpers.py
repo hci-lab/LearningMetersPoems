@@ -81,7 +81,6 @@ def get_alphabet_tashkeel_combination(tashkeel=arabic.shortharakat):
     '''
     alphabet = [] + arabic.alphabet
     alphabet += ' '
-    alphabet += '\n'
     arabic_alphabet_tashkeel = [''] + alphabet + arabic_alphabet_tashkeel
         
     return arabic_alphabet_tashkeel
@@ -246,6 +245,36 @@ def string_with_tashkeel_vectorizer_OneHot(string, padding_length):
 
     return np.array(vector) 
 
+
+def oneHot_per_sample(string, padding_length):
+    '''
+        * Optimized for memory use.
+        * encodes each letter in string with ont-hot vector
+        * returns a list of one-hot vectors a list of (1*182) vectors
+        * letter -> 1*182 vector
+    '''
+    cleanedString = factor_shadda_tanwin(string)
+    charCleanedString = separate_token_with_dicrites(cleanedString)
+
+    # Initializing a Matrix
+    encodedString = np.zeros( (padding_length, len(lettersTashkeelCombination)) )
+    
+    letter = 0
+    for char in charCleanedString:
+        one_index = lettersTashkeelCombination.index(char)
+        # * add 1 for the current letter in one_index
+        encodedString[letter][one_index] = 1
+        letter +=1
+
+    return encodedString
+
+'''
+x = 'طَهَ'
+x1 = oneHot_per_sample(x, 10)
+x2 = string_with_tashkeel_vectorizer_OneHot(x, 10)
+print(np.array_equal(x1, x2))
+print(x1[0][53])
+'''
 
 
 def two_hot_encoding(text , max_bayt_len):
