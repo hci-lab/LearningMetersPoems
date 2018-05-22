@@ -28,7 +28,7 @@
 %-----------------------
 
 \textsc{\LARGE Helwan University}\\[1.5cm] % Name of your university/college
-\textsc{\Large \textarabic{تعرفهم على الأنماط حائر}}\\[0.5cm] % Major heading such as course name
+\textsc{\Large \textarabic{لا غالب إلا الله}}\\[0.5cm] % Major heading such as course name
 
 %-----------------------
 %	TITLE SECTION
@@ -129,7 +129,19 @@ structure.
 
 
 \section{The Project Road Map}
-The following figure show the project flow; there are four main stages.
+This is are four-stage project.  The first one is where we get the raw data and
+put it is a feature-response form, the second stage is cleaning the data, by that
+we mean that any non-letter character and unnecessary white-spaces are removed,
+also, handling any diacritics issue, as it will be demonstrated in the next
+sections, this stage include encoding the data to the form that is suitable to be
+fed to our neural networks. 
+
+The third stage is where the models are built and are tuned then we have
+automated the experiments to run all the iterations one after another, much
+details will be presented. Finally, we gather the results and analyse them, also
+we then conduct some additional experiments to see the language and encoding
+effect over the learning curve.  The first two steps were much difficult than
+building the models. The following figure shows the road map.
 
 \begin{center}
 \begin{tikzpicture}
@@ -152,6 +164,7 @@ The following figure show the project flow; there are four main stages.
 \node at (-5, 1.5) {Scraping};
 \node at (-5, 1) {The};
 \node at (-5, .5) {Web};
+\node at (-5, -.5) {\small \textit{Gathering Data}};
 
 \node at (5.5, 1.2) {Analysing};
 \node at (5.5, .7) {Results};
@@ -164,10 +177,75 @@ The following figure show the project flow; there are four main stages.
 \end{tikzpicture}
 \end{center}
 
-\section{Scraping The Web}
+
+
+
+\section{Scraping The Web \textit{\small --gathering the data}}
+
+\subsection{Data Set}
+\subsubsection{Arabic dataset}
+We have scrapped the Arabic dataset from two big poetry websites:
+\textarabic{الديوان}\footnote{\textit{aldiwan.net}}, \textarabic{الموسوعة
+الشعرية}\footnote{\textit{poetry.tcaabudhabi.ae}}. Both are merged into one large
+dataset.  The total number of verses is  1,862,046 poetic verses; each verse is
+labeled by its meter, the poet who wrote it, and the
+age which it was written in. There are 22 meters, 3701 poets and 11
+ages; and they are Pre-Islamic, Islamic, Umayyad, Mamluk, Abbasid, Ayyubid, Ottoman,
+Andalusian, era between Umayyad and Abbasid, Fatimid and modern.  We are only
+interested  in the 16 classic meters which are attributed to \textit{Al-Farahidi},
+and they are the majority of the dataset with a total number of 1,722,321
+verses\footnote{https://wwww.github.com/tahamagdy}.
+
+
+% NOTE: convert it to a line chart
+% NOTE: add annotations; percentages of each class from the data size. 
+\begin{table}[!t]
+  \centering
+  \begin{tabular}{|c|c|} 
+    \hline
+    \textbf{Meter} & \textbf{Verses Count} \\ 
+    \hline
+    Al-Taweel       &     416,428 \\
+    Al-Kamel        &     370,116 \\
+    Al-Baseet       &     244,583 \\
+    Al-Khafeef      &     157,880 \\
+    Al-Wafeer       &     143,148 \\
+    Al-Rigz         &     119,286 \\
+    Al-Raml         &     79,560 \\
+    Al-Motakarib    &     63,613 \\
+    Al-Sar'e        &     59,370 \\
+    Al-Monsafeh     &     28,768 \\
+    Al-Mogtath      &     18,062 \\
+    Al-Madeed       &     7,808 \\
+    Al-Hazg         &     7,468 \\
+    Al-Motadarik    &     5,144 \\
+    Al-Moktadib     &     799 \\
+    Al-Modar'e      &     288 \\
+    \hline
+  \end{tabular}
+  \caption{\textit{The size of each class}}
+  \label{data_size}
+\end{table}
+% NOTE: add a line-chart like arabic + percentatge for every class.
+\subsubsection{English dataset}
+The English dataset is scraped from many different web
+resources\footnote{http://www.eighteenthcenturypoetry.org}. It consists of 199,002
+verses, each of them is labeled with one of these four meters: \textit{Iambic},
+\textit{Trochee}, \textit{Dactyl} and \textit{Anapaestic}.  The \textit{Iambic}
+class dominates the dataset; there are  186,809 \textit{Iambic} verses, 5418
+\textit{Trochee} verses, 5378  \textit{Anapaestic} verses, 1397 \textit{Dactyl}
+verses.  We have downsampled the \textit{Iambic} class to 5550 verses.
+
+
+
 \section{Cleaning Data}
+
 \section{Building the models}
-\subsection{Analysing Results}
+\subsection{Data Encoding}
+\subsection{Models}
+
+
+\section{Analysing Results}
 
 \section{Tools}
 Python is pseudo-code like programming language, it is so easy and high-level
