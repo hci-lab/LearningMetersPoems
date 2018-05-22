@@ -182,6 +182,29 @@ building the models. The following figure shows the road map.
 \end{center}
 
 
+\section{Tools}
+Python is pseudo-code like programming language, it is so easy and high-level
+that we can describe complex structures in a few lines of code, the main second
+reason is that python recently has been so papular in the Artificial Intelligence
+community. Its library is so rich with packages for Machine Learning, Deep
+Learning, data manipulation, even for web-scraping; we don't need to parse HTML
+by your hands.
+
+We have used:
+Two columns:
+    \begin{multicols}{2}
+\begin{itemize}
+\item \textit{Python} 3.6.5
+\item \textit{Keras} x.x for deep learning.
+\item \textit{Tensorflow} x.x as back-end of Keras.
+\item \textit{BeautifulSoup} for web scraping.
+\end{itemize}
+    \end{multicols}
+
+
+
+
+
 
 
 \section{Scraping The Web \textit{\small --gathering the data}}
@@ -273,7 +296,8 @@ unnecessary white spaces inside the text, they have been removed.  In addition,
 there were diacritics mistakes, like the existence of two consecutive
 \textit{harakat}, we have only kept one and have removed the other, or a
 \textit{haraka} comes after a white space, it has been removed. 
-% Data preparing
+
+\section{Data preparing}
 As a pre-encoding step, we have factored both of \textit{shadda} and
 \textit{tanween} to two letters,  by this step we shorten the encoding vector,
 and save more memory.
@@ -291,24 +315,6 @@ and save more memory.
 
 \section{Analysing Results}
 
-\section{Tools}
-Python is pseudo-code like programming language, it is so easy and high-level
-that we can describe complex structures in a few lines of code, the main second
-reason is that python recently has been so papular in the Artificial Intelligence
-community. Its library is so rich with packages for Machine Learning, Deep
-Learning, data manipulation, even for web-scraping; we don't need to parse HTML
-by you hands.
-
-We have used:
-Two columns:
-    \begin{multicols}{2}
-\begin{itemize}
-\item \textit{Python} 3.6.5
-\item \textit{Keras} x.x for deep learning.
-\item \textit{Tensorflow} x.x as back-end of Keras.
-\item \textit{BeautifulSoup} for web scraping.
-\end{itemize}
-    \end{multicols}
 
 
 
