@@ -1,0 +1,171 @@
+\documentclass[12pt]{article}
+\usepackage{multicol}
+
+
+%% Drawing
+\usepackage{tikz}
+\usetikzlibrary{arrows} % For arrows :"D
+
+% For Arabic
+\usepackage{polyglossia}
+\setmainlanguage{english}
+\setotherlanguage{arabic}
+\newfontfamily\arabicfont[Script=Arabic]{Amiri}
+
+
+
+\begin{document}
+
+
+\begin{titlepage}
+
+\newcommand{\HRule}{\rule{\linewidth}{0.5mm}} % Defines a new command for the horizontal lines, change thickness here
+
+\center % Center everything on the page
+ 
+%-----------------------
+%	HEADING SECTIONS
+%-----------------------
+
+\textsc{\LARGE Helwan University}\\[1.5cm] % Name of your university/college
+\textsc{\Large \textarabic{تعرفهم على الأنماط حائر}}\\[0.5cm] % Major heading such as course name
+
+%-----------------------
+%	TITLE SECTION
+%-----------------------
+
+\HRule \\[0.4cm]
+{ \LARGE \bfseries Learning meters of Arabic and English poems}\\[0.4cm] % Title of your document
+\HRule \\[1.5cm]
+ 
+%-----------------------
+%	AUTHOR SECTION
+%-----------------------
+
+\begin{minipage}{0.4\textwidth}
+\begin{flushleft} \large
+\emph{Members, \textit{\small alphabetically ordered}:}\\
+
+\small{Abdaullah Ramzy}\\
+\small{Ali Abdemoniem}\\
+\small{Ali Osama}\\
+\small{Taha Magdy}\\
+\small{Umar Mohamed}\\
+\end{flushleft}
+\end{minipage}
+~
+\begin{minipage}{0.4\textwidth}
+\begin{flushright} \large
+\emph{Supervisor:} \\
+Prof. Waleed A.\textsc{Yousuf} % Supervisor's Name
+\end{flushright}
+\end{minipage}\\[2cm]
+
+% If you don't want a supervisor, uncomment the two lines below and remove the section above
+%\Large \emph{Author:}\\
+%John \textsc{Smith}\\[3cm] % Your name
+
+%-----------------------
+%	DATE SECTION
+%-----------------------
+
+{\large \today}\\[2cm] % Date, change the \today to a set date if you want to be precise
+
+%-----------------------
+%	LOGO SECTION
+%-----------------------
+\includegraphics[width=30mm,scale=0.5]{logo.png}\\[1cm] % Include a department/university logo - this will require the graphicx package
+
+\vfill % Fill the rest of the page with whitespace
+
+\end{titlepage}
+%\tableofcontents \newpage
+
+
+
+
+%%%%%%
+\section{Introduction and Problem Statement}
+Detecting the meter of poems is not an easy task for ordinary people, but how
+computers will perform? Our task is to train a model so that it can detect the
+meter of the input verse/text.
+We have worked on Arabic and English in parallel, everything thing is applied to
+Arabic is applied also in English, as possible as we can.
+
+To be clearer, the model's input is a verse/text \textarabic{بيت شعر} and the
+output is a class which is the verse's meter \textarabic{البحر}, as shown in the
+figure below.
+
+
+% FIGURE
+\begin{center}
+\begin{tikzpicture}
+\centering
+
+%\draw[step=0.5, gray, very thin] (0,0) grid (6,2);
+\node at (3, 1.5) {Deep};
+\draw[rounded corners=2pt, thick] (2,0) rectangle (2+2,2) node[pos=.5] {Learning};
+\node at (3, 0.5) {Model};
+
+\draw[arrows=-angle 90, line width=1pt ] (1, 1) -- (1 +1 -0.1, 1);
+\node at (0, 1.5) {Verse};
+\node at (0, 1) {\textarabic{بيتُ الشعر}};
+
+\draw[arrows=-angle 90, line width=1pt] (4 +.1, 1) -- (4 +1, 1);
+\node at (6, 1.5) {Meter};
+\node at (6, 1) {\textarabic{البحْرُ}};
+
+\end{tikzpicture}
+\end{center}
+
+The output is a class, then our problem can be described as \textit{supervised
+learning  classification}.  We have trained some deep learning models such as
+LSTM, Bi-LSTM and GRU.  Those models are chosen because of the nature of our
+problem. We were trying to detect the verse's meter, which is a sequence of
+characters and \textit{recurrent neural network} are suitable  to learn that
+pattern, thanks to its cell's share-memory and its recursive structure.
+
+
+\section{The Project Road Map}
+
+% FIGURE
+\begin{center}
+\begin{tikzpicture}
+\centering
+
+\draw[step=0.5, gray, very thin] (-6,0) grid (6,2);
+
+\end{tikzpicture}
+\end{center}
+
+\section{Objectives}
+\section{Tools}
+Python is pseudo-code like programming language, it is so easy and high-level
+that we can describe complex structures in a few lines of code, the main second
+reason is that python recently has been so papular in the Artificial Intelligence
+community. Its library is so rich with packages for Machine Learning, Deep
+Learning, data manipulation, even for web-scraping; we don't need to parse HTML
+by you hands.
+
+We have used:
+Two columns:
+    \begin{multicols}{2}
+\begin{itemize}
+\item \textit{Python} 3.6.5
+\item \textit{Keras} x.x for deep learning.
+\item \textit{Tensorflow} x.x as back-end of Keras.
+\item \textit{BeautifulSoup} for web scraping.
+\end{itemize}
+    \end{multicols}
+
+
+
+
+
+\section{Gathering data}
+
+% Figure of Project flow
+
+\end{document}
+
+
