@@ -5,6 +5,10 @@
 %% Drawing
 \usepackage{tikz}
 \usetikzlibrary{arrows} % For arrows :"D
+\usepackage{subcaption}
+\usepackage{mathtools}
+\DeclarePairedDelimiter{\ceil}{\lceil}{\rceil}
+\usepackage{amsfonts, amssymb, bm, amsmath}
 
 % For Arabic
 \usepackage{polyglossia}
@@ -181,10 +185,34 @@ building the models. The following figure shows the road map.
 
 
 \section{Scraping The Web \textit{\small --gathering the data}}
+To train our models we need dataset of poems. For Arabic, this kind of dataset
+are not so popular so you can hardly find a dataset for poetry. So, we had to
+create our own. During our search we have found two big poetry web sites, that
+contain tons of metrical-classified poems. And similar is happened for English.
+So we have scrapped those web sites. \textit{Scraping} is to write a script to
+browse the target web site, and copy the specific content and dump it to our
+\textit{csv} file. This was the most difficult step in the hole project. 
+ 
+Also, we present a very large Arabic dataset that can be used for further
+research purposes, next sub-section contains much details about the Arabic
+dataset. For the English dataset, the situation was worse than scraping big
+complex web site, because the there were not big web site that contain a large
+amount of metrical-classified poems, so the English dataset is to small if it is
+compared to its Arabic counterpart, but this what we have found after an
+extensive search. 
+% NOTE:
+cite(Farren) had been generously granted his data from the
+Stanford English literature department, we have tried to contact them through
+their email but none has reposed.
 
-\subsection{Data Set}
-\subsubsection{Arabic dataset}
-We have scrapped the Arabic dataset from two big poetry websites:
+The scraping scripts are under the directory \texttt{repository\_root/scraping
+the web}, accompanied by  a thorough self-contained \texttt{README.md} file,
+which contains everything you may need to use or re-use the code, even the code
+is written to be re-used with a lot of  \textit{in-line} documentation.
+
+
+\subsection{Arabic dataset}
+We have scrapped the Arabic dataset from two poetry websites:
 \textarabic{الديوان}\footnote{\textit{aldiwan.net}}, \textarabic{الموسوعة
 الشعرية}\footnote{\textit{poetry.tcaabudhabi.ae}}. Both are merged into one large
 dataset.  The total number of verses is  1,862,046 poetic verses; each verse is
@@ -194,6 +222,7 @@ ages; and they are Pre-Islamic, Islamic, Umayyad, Mamluk, Abbasid, Ayyubid, Otto
 Andalusian, era between Umayyad and Abbasid, Fatimid and modern.  We are only
 interested  in the 16 classic meters which are attributed to \textit{Al-Farahidi},
 and they are the majority of the dataset with a total number of 1,722,321
+% NOTE: chage to the public rep.
 verses\footnote{https://wwww.github.com/tahamagdy}.
 
 
@@ -227,7 +256,7 @@ verses\footnote{https://wwww.github.com/tahamagdy}.
   \label{data_size}
 \end{table}
 % NOTE: add a line-chart like arabic + percentatge for every class.
-\subsubsection{English dataset}
+\subsection{English dataset}
 The English dataset is scraped from many different web
 resources\footnote{http://www.eighteenthcenturypoetry.org}. It consists of 199,002
 verses, each of them is labeled with one of these four meters: \textit{Iambic},
@@ -239,10 +268,25 @@ verses.  We have downsampled the \textit{Iambic} class to 5550 verses.
 
 
 \section{Cleaning Data}
+Data was not clean enough, there were some non-alphabetical characters and many
+unnecessary white spaces inside the text, they have been removed.  In addition,
+there were diacritics mistakes, like the existence of two consecutive
+\textit{harakat}, we have only kept one and have removed the other, or a
+\textit{haraka} comes after a white space, it has been removed. 
+% Data preparing
+As a pre-encoding step, we have factored both of \textit{shadda} and
+\textit{tanween} to two letters,  by this step we shorten the encoding vector,
+and save more memory.
 
-\section{Building the models}
+
+
+
+
+
+
 \subsection{Data Encoding}
-\subsection{Models}
+% NOTE: Copy the paper in here, after the finish the figures.
+\section{Building the models}
 
 
 \section{Analysing Results}
