@@ -103,8 +103,9 @@ figure below.
 \centering
 
 %\draw[step=0.5, gray, very thin] (0,0) grid (6,2);
+\draw[rounded corners=2pt, thick] (2,0) rectangle (2+2,2);
 \node at (3, 1.5) {Deep};
-\draw[rounded corners=2pt, thick] (2,0) rectangle (2+2,2) node[pos=.5] {Learning};
+\node at (3, 1) {Learning};
 \node at (3, 0.5) {Model};
 
 \draw[arrows=-angle 90, line width=1pt ] (1, 1) -- (1 +1 -0.1, 1);
@@ -118,27 +119,56 @@ figure below.
 \end{tikzpicture}
 \end{center}
 
-The output is a class, then our problem can be described as \textit{supervised
-learning  classification}.  We have trained some deep learning models such as
-LSTM, Bi-LSTM and GRU.  Those models are chosen because of the nature of our
-problem. We were trying to detect the verse's meter, which is a sequence of
-characters and \textit{recurrent neural network} are suitable  to learn that
-pattern, thanks to its cell's share-memory and its recursive structure.
+The output variable is a class/categorical, then our problem can be described as
+\textit{supervised learning  classification}.  We have trained some deep learning
+models such as LSTM, Bi-LSTM and GRU.  Those models are chosen because of the
+nature of our problem. We were trying to detect the verse's meter, which is a
+sequence of characters and \textit{recurrent neural network} are suitable  to
+learn that pattern, thanks to its cell's share-memory and its recursive
+structure.
 
 
 \section{The Project Road Map}
+The following figure show the project flow; there are four main stages.
 
-% FIGURE
 \begin{center}
 \begin{tikzpicture}
 \centering
 
-\draw[step=0.5, gray, very thin] (-6,0) grid (6,2);
+%\draw[step=0.5, gray, very thin] (-6,0) grid (6.5,2);
+
+\draw[rounded corners=2pt, thick] (-6, 0) rectangle (-6 +2,2);
+\draw[rounded corners=2pt, thick] (-2.5, 0) rectangle (-2.5 +2,2);
+\draw[rounded corners=2pt, line width=2pt] (1, 0) rectangle (1 +2,2);
+\draw[rounded corners=2pt, thick] (4.5, 0) rectangle (4.5 +2,2);
+
+
+\node at (2, 1.2) {Building};
+\node at (2, .7) {Models};
+
+\node at (-1.5, 1.2) {Cleaning};
+\node at (-1.5, .7) {Data};
+
+\node at (-5, 1.5) {Scraping};
+\node at (-5, 1) {The};
+\node at (-5, .5) {Web};
+
+\node at (5.5, 1.2) {Analysing};
+\node at (5.5, .7) {Results};
+
+\def \littelM {0.1}
+\draw[arrows=-angle 90, line width=1pt] (-6 +2 +\littelM, 1) -- (-2.5 -\littelM, 1);
+\draw[arrows=-angle 90, line width=1pt] (-2.5 +2 +\littelM, 1) -- (1 -\littelM, 1);
+\draw[arrows=-angle 90, line width=1pt] ( 1 +2 +\littelM, 1) -- (4.5 -\littelM, 1);
 
 \end{tikzpicture}
 \end{center}
 
-\section{Objectives}
+\section{Scraping The Web}
+\section{Cleaning Data}
+\section{Building the models}
+\subsection{Analysing Results}
+
 \section{Tools}
 Python is pseudo-code like programming language, it is so easy and high-level
 that we can describe complex structures in a few lines of code, the main second
