@@ -9,6 +9,9 @@
 \usepackage{mathtools}
 \DeclarePairedDelimiter{\ceil}{\lceil}{\rceil}
 \usepackage{amsfonts, amssymb, bm, amsmath}
+\usepackage{pgfplots}
+\definecolor{myBlue}{HTML}{7982db}
+\definecolor{myGreen}{HTML}{ABDDA4}
 
 % For Arabic
 \usepackage{polyglossia}
@@ -39,7 +42,8 @@
 %-----------------------
 
 \HRule \\[0.4cm]
-{ \LARGE \bfseries Learning meters of Arabic and English poems}\\[0.4cm] % Title of your document
+{ \LARGE \bfseries Learning meters of Arabic and English poems with recurrent
+neural networks}\\[0.4cm] % Title of your document
 \HRule \\[1.5cm]
  
 %-----------------------
@@ -48,7 +52,7 @@
 
 \begin{minipage}{0.4\textwidth}
 \begin{flushleft} \large
-\emph{Members, \textit{\small alphabetically ordered}:}\\
+\emph{Members, \textit{\small alphabetically}:}\\
 
 \small{Abdaullah Ramzy}\\
 \small{Ali Abdemoniem}\\
@@ -78,7 +82,7 @@ Prof. Waleed A.\textsc{Yousuf} % Supervisor's Name
 %-----------------------
 %	LOGO SECTION
 %-----------------------
-\includegraphics[width=30mm,scale=0.5]{logo.png}\\[1cm] % Include a department/university logo - this will require the graphicx package
+%\includegraphics[width=30mm,scale=0.5]{logo.png}\\[0.5cm] % Include a department/university logo - this will require the graphicx package
 
 \vfill % Fill the rest of the page with whitespace
 
@@ -246,38 +250,17 @@ Andalusian, era between Umayyad and Abbasid, Fatimid and modern.  We are only
 interested  in the 16 classic meters which are attributed to \textit{Al-Farahidi},
 and they are the majority of the dataset with a total number of 1,722,321
 % NOTE: chage to the public rep.
-verses\footnote{https://wwww.github.com/tahamagdy}.
+verses\footnote{https://wwww.github.com/tahamagdy}. The following chart
+which clarifies the sizes of the classes.
 
 
-% NOTE: convert it to a line chart
-% NOTE: add annotations; percentages of each class from the data size. 
-\begin{table}[!t]
-  \centering
-  \begin{tabular}{|c|c|} 
-    \hline
-    \textbf{Meter} & \textbf{Verses Count} \\ 
-    \hline
-    Al-Taweel       &     416,428 \\
-    Al-Kamel        &     370,116 \\
-    Al-Baseet       &     244,583 \\
-    Al-Khafeef      &     157,880 \\
-    Al-Wafeer       &     143,148 \\
-    Al-Rigz         &     119,286 \\
-    Al-Raml         &     79,560 \\
-    Al-Motakarib    &     63,613 \\
-    Al-Sar'e        &     59,370 \\
-    Al-Monsafeh     &     28,768 \\
-    Al-Mogtath      &     18,062 \\
-    Al-Madeed       &     7,808 \\
-    Al-Hazg         &     7,468 \\
-    Al-Motadarik    &     5,144 \\
-    Al-Moktadib     &     799 \\
-    Al-Modar'e      &     288 \\
-    \hline
-  \end{tabular}
-  \caption{\textit{The size of each class}}
-  \label{data_size}
-\end{table}
+\begin{center}
+\input{../Research_paper/barChart}
+\end{center}
+
+
+
+
 % NOTE: add a line-chart like arabic + percentatge for every class.
 \subsection{English dataset}
 The English dataset is scraped from many different web
@@ -297,9 +280,11 @@ there were diacritics mistakes, like the existence of two consecutive
 \textit{harakat}, we have only kept one and have removed the other, or a
 \textit{haraka} comes after a white space, it has been removed. 
 
+% ◌
 \section{Data preparing}
-As a pre-encoding step, we have factored both of \textit{shadda} and
-\textit{tanween} to two letters,  by this step we shorten the encoding vector,
+As a pre-encoding step, we have factored both of \textit{shadda} to two letter 
+the first carries \textarabic{◌ْ} and the second carries \textarabic{حركة},
+and \textit{tanween} to additional \textarabic{نْ},  by this step we shorten the encoding vector,
 and save more memory.
 
 
@@ -310,19 +295,108 @@ and save more memory.
 
 \subsection{Data Encoding}
 % NOTE: Copy the paper in here, after the finish the figures.
-\section{Building the models}
 
+% General Scenario
+Generally, a character will be represented as an $n$ vector. Consequently, a
+verse would be an $n \times p$ matrix, where $n$ is the character representation
+length; $n$ varies from one encoding to another, we have used 3 different
+techniques to encode the characters, and $p$ is the verse's length.
+
+% An issues
+% NOTE: refine it; break it down to smaller parts.
+There is an issue; we will take the \textit{one-hot} encoding as an example to
+demonstrate it.  A character without diacritics is represented as a $37 \times 1$
+vector, where 37 is the 36 letters in addition to a white-space character, so a
+phrase like \textarabic{مرحبا} having 5 letters is encoded as a $37 \times 5$
+matrix if it came with diacritics it would be represented as $41 \times 1$
+vector, where 41 is 37 characters + $4$ diacritics, therefore  a phrase like
+\textarabic{مَرْحَبَا} which has 5 letters and 4 diacritics, would be encoded as a
+$41 \times 9$ matrix.  The issue comes from considering diacritics as stand-alone
+characters while encoding, a phrase with diacritics has more characters than if
+it was without diacritics, this leads to different number of time steps in the
+\textit{RNN} cell and different input matrix dimensions which in turn leads to
+changing the model architecture, we do not want models architectures to differ
+whether diacritics exist of not in a verse so that we be able to conduct
+fair performance comparisons between models. 
+% Solution
+As a solution we have encoded both a letter with its diacritic as one character,
+there are 36 letters and $36 \times 4$ combinations between each letter and each
+diacritic, then we have 181 characters including the white-space. From now
+forward, we have a 181-character alphabet, according to it, we will encode verses.
+
+% NOTE: See how to use those two figures
+% NOTE: Reform so that you refer to 181-encoding
+%       and to refer to the one hot transition from 36-to-180.
+% * You may need something else.
+So, we used $180 \times 1$ vector to represent a character in order to avoid the
+previous two problems, see the upcoming figure  and figure
+\ref{fig:one-hot}.
+
+
+% NOTE: put binary next to common-features.
+% old idea one hot figure
+\input{../Research_paper/oldOneHot}
+
+% Let the game begin :)
+%% SIDE BY SIDE
+\begin{figure}
+% One Hot figure
+\input{../Research_paper/subfigureOneHot}
+\hfill
+% Binary figure
+\input{../Research_paper/subfigureBinary}
+\end{figure}
+
+
+
+
+
+
+% One-Hot encoding figure
+\subsection{One-Hot encoding}
+% 36 Arabic character  + ' ' = 37 char
+Here, a character is represented by an $n \times 1$ \textit{one-hot} vector, where
+$n$ is the alphabet length, in \textit{Arabic} it is the 181-character alphabet,
+and in \textit{English} is the 26-letter alphabet.
+
+
+
+% Binary encoding figure
+\subsection{Binary Encoding}
+The idea is to represent a character with an $n
+\times 1$ vector which contains a unique combination of ones and zeros.  $n =
+\ceil*{\log_2 l}$ where $l$ is the alphabet length, and $n$ is the sufficient
+number of digits to represent $l$ unique binary combinations.  For example a phrase
+like this \textarabic{مَرْحَبا}, it has 5 characters, figure
+\ref{fig:binary-encoding} shows how it is encoded as a $8 \times 5$ matrix,
+which saves more memory than the \textit{one-hot} and reduces the model capacity,
+significantly. But on the other hand, the input characters share some features
+between them due to the binary representation as it is shown in figure
+\ref{fig:problem-with-binary-encoding}. We will make a comparison between both
+encoding techniques \textit{binary} and \textit{one-hot}, at the end.
+
+
+
+\subsection{Two-Hot encoding}
+This is an intermediate technique which takes the advantages of the previous two
+encoding techniques. In which we encode the letter and its diacritic
+separately using \textit{one-hot} encoding, this way the letter is encoded as $37
+\times 1$ \textit{one-hot} vector and the diacritic is encoded as $4 \times 1$
+\textit{one-hot} vector, then both vectors are stacked to form one $41 \times 1$
+vector. By this way, we reduces the vector dimension from 180 to 41 and also
+minimizes the number of shared features between vectors to maximum 2 ones at each
+vector.
+
+% lolo figure
+\input{../Research_paper/lolo}
+
+
+
+
+
+\section{Building models}
 
 \section{Analysing Results}
-
-
-
-
-
-
-\section{Gathering data}
-
-% Figure of Project flow
 
 \end{document}
 
