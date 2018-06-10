@@ -1,0 +1,79 @@
+\begin{center}
+\begin{tikzpicture}
+% helper grid
+%    \draw[step=0.5, gray, very thin] (0,0) grid (4,5);
+
+\node at (2, 0) {\textit{One-Hot Vector}: from $36 \times 1$ to $181 \times 1$};
+
+% Change lengths to change the rec hieght 
+% [DO NOT play with the coordinates].
+\def \recLengthFirst   {2.5}
+\def \recLengthSecond  {3}
+\def \recWidth         {0.5}
+
+%% Positioning rectangles.
+% Stating point of the First rectangle
+\def \xF {0} % right and left
+\def \yF {1} % up and down
+% Stating point of the Second rectangle
+\def \xS {3} % right and left
+\def \yS {0.75} % up and down
+
+% First Rectangle (on the right)
+\draw[rounded corners=1pt] (\xF, \yF) 
+    rectangle (\recWidth, \yF + \recLengthFirst)
+         node [above, xshift=-0.25cm] {\textarabic{ب}};
+
+% Second Rectangle (on the left)
+\draw[rounded corners=1pt] (\xS, \yS) 
+    rectangle (\xS + \recWidth, \yS + \recLengthSecond) 
+        node [above, xshift=-0.25cm] {\textarabic{ب}};
+
+
+% The coordinate of the rectangle's top y .
+\def \topF {\recLengthFirst + \yF}
+% Populating the first rectangle.
+\newcommand\numbers{{0.25, 0.6, 0.95, 1.3, 1.65, 2, 2.35, 2.7}}
+\node at (0.25, \topF - \numbers[0]) {0};
+\node at (0.25, \topF - \numbers[1]) {1};
+\node at (0.25, \topF - \numbers[2]) {0};
+\node at (0.25, \topF - \numbers[3]) {\vdots};
+\node at (0.25, \yF + \numbers[1])   {0};
+\node at (0.25, \yF + \numbers[0])   {0};
+
+% Annotating the first rectangle.
+\def \leftDistance {-0.4}
+\draw[arrows=->] (\leftDistance, \yF + 1.59) -- (\leftDistance, \yF + 2.4);
+\draw[arrows=<-] (\leftDistance, \yF + 0.1) -- (\leftDistance, \yF + .94);
+
+% Transformation  Arrow
+\def \arrowY {\yF + \recLengthFirst/2}
+\draw[arrows=-angle 90, line width=2pt] (1, \arrowY) -- (2.5, \arrowY);
+\node at (\leftDistance, \arrowY) {36};
+
+% Annotating the first rectangle.
+\def \rightDistance {0.4}
+\draw[arrows=->] (\rightDistance +3.5, \yF + 1.59) -- (\rightDistance +3.5, \yF + 2.67);
+\draw[arrows=<-] (\rightDistance +3.5, \yF - 0.2 ) --  (\rightDistance +3.5, \yF + .94);
+\node at (\rightDistance + 3.5, \arrowY) {181};
+
+
+
+%  Populating 
+\def \topS {\recLengthSecond + \yS}
+\node at (\xS + .25, \topS - \numbers[0]) {0};
+\node at (\xS + .25, \topS - \numbers[1]) {1};
+\node at (\xS + .25, \topS - \numbers[2]) {0};
+\node at (\xS + .25, \topS - 1.4)         {\vdots};
+\node at (\xS + .25, \yS + \numbers[2])   {0};
+\node at (\xS + .25, \yS + \numbers[1])   {0};
+\node at (\xS + .25, \yS + \numbers[0])   {0};
+
+
+
+\end{tikzpicture}
+
+
+
+\end{center}
+

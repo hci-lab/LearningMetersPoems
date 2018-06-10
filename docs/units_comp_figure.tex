@@ -1,0 +1,27 @@
+\begin{tikzpicture}[scale=0.9]
+\begin{axis}[
+    symbolic x coords={
+    % the x ordering.
+    LSTM,
+    Bi-LSTM,
+    },
+    xtick=data,
+    % the following x label positioning does work here.
+    every axis y label/.style= {at={( 0.1, 1.1)}, anchor=north},
+    ylabel={f1 score},
+    x=3cm,
+    ytick={10, 20, 30, 40},
+    % X ticks configurations
+    x tick label style={anchor=north},
+    % Y ticks configurations
+    y tick label style={/pgf/number format/.cd,%
+      set thousands separator={,},
+      fixed},]
+
+    \addplot[ybar,fill=myBlue] coordinates {
+        % Ordering does not effect.
+        (LSTM, 50.78)
+        (Bi-LSTM,  88.55)
+    };
+\end{axis}
+\end{tikzpicture}

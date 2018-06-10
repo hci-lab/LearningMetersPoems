@@ -1,0 +1,52 @@
+\begin{tikzpicture}[scale=0.9]
+\begin{axis}[
+    symbolic x coords={Taweel,
+   Kamel,
+   Baseet,
+   Khafeef,
+   Wafeer,
+   Rigz,
+   Raml,
+   Motakarib,
+   Sar'e,
+   Monsafeh,
+   Mogtath,
+   Madeed,
+   Hazg,
+   Motadarik,
+   Moktadib,
+   Modar'e
+    },
+    xtick=data,
+    % the following x label positioning does work here.
+    every axis y label/.style= {at={( 0.1, 1.1)}, anchor=north},
+    %ylabel style={font=\footnotesize},
+    xticklabel style = {font=\footnotesize},
+    ylabel={Class size},
+    x=0.4cm,
+    x tick label style={rotate=60, anchor=east}, 
+    % Y ticks configurations
+    y tick label style={/pgf/number format/.cd,%
+      scaled y ticks = false,
+      set thousands separator={,},
+      fixed},]
+    \addplot[ybar,fill=myBlue] coordinates {
+        (Taweel, 416428)
+        (Kamel,  370116)
+        (Baseet, 244583)
+        (Khafeef,     157880)
+        (Wafeer,     143148)
+        (Rigz,     119286)
+        (Raml,     79560)
+        (Motakarib,     63613)
+        (Sar'e,     59370)
+        (Monsafeh,     28768)
+        (Mogtath,     18062)
+        (Madeed,     7808)
+        (Hazg,     7468)
+        (Motadarik,     5144)
+        (Moktadib,     799 )
+        (Modar'e,     288 )
+    };
+\end{axis}
+\end{tikzpicture}
