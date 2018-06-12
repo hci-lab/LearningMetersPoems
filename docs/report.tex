@@ -1,5 +1,14 @@
 % XELATEX
 \documentclass[12pt]{report}
+\usepackage{fancyhdr}
+ 
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[LE,RO]{Helwan University}
+\fancyhead[RE,LO]{Learning meters of poems with Deep Learning}
+\fancyfoot[CE,CO]{\leftmark}
+\fancyfoot[LE,RO]{\thepage}
+ 
 \usepackage{multicol}
 
 \usepackage{geometry}
@@ -125,6 +134,7 @@
 
 \def\thesection{\arabic{section}}
 \def\thesection{\arabic{subsection}}
+
 \begin{document}
 
 %\title{Learning meters of Arabic and English poems with Recurrent Neural Networks}
@@ -398,7 +408,7 @@ amount of metrical-classified poems, so the English dataset is to small if it is
 compared to its Arabic counterpart, but this what we have found after an
 extensive search. 
 % NOTE:
-cite(Farren) had been generously granted his data from the
+\citet{farren} had been generously granted his data from the
 Stanford English literature department, we have tried to contact them through
 their email but none has reposed.
 
@@ -569,6 +579,7 @@ A poem is a collection of verses, a verse looks like the following:%
 % والأرض مملوءة جورا مسخرة ... لكل طاغية في الخلق محتكم
 
     ألا قاتل الله الحمامة غدوةً \quad & \quad على الأيكِ ماذا هيّجتْ حين غنّتِ
+
     تغَنّت بصوت أعجمىّ فهيجت  \quad & \quad من الوَجد ما كانت ضُلوعى أجنّتِ
   \end{traditionalpoem*}
 \end{Arabic}%
@@ -976,7 +987,7 @@ performed below or equal to the baseline. Even though the “Block Average Numbe
 of Lines” feature achieved a very high accuracy, the effect of removing it from
 the all features set is negligible, at an accuracy of 98.94\%. 
 \begin{center}
-\includegraphics[scale=0.2]{table}
+\includegraphics[scale=0.22]{table}
 \end{center}
 The F-Measure scores were similar. The "Block Average Number of Lines” feature achieved the best F score for
 a single feature (97.6\%). The excellent performance of the "Block Average Number of Lines” visual feature is
