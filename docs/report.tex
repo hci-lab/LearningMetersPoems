@@ -293,18 +293,27 @@ structure.
 
 
 \section{The Project Road Map}
-This is are four-stage project.  The first one is where we get the raw data and
-put it in a feature-response form, the second stage is cleaning the data, by that
-we mean that any non-letter character and unnecessary white-spaces are removed,
-also, handling any diacritics issue, as it will be demonstrated in the next
-sections, this stage include encoding the data to the form that is suitable to be
-fed to our neural networks. 
+This is are four-stage project. 
 
-The third stage is where the models are built and are tuned then we have
-automated the experiments to run all the iterations one after another, much
-details will be presented. Finally, we gather the results and analyse them, also
-we then conduct some additional experiments to see the language and encoding
-effect over the learning curve.  The first two steps were much difficult than
+\begin{enumerate}
+    \item The first one is where we get the raw data and put it in a
+            feature-response form.
+    \item The second stage is cleaning the data, by which we mean that any
+            non-letter character and unnecessary white-spaces are removed, also, handling any
+            diacritics issue, as it will be demonstrated in the next sections, this stage
+            include encoding the data to the form that is suitable to be fed to our neural
+            networks.
+    \item The third stage is where the models are built and are tuned then we
+            have automated the experiments to run all the iterations one after another, much
+            details will be presented.
+    \item Finally, we gather the results and analyse them, also we then conduct
+            some additional experiments to see the language and encoding effect over the
+            learning curve.
+\end{enumerate}
+
+ 
+
+The first two steps were much difficult than
 building the models. The following figure shows the road map.
 
 \begin{center}
@@ -519,14 +528,17 @@ which means "\textit{seas}".
 A poem is a collection of verses, a verse looks like the following:%
 % What are poems and terminologies?
 % What does a poem look like? bayt, shatr, ....
+
 \begin{Arabic}
   \begin{traditionalpoem*}
 % ويوم موعدهم أن يُحشروا زُمرا يوم التغابن إذ لا ينفع الحذرُ
 % والأرض مملوءة جورا مسخرة ... لكل طاغية في الخلق محتكم
 
     ألا قاتل الله الحمامة غدوةً \quad & \quad على الأيكِ ماذا هيّجتْ حين غنّتِ
+    تغَنّت بصوت أعجمىّ فهيجت  \quad & \quad من الوَجد ما كانت ضُلوعى أجنّتِ
   \end{traditionalpoem*}
 \end{Arabic}%
+
 A verse, known as \textit{bayt} in Arabic, consists of two halves; a half is
 called a \textit{shatr}\footnote{it is a singular in arabic, but for simplicity
 we will use it for both singular and plural.}. %
@@ -582,8 +594,7 @@ This is a very brief introduction to \textit{Arud}, many details are reduced.
  
 
 
-\begin{table}[!t]
-  \centering
+\begin{center}
   \begin{tabular}[h!]{|c|c|} 
     \hline
     \textbf{Meter Name} & \textbf{Meter} \small{\textit{feet combination}} \\ 
@@ -607,8 +618,8 @@ This is a very brief introduction to \textit{Arud}, many details are reduced.
     \hline
   \end{tabular}
   % NOTE: add more expressive caption; demonistrate the combinarions.
-  \caption{\textit{The sixteen Arabic poem meters}}\label{arud:meters}
-\end{table}
+  \captionof{table}{\textit{The sixteen Arabic poem meters}}\label{arud:meters}
+\end{center}
 
 \subsection{English poetry Introduction}
 % Introduction
