@@ -122,6 +122,9 @@
 \let\maketitle\keptmaketitle %<------------ADDED THIS LINE
 \definecolor{new_blue}{HTML}{517EB9}
 %%%%%%%%%%%%%%%%%% 
+
+\def\thesection{\arabic{section}}
+\def\thesection{\arabic{subsection}}
 \begin{document}
 
 %\title{Learning meters of Arabic and English poems with Recurrent Neural Networks}
@@ -205,6 +208,8 @@ Prof. Waleed A.\textsc{Yousuf} % Supervisor's Name
 
 
 
+\tableofcontents
+\newpage
 %\renewcommand\IEEEkeywordsname{Keywords}
 %\begin{IEEEkeywords}
 %\ Poetry, Meters, Arabic, English, RNN, Deep Learning, Classification,
@@ -862,18 +867,47 @@ the topic is still unexplored, computationally.
 \citet{Abuata} present the most related work to our topic. They classify
 Arabic poems according to their \textit{meters}.  But they have not addressed it
 as a \textit{learning problem}, they have designed a deterministic
-five-step \textit{algorithm} for analysing  and detecting meters. The first step
-and the most important is having the input text carrying full diacritics, this 
-means that every single letter must carry a diacritic, explicitly. The next step
-is converting input text into \textit{Arud writing}\footnote{It is a pronounced
-version of writing; where only pronounced sounds are written.} using if-else like
-rules. Then metrical \textit{scansion} rules are applied to the \textit{Arud writing},
-which leaves the input text as a series of zeros and ones. After that each group of zeros and
-ones are defined as a \textit{tafa'il} \ref{arud:feet}, so now we have a sequence
-of \textit{tafa'il}. And finally  the input text is classified to the closest
-meter to the \textit{tafa'il} sequence \ref{arud:meters}.
+five-step \textit{algorithm} for analysing  and detecting meters. 
+
+
+\begin{enumerate}
+\item The first step and the most important is having the input text carrying
+    full diacritics, this means that every single letter must carry a diacritic,
+    explicitly.
+\item The next step is converting input text into \textit{Arud
+    writing}\footnote{It is a pronounced version of writing; where only pronounced
+    sounds are written.} using if-else like rules.
+\item Then metrical \textit{scansion} rules are applied to the \textit{Arud
+    writing}, which leaves the input text as a series of zeros and ones. 
+\item After that each group of zeros and ones are defined as a \textit{tafa'il}
+    \ref{arud:feet}, so now we have a sequence of \textit{tafa'il}.
+
+\item And finally  the input text is classified to the closest meter to the
+    \textit{tafa'il} sequence \ref{arud:meters}.
+\end{enumerate}
+
 %%% Results
-82.2\% is the classification accuracy on a relatively small sample, only 417 verse.
+82.2\% is the classification accuracy on a relatively small sample, only 417
+verse.  There are few well designated algorithms for detecting the meter of
+Classical Arabic poem. Those algorithms as explained in the literature are either
+complicated and use database or/and not well defined and tested. The proposed
+algorithm presented above computes the correct meter of verses with high accuracy
+( 82\%).  That algorithm is implemented to find classical Arabic poetry meter
+(Buhūr). The algorithm utilizes the complete verse (ذٞث / bayt) writing styles and
+characteristics to identify the type of meter that represents the verse. The
+proposed algorithm consists of five main steps. These steps covert the input
+poetry into Arud Writing in order to find the correct suitable meter that
+represents the verse. The algorithm is based on a set of well defined rules used
+through the algorithm steps. The most important part of the algorithm is the Arud
+Writing part. Here we have many rules to apply and according to these rules we
+have to add or remove different letters. The algorithm only needs to rewrite the
+first part (sadr صذس (of the poem verse and not the whole verse The algorithm was
+tested with a set of verses from different classical Arabic poems and we tried to
+choose poems that cover all meters types. The results showed a high level of
+accuracy with 82% of the verses were correctly matched the algorithm recognized
+meters. 
+
+
 
 %% 
 % (Mohammad A. Alnagdawi 2013)
@@ -924,6 +958,52 @@ divided into 513 modern poems and 1554 prose.
 Then classifiers have been evaluated using \textit{10-fold cross-validation}. 
 The best accuracy 99.81\% has been achieved by the \textit{decision tree}
 classifier which is trained on all features together.
+
+As a reault they, built several classifier using the Decision Tree and Naive Bayes algorithms.
+The first classifier was a F-Measure decision tree using all of the features.
+This classifier achieved the best overall accuracy, 99.81\%. The remaining
+classifiers were all Naive Bayes. Table I shows the results of these classifiers
+using different sets of features. The best accuracy was achieved using only the
+visual features at 99.71\%. The all feature classifier scored a slightly lower
+performance of 99.61\%. On the other hand, the linguistic features achieved only
+87.13\%. The baseline accuracy is 75.18\% based on the majority class in the
+dataset. The results for the single feature classifiers varied widely. The best
+single feature classifier is the classifier that was built using the “Block
+Average Number of Lines” feature, 97.58\%. This is a very excellent performance;
+about 2\% less than the best achieved result. The best linguistic feature is
+“Diacritic Rate”, 82.44\%. Almost all of the remaining single feature classifiers
+performed below or equal to the baseline. Even though the “Block Average Number
+of Lines” feature achieved a very high accuracy, the effect of removing it from
+the all features set is negligible, at an accuracy of 98.94\%. 
+\begin{center}
+\includegraphics[scale=0.2]{table}
+\end{center}
+The F-Measure scores were similar. The "Block Average Number of Lines” feature achieved the best F score for
+a single feature (97.6\%). The excellent performance of the "Block Average Number of Lines” visual feature is
+attributed to that poems are usually arranged in multiple blocks of text (stanzas) with a bunch of short lines
+(verses). While plain unformatted text articles are normally organized as one or more blocks of less but longer
+lines of text representing paragraphs. In the dataset, the average value of this feature is 10.7 lines for poems, and
+10.2 lines for article documents. For item list documents, this value is 13.4. Fig. 7 shows the class distribution
+using the "Block Average Number of Lines" and "Average Line Length" features.
+Four other features achieved good precision rates, but with reduced recall: Rhyme Rate, Punctuation Rate,
+Average and SD of Line Length. This shows that rhymes and punctuations are good indicators for poems,
+however, in some poems, they may not be emphasized enough. Fig. 8 and 9 shows the poem and non-poem
+distribution in the rhyme and punctuation feature space. The same applies to the line length features. Poem lines
+tend to be short and with low standard deviation in most cases but not always. The mean of the average and SD
+of line length of poems in the dataset is 23.6 and 8.5 characters, respectively, compared to 390.4 and 375.7
+characters for non-poems. Fig.10 shows the distribution in the line length space.
+The precisions of the remaining four features were low, namely, Diacritic Rate, SD of Block Number of Lines,
+Line and Word Repetition Rates. These features, found to be not very indicatives for poems. On the other hand,
+the Diacritic Rate feature achieved a good recall score (82.4\%) but the low
+precision score (56.5\%) is due to
+having a similar usage rate of diacritics in poem and non-poem samples in the dataset. 
+
+
+
+
+
+
+
 %%% DONE
 
 \citet{Tizhoosh2006a} has presented similar work to \citet{Almuhareb2015}, have
@@ -946,6 +1026,46 @@ interesting problem with their dataset, it was imbalanced, (871 metrical poems,
 improve decision tree accuracy.  With \textit{J48} and \textit{bootstrap
 aggregating}, he was able to achieve a 94.39\% correctly classifying poetry as
 metrical or not.
+
+By the way,\textit{Bootstrap aggregating} , also called bagging, is a machine learning
+ensemble meta-algorithm designed to improve the stability and accuracy of machine
+learning algorithms used in statistical classification and regression. It also
+reduces variance and helps to avoid overfitting. Although it is usually applied
+to decision tree methods, it can be used with any type of method. Bagging is a
+special case of the model averaging approach.
+
+
+
+As a results, binary classification experiments (metered or not me- tered) were
+better than the baseline. The unbalanced test experiment resulted in an accuracy
+of 94.39\% (Figure 10), which was significantly better than ZeroR (82.53\%) but
+only marginally better than OneR (92.10\%). The two balanced test results (from
+over and under sampling) were not signif- icantly different from the original
+test (less than 1\% differ- ence between the three). Classification may improve
+with more advanced classification algorithms and may improve further still as we
+continue to add more training data to our corpus.  The Scandroid was more
+accurate at determining lexical stress and parsing text into metrical feet than
+the work done by the Stanford Literary Lab. It may be possible to train a neural
+network in a way similar to the work done by Hay- ward (but using more modern
+methods) to further improve accuracy and introduce sensitivity to different
+levels of stress (not just binary encoding).  There are known issues with the
+Scandroid, including lex- ical ambiguity and phrasal verbs (Hartman 2005). Lexi-
+cal ambiguity affects the pronunciation of certain words de- pending on whether
+they are verbs or nouns. Hartman uses “con VICT” (verb) and “CON vict” (noun) as
+an example. This ambiguity could be lessened by including contextual information
+from a POS (Part of Speech) tagger. Phrasal verbs are lexical units that operate
+as a single word but do not look that way, e.g. “put out”, “put down” or “put
+away”. Stress tends to be evenly distributed over the verb and gram- matical
+structure following it. A POS tagger could also be used to identify phrasal verbs
+and adjust stress appropriately. Finally, our implementation of the Scandroid is
+missing the ability to identify promoted stress. Source code cleanup should make
+that easier to implement. Rhyme detection can be improved and extended by adding
+the ability to detect internal/nonterminal rhymes and rhymes spread out over
+multiple words (known as mosaic rhymes), e.g. “Poet” and “know it”. If a word is
+not listed in the cmudict, we used the double metaphone algorithm by Lawrence
+Philips (Philips 1990) and spelling as crude back- ups. A more sophisticated
+approach may involve the use of a computer text to speech system.
+
 %%% END
 
 \subsection*{Encoding the categorical variables and  its impact on neural network performance}
