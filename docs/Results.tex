@@ -1,8 +1,8 @@
-\section{Results}
+\section*{Results}
 % Figures -> Confusion matrices and Heat Maps
 % answers “what?”
 
-\subsection{Arabic Results}
+\subsection*{Arabic Results}
 \begin{center}
  \begin{tabular}{c c c c c c c}
      %\hline
@@ -63,11 +63,6 @@ loss function is wieghted, 0 otherwise.}
 After analysing all models, we have noticed  that Bi-LSTM models always outperforms
 LSTM models significantly.
 
-\begin{center}
-\input{units_comp_figure}
-\captionof{figure}{This is the average f1 score of 100 different models.}
-\end{center}
-
 All results in the table \ref{ar-results} is from Bi-LSTM models. The best full
 data models, with diacritics is model 3 and without diacritics model 2.
 
@@ -116,7 +111,7 @@ data models, with diacritics is model 3 and without diacritics model 2.
 
 
 % ENCODING
-\subsection{Encoding effect}
+\subsection*{Encoding effect}
 We can compare the three encoding techniques according to two comparison aspects; the
 first is their effect on the learning curve and the second is their  memory
 consumption  which what we will start with. The following figure shows how much
@@ -177,7 +172,7 @@ no-diacritic models.
 
   
 %In general, two-hot encoding performs better than the binary encoding and has a steeper learning curve.  In big archicture with unwieghted models, binary encoding results were close to the two-hot results, but the two-hot is still better.  
-\subsection{Imbalanced Dataset effect}
+\subsection*{Imbalanced Dataset effect}
 As char \ref{data_size} shows, the dataset is imbalanced, big classes have enough
 data to train the model well, while small classes do not; small classes' size is
 less than 18,000 data points. To handle this situation we have presented two
@@ -261,7 +256,7 @@ method needs at least 82 units so that it increases the accuracy.
 
 
 %%%%%
-\subsection{English Results}
+\subsection*{English Results}
 \begin{center}
  \begin{tabular}{c c c c} 
      %\hline

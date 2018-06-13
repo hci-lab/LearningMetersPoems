@@ -218,8 +218,8 @@ Prof. Waleed A.\textsc{Yousuf} % Supervisor's Name
 
 
 
-\tableofcontents
-\newpage
+%\tableofcontents
+%\newpage
 %\renewcommand\IEEEkeywordsname{Keywords}
 %\begin{IEEEkeywords}
 %\ Poetry, Meters, Arabic, English, RNN, Deep Learning, Classification,
@@ -264,7 +264,7 @@ merges the advantages of both \textit{Binary} and \textit{One-Hot} techniques.
 
 
 
-\section{Introduction and Problem Statement}
+\section*{Introduction and Problem Statement}
 Detecting the meter of poems is not an easy task for ordinary people, but how
 computers will perform? Our task is to train a model so that it can detect the
 meter of the input verse/text.
@@ -307,7 +307,7 @@ learn that pattern, thanks to its cell's share-memory and its recursive
 structure.
 
 
-\section{The Project Road Map}
+\section*{The Project Road Map}
 This is are four-stage project. 
 
 \begin{enumerate}
@@ -366,7 +366,7 @@ building the models. The following figure shows the road map.
 \end{center}
 
 
-\section{Tools}
+\section*{Tools}
 Python is pseudo-code like programming language, it is so easy and high-level
 that we can describe complex structures in a few lines of code, the main second
 reason is that python recently has been so papular in the Artificial Intelligence
@@ -389,7 +389,7 @@ Two columns:
 
 
 
-\section{Scraping The Web \textit{\small --gathering the data}}
+\section*{Scraping The Web \textit{\small --gathering the data}}
 To train our models we need dataset of poems. For Arabic, this kind of dataset
 are not so popular so you can hardly find a dataset for poetry. So, we had to
 create our own. During our search we have found two big poetry web sites
@@ -439,11 +439,11 @@ is written to be re-used with a lot of  \textit{in-line} documentation.
 
 
 
-\section{Introduction}
+\section*{Introduction}
 %% 1* Introduce Arabic poems
 % answers “why?”
 %% الخليل بن أحمد صنف الشعر
-\subsection{Arabic Language}
+\subsection*{Arabic Language}
 %% Arabic Introduction
 
 % Hello, Arabic
@@ -526,7 +526,7 @@ unicode. This is in contrast to the Latin diacritics; e.g., in the set
 \textit{\{ê, é, è, ë, ē, ĕ, ě\}}, each combination of the letter \textit{e} and a diacritic is represented by one unicode.
 
 
-\subsection{Attempts To Define Poetry}
+\subsection*{Attempts To Define Poetry}
 Poetry is the other way of using language. Perhaps in some hypothetical beginning
 of things it was the only way of using language or simply was language tout
 court, prose being the derivative and younger rival. Both poetry and language are
@@ -554,7 +554,7 @@ That is a minimal definition but perhaps not altogether uninformative. It may be
 
 
 
-\subsection{Arabic Poetry \textarabic{الشعر العربى}}
+\subsection*{Arabic Poetry \textarabic{الشعر العربى}}
 %% Introduction; the circumstances before alarud
 Arabic poetry is the earliest form of Arabic literature. It dates back to the sixth century. Poets have written poems without knowing exactly what rules which make a collection of words a poem. People recognize poetry by nature, but only talented ones who could write poems. %
 % What al-Farahidi did 
@@ -638,9 +638,6 @@ be read from right to left:%
 This is a very brief introduction to \textit{Arud}, many details are reduced.
 
 
-\begin{center}
-\includegraphics[scale=0.15]{verse}
-\end{center}
 
 
  
@@ -673,7 +670,7 @@ This is a very brief introduction to \textit{Arud}, many details are reduced.
   \captionof{table}{\textit{The sixteen Arabic poem meters}}\label{arud:meters}
 \end{center}
 
-\subsection{Arabic sound system}
+\subsection*{Arabic sound system}
 The sound system of Arabic is very different from that of English and the other
 languages of Europe. It includes a number of distinctive guttural sounds
 (pharyngeal and uvular fricatives) and a series of velarized consonants
@@ -692,7 +689,7 @@ whereas the same root combined with the pattern /-ā-i-/ gives kātib ‘one who
 writes’ or ‘clerk.’ The language also makes use of prefixes and suffixes, which
 act as subject markers, pronouns, prepositions, and the definite article.
 
-\subsection{Metre and rhyme}
+\subsection*{Metre and rhyme}
 The recording of the earliest-known Arabic poetry provided future generations
 with examples of recitations by bards of 7th- or 8th-century versions of poems
 whose original composition and performance date back perhaps centuries. The
@@ -716,7 +713,7 @@ the line; thereafter the rhyme occurs only at the end of the complete line.
 
 
 
-\subsection{English poetry Introduction}
+\subsection*{English poetry Introduction}
 % Introduction
 % English prosody -> Cite the Meters.
 % Intro: Add English development -> Middle-English -> Now.
@@ -788,7 +785,7 @@ it is \textit{Iambic pentameter}.
 
 
 
-\subsection{Origins And Basic Characteristics}
+\subsection*{Origins And Basic Characteristics}
 English belongs to the Indo-European family of languages and is therefore related
 to most other languages spoken in Europe and western Asia from Iceland to India.
 
@@ -860,7 +857,7 @@ the pronunciation of words; see below Orthography.
 
 
 
-\section{Literature review}
+\section*{Literature review}
 % A little Introduction
 % Algorithmic Approaches
 % Machine Learning Approaches 
@@ -1093,8 +1090,8 @@ encodings---\textit{one-hot} and \textit{binary}.
 \input{MotivationSection}
 
 
-\section{Datasets}
-\subsection{Arabic dataset}
+\section*{Datasets}
+\subsection*{Arabic dataset}
 We have scrapped the Arabic dataset from two big poetry websites:
 \textarabic{الديوان}\footnote{\textit{aldiwan.net}}, \textarabic{الموسوعة
 الشعرية}\footnote{\textit{poetry.tcaabudhabi.ae}}. Both are merged into one large
@@ -1120,7 +1117,7 @@ verses\footnote{https://wwww.github.com/tahamagdy}.
 
 
 % NOTE: add a line-chart like arabic + percentatge for every class.
-\subsection{English dataset}
+\subsection*{English dataset}
 The English dataset is scraped from many different web
 resources\footnote{http://www.eighteenthcenturypoetry.org}. It consists of 199,002
 verses, each of them is labeled with one of these four meters: \textit{Iambic},
@@ -1129,13 +1126,13 @@ class dominates the dataset; there are  186,809 \textit{Iambic} verses, 5418
 \textit{Trochee} verses, 5378  \textit{Anapaestic} verses, 1397 \textit{Dactyl}
 verses.  We have downsampled the \textit{Iambic} class to 5550 verses.
 
-\section{Preparing Data}
+\section*{Preparing Data}
 % answers “when, where, how, how much?”
 % Give question to whet the whet the reader’s appetite to read further and give a taste
 % to read the methods. 
 
 
-\subsection{Data Cleaning}
+\subsection*{Data Cleaning}
 %%%% Take the common between encoding, with/without are the same length
 %%%% ذكر مشكلة ديوان
 
@@ -1152,9 +1149,9 @@ As a pre-encoding step, we have factored both of \textit{shadda} and
 introduction,  by this step we shorten the encoding vector, and save more memory.
 
 
-\subsection{Data Encoding}
+\subsection*{Data Encoding}
 
-\subsection{Categorical Data}
+\subsection*{Categorical Data}
 a categorical variable is a variable that can take on one of a limited, and
 usually fixed, number of possible values, assigning each individual or other unit
 of observation to a particular group or nominal category on the basis of some
@@ -1300,7 +1297,7 @@ vector.
 
 
 
-\section{Model}
+\section*{Model}
 % RNN, LSTM BiLSTM Citation.
 Our experiments depend on \textit{LSTM} introduced by \citet{Hochreiter1997}; and
 \textit{Bi-LSTM}, which is two \textit{LSTM}s stacked on top of each other.  LSTM
@@ -1372,14 +1369,14 @@ Gated Recurrent Unit.
 
 
 
-% \section{Results}
+% \section*{Results}
 \input{Results}
 
 
 
 
 
-% \section{Conclusion}
+% \section*{Conclusion}
 
 
 
