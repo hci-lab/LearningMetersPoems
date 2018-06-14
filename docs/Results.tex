@@ -114,21 +114,10 @@ data models, with diacritics is model 3 and without diacritics model 2.
 \subsection*{Encoding effect}
 We can compare the three encoding techniques according to two comparison aspects; the
 first is their effect on the learning curve and the second is their  memory
-consumption  which what we will start with. The following figure shows how much
-memory an encoded verse consumes.  It is clear that the One-Hot encoding needs
-4.2 times and 22.4 times more than the Two-Hot and the Binary, respectively. And
-the Two-Hot encoding needs memory 5 times more than the Binary, but difference is
-not as huge as in the One-Hot, which in turns will have an effect on the
-computational power and the training time, so they need be chosen very carefully. 
-\begin{center}
-\input{MemorySizesEncoding}
-\captionof{figure}{The memory space needed to encode on Arabic verse using the
-three encoding techniques.}
-\end{center}
-
+consumption  which what we will start with. 
 This was the first aspect, the second aspect is the encoding effect on the
 learning curve. On average, the three encoding methods almost achieve the same
-results but with different architectures. From figure \ref{comparingEnc}, the
+results but with different architectures. The
 best models could learn faster when the data is represented by One-Hot and
 Two-Hot encoding; which makes a great sense, because both encoding techniques
 share a property, they do not have common features in representing the letters,
@@ -136,8 +125,8 @@ or at least Two-Hot has at most only one common features; letters may share the
 same diacritic state, so the data representation was so clear for the models.
 This is not the case in the Binary encoding, the
 best models' learning was slower than the previous two  because of the common
-feature problem \ref{commonFproblem} so models 3, 4, 9 and 10 from the table
-\ref{ar-results} need to be deeper to % NOTE: and 10 layer model results
+feature problem  so models 3, 4, 9 and 10 
+need to be deeper to % NOTE: and 10 layer model results
 distinguish between the letters first. 
 % NOTE: add some examples, need n layers with ONE_TWO but binary needs 2n layers
 % to reach their results; Model has to be deep.
@@ -146,14 +135,6 @@ distinguish between the letters first.
 
 
 
-%{This result is the average accuracy of the best six models per each epoch.}
-\begin{center}
-\input{threeEncodingEffectOnLearning.tex}
-\captionof{figure}{Each point in this chart is the average of the validation
-accuracy on the best models at epoch $i$; we have performed the same process
-three times by changing  one factor, the encoding.}
-\label{comparingEnc}
-\end{center}
 
 
 \subsubsection{Diacritics}
@@ -173,9 +154,9 @@ no-diacritic models.
   
 %In general, two-hot encoding performs better than the binary encoding and has a steeper learning curve.  In big archicture with unwieghted models, binary encoding results were close to the two-hot results, but the two-hot is still better.  
 \subsection*{Imbalanced Dataset effect}
-As char \ref{data_size} shows, the dataset is imbalanced, big classes have enough
+The dataset is imbalanced, big classes have enough
 data to train the model well, while small classes do not; small classes' size is
-less than 18,000 data points. To handle this situation we have presented two
+less than a critical number of data points. To handle this situation we have presented two
 methods: weighting the loss function and eliminating the small classes. For
 weighting the loss function, it does not effect the results as we previously
 thought. The following table contains 4 models.
