@@ -1,0 +1,274 @@
+\documentclass[10pt]{beamer}
+
+\usetheme[progressbar=frametitle]{metropolis}
+\usepackage{appendixnumberbeamer}
+\usepackage{booktabs}
+\usepackage[scale=2]{ccicons}
+\usepackage{pgfplots}
+\usepgfplotslibrary{dateplot}
+\usepackage{xspace}
+\usepackage{amsmath}
+\newcommand{\themename}{\textbf{\textsc{metropolis}}\xspace}
+
+\usepackage{tipa}
+\usepackage{xcolor}
+
+\definecolor{myBlue}{HTML}{7982db}
+\definecolor{myGreen}{HTML}{ABDDA4}
+\definecolor{myBlue2}{HTML}{4169AA}
+\definecolor{myGreen2}{HTML}{38AE40}
+
+
+
+
+% For Arabic
+\usepackage{polyglossia} 
+\setmainlanguage{english}
+\setotherlanguage{arabic}
+% Defining the font family
+\newfontfamily\arabicfont  [Script=Arabic, Scale=1.5]{Scheherazade}%
+\newfontfamily\arabicfontsf[Script=Arabic, Scale=1.5]{Scheherazade}%
+
+\usepackage{bidipoem}
+
+\title{Learning Meters of Arabic and English poems}
+\subtitle{With Recurrent Neural Networks}
+\date{\today}
+\author{
+Prof. Waleed A. YOUSEF \\
+The Team}
+\institute{Computer Science department\\
+Faulty of Computers and Information, Helwan University}
+
+%\title{A Practical Introduction to Natural Language Processing}
+%
+%\subtitle{Intelligent Processing \& Applications\\Research Cluster Seminar}
+%
+%%\date{5 \& 12 March 2015}
+%%\date{5 March 2015\\Session 1: Common Tasks and Concepts in NLP}
+%%\date{12 March 2015\\Session 2: Software Libraries and Resources for NLP}
+%\date{5 March 2015\\Session 1: Common Tasks and Concepts in NLP\\[0.5ex]
+%12 March 2015\\Session 2: Software Libraries and Resources for NLP}
+%\author{Dr Lim Lian Tze}
+%\institute{
+%Information Technology Department\\
+%School of Science, Engineering and Technology\\
+%KDU College Penang
+%}
+
+\begin{document}
+
+\maketitle
+
+\begin{frame}{Table of contents}
+  \setbeamertemplate{section in toc}[sections numbered]
+  \tableofcontents[hideallsubsections]
+\end{frame}
+
+
+
+% 1
+\section{Introduction}
+\begin{frame}[fragile]{Hello, Arabic}
+    \begin{center}
+    \begin{Arabic}
+    ودعْ عنك آراءَ الرجالِ وقولَهم\hspace{3em}  فقولُ رسولِ الله أزكى وأشرحُ
+    \end{Arabic}
+    \end{center}
+\end{frame}
+
+
+% But ... What is poetry?
+\begin{frame}[fragile]{But ... What is poetry?}
+
+\textbf{\large General Definition}:
+\begin{itemize}
+  \item \textbf{Poetry} is a piece of writing or speaking, which
+\textbf{\textcolor{red}{MUST}} follow specific
+\alert{\underline{\textbf{Patterns}}}.
+\end{itemize}
+
+\vspace{0.5cm}
+\textbf{\large Example}, \textit{\small English verse}:
+\begin{center}
+That 
+  \textcolor{myGreen2}{\textbf{time}} of 
+  \textcolor{myGreen2}{\textbf{year}} thou
+  \textcolor{myGreen2}{\textbf{mayst}}  in 
+  \textcolor{myGreen2}{\textbf{me}}
+be\textcolor{myGreen2}{\textbf{hold}}
+\end{center}
+
+To detect poems' meters, we need to learn those \alert{\textbf{Patterns}}.
+\end{frame}
+
+
+
+
+\begin{frame}[fragile]{Arabic Prosody \textarabic{العَرُوض}}
+
+\begin{itemize}
+  \item \textbf{Foot} \textarabic{التفعيلة}: is a sequence of vowels and consonants.
+\end{itemize}
+
+
+
+
+\begin{center}
+  \begin{tabular}{|c|c|} \hline
+    \textbf{Feet} & \textbf{Scansion} \\
+    \hline
+    \textarabic{فَعُولُنْ}  & \texttt{0/0//}\\
+    \textarabic{فَاعِلُنْ}  & \texttt{0//0/}\\
+    \textarabic{مُسْتَفْعِلُنْ}& \texttt{0//0/0/}\\
+    \textarabic{مَفاعِيلُنْ}& \texttt{0/0/0//}\\
+    \textarabic{مَفْعُولاَت} & \texttt{0//0///}\\
+    \textarabic{فَاعِلاَتُنْ} & \texttt{0/0//0/}\\
+    \textarabic{مُفَاعَلَتُنْ}& \texttt{0///0//}\\
+    \textarabic{مُتَفَاعِلُنْ}& \texttt{0//0///}\\
+    \hline
+  \end{tabular}
+\end{center}
+
+\end{frame}
+
+
+
+
+
+\begin{frame}[fragile]{Arabic Prosody \textarabic{العَرُوض}}
+
+Arabic Patterns/Meters \textarabic{بحور الشعر}:
+\begin{itemize}
+  \item \textbf{Meter} \textarabic{البحر}: is a sequence of \alert{feet}. 
+\end{itemize}
+
+\begin{center}
+  \begin{tabular}[h!]{|c|c|} 
+    \hline
+    \textbf{Meter Name} & \textbf{Meter} \small{\textit{feet combination}} \\ 
+    \hline
+   \textit{al-Wafeer}    & \textarabic{مُفَاعَلَتُن مُفَاعَلَتُن فَعُولُن} \\ %
+   \textit{al-Taweel}    & \textarabic{فَعُوْلُنْ مَفَاْعِيْلُنْ فَعُوْلُنْ مَفَاْعِلُنْ} \\ %
+   \vdots                &  \vdots\\
+   \textit{al-Moktadib}  & \textarabic{مَفْعُوْلاتُ مُسْتَفْعِلُنْ مُسْتَفْعِلُن} \\
+   \textit{al-Modar'e}   & \textarabic{مَفَاْعِيْلُنْ فَاْعِلاتُنْ مَفَاْعِيْلُنْ} \\
+    \hline
+  \end{tabular}
+\end{center}
+
+\end{frame}
+
+
+
+
+\begin{frame}[fragile]{Arabic Prosody, example!}
+
+\textbf{From \textarabic{بحر الوافر}}:
+\begin{center}
+  \textarabic{ويسْأل فىْ الْحواْدث ذوْ صواْبٍ}\\
+  \textarabic{ويسأل فل \hspace{0.4cm}
+    حوادث ذو\hspace{0.4cm}
+    صوابن}\\
+  \texttt{0/0//     \hspace{0.3cm}
+          0///0//   \hspace{0.3cm}
+          0///0//}\\
+
+  \textarabic{مفاْعلتنْ\hspace{0.7cm} 
+    مفاْعلتنْ          \hspace{0.7cm}
+    فعوْلنْ}
+\end{center}
+
+\end{frame}
+
+
+
+
+
+\begin{frame}[fragile]{English Prosody}
+
+
+\textbf{English Meters Building Blocks}:
+\begin{itemize}
+  \item Syllables: \textipa{\sffamily /"wO:t@/} = \textipa{\sffamily /"wO:/}  $+$ \textipa{\sffamily /t@(r)/}.
+    \begin{itemize}
+         \item \textcolor{myGreen2}{\textbf{stressed}} $+$ unstressed.
+    \end{itemize}
+  \item Foot: is a combination of stressed and unstressed syllables. 
+
+\end{itemize}
+
+\begin{center}
+\begin{tabular}{|c | c|} 
+    \hline
+    %\toprule
+    Feet     & Stresses Combination\\ 
+    \hline
+    %\toprule
+    \textit{Iamb} & $\times$\textit{/}\\             %\midrule
+    \textit{Trochee}& \textit{/}$\times$\\           %\midrule
+    \textit{Dactyl} & \textit{/}$\times\times$\\     %\midrule
+    \textit{Anapest}& $\times\times$\textit{/}\\     %\midrule
+    \textit{Pyrrhic}& $\times\times$\\               %\midrule
+    \textit{Amphibrach}& $\times$\textit{/}$\times$\\%\midrule
+    \textit{Spondee}& \textit{/}\textit{/}\\
+    %\bottomrule
+    \hline
+\end{tabular}
+\end{center}
+
+\textbf{Meter}: is repeating a foot $n$ times; where $n \in [1, 8]$. 
+\end{frame}
+
+
+
+
+
+\begin{frame}[fragile]{English Patterns}
+
+Iambic pentameter verse:
+\begin{center}
+$\underbrace{\text{That \textcolor{myGreen2}{\textbf{time}}}
+}_\text{Iambic Foot}$
+%
+$\overbrace{\text{of \textcolor{myGreen2}{\textbf{year}}}
+}^\text{2nd}$
+%
+$\overbrace{\text{thou \textcolor{myGreen2}{\textbf{mayst}}}
+}^\text{3rd}$
+%
+$\overbrace{\text{in \textcolor{myGreen2}{\textbf{me}}}
+}^\text{4th}$
+%
+$\overbrace{\text{be\textcolor{myGreen2}{\textbf{hold}}}
+}^\text{5th}$
+\end{center}
+\end{frame}
+
+
+%\begin{frame}[fragile]{Arabic Patterns}
+%Hello
+%\end{frame}
+
+
+
+
+
+
+
+
+
+
+\section{Literature Review}
+\section{Technical Details}
+\section{Results}  
+
+
+
+
+
+
+
+
+
+\end{document}
