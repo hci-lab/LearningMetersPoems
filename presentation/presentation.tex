@@ -229,38 +229,130 @@ Arabic Patterns/Meters \textarabic{بحور الشعر}:
 Iambic pentameter verse:
 \begin{center}
 $\underbrace{\text{That \textcolor{myGreen2}{\textbf{time}}}
-}_\text{Iambic Foot}$
+}_\text{Iambic Foot}$\hspace{0.2cm}
 %
 $\overbrace{\text{of \textcolor{myGreen2}{\textbf{year}}}
-}^\text{2nd}$
+}^\text{2nd}$\hspace{0.2cm}
 %
 $\overbrace{\text{thou \textcolor{myGreen2}{\textbf{mayst}}}
-}^\text{3rd}$
+}^\text{3rd}$\hspace{0.2cm}
 %
 $\overbrace{\text{in \textcolor{myGreen2}{\textbf{me}}}
-}^\text{4th}$
+}^\text{4th}$\hspace{0.2cm}
 %
-$\overbrace{\text{be\textcolor{myGreen2}{\textbf{hold}}}
-}^\text{5th}$
+$\overbrace{\text{be\textcolor{myGreen2}{\textbf{hold}}.}
+}^\text{5th}$\hspace{0.2cm}
 \end{center}
 \end{frame}
 
 
-%\begin{frame}[fragile]{Arabic Patterns}
-%Hello
-%\end{frame}
 
 
 
 
-
-
-
-
-
-
+% Literature 
 \section{Literature Review}
-\section{Technical Details}
+\begin{frame}[fragile]{Detecting Arabic poems' Meters}
+
+\textbf{Abuata and Al-Omari}:
+    \begin{itemize}
+        \item Five-step Algorithm
+            \begin{enumerate}
+                \item Getting the input, carrying full diacritics.
+                \item Metrical scansion rules are applied to the Arud writing. 0/0/..
+                \item Grouping zero and ones to feet \textarabic{تفعيلات}.
+                \item A class is assigned  to the input.
+            \end{enumerate}
+        \item \textbf{\alert{Results}}: 82.2\% of 417 verses.
+    \end{itemize}
+\textbf{Alnagdawi et al}, similar approach;  Context-Free Grammar; 75\% correctly
+classed from 128.
+\end{frame}
+
+\begin{frame}[fragile]{example!}
+
+\begin{center}
+  \textarabic{ويسْأل فىْ الْحواْدث ذوْ صواْبٍ}\\
+  \textarabic{ويسأل فل \hspace{0.4cm}
+    حوادث ذو\hspace{0.4cm}
+    صوابن}\\
+  \texttt{0/0//     \hspace{0.3cm}
+          0///0//   \hspace{0.3cm}
+          0///0//}\\
+
+  \textarabic{مفاْعلتنْ\hspace{0.7cm} 
+    مفاْعلتنْ          \hspace{0.7cm}
+    فعوْلنْ}
+\end{center}
+
+\end{frame}
+
+\begin{frame}[fragile]{Abuata and Al-Omari \&\& Alnagdawi et al; Problems}
+Issues;
+    \begin{itemize}
+       \item A huge constrain. \alert{Diacritics} are a must.
+        % A source of randomness.
+       \item Converting the text into pronounced text is \alert{probabilistic}.
+            \begin{itemize}
+                % الرحمن لكن هذا إله السموات
+                \item \textarabic{اثبات الحروف المحذوفة خطاً}
+                \item \textarabic{التصرف فى التقاء الساكنين}
+            \end{itemize}
+    \end{itemize}
+\end{frame}
+
+
+
+
+\begin{frame}[fragile]{Tanasescu et al.}
+Binary Classification; Metric or Free-Verse: 
+        \begin{itemize}
+            \item verses are represented as vectors of statistical features.
+        \end{itemize}
+\end{frame}
+
+
+\section{Datasets}
+\begin{frame}[fragile]{Datasets}
+\textbf{Arabic Dataset}:
+\begin{center}
+\input{MeterSizesBarChart}
+\end{center}
+\end{frame}
+
+\begin{frame}[fragile]{Datasets}
+\textbf{English Dataset}:
+\begin{center}
+\input{englishMeterSizes.tex}
+\end{center}
+\end{frame}
+
+
+\section{Methodology}
+\begin{frame}[fragile]{Which Network}
+\textbf{}
+\end{frame}
+
+
+
+
+
+
+
+
+%begin{frame}[fragile]{Arabic Patterns}
+%ello
+%end{frame}
+
+
+
+
+
+
+
+
+
+
 \section{Results}  
 
 
