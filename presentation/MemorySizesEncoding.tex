@@ -1,0 +1,31 @@
+\begin{tikzpicture}[scale=0.9]
+\begin{axis}[
+    symbolic x coords={
+    % the x ordering.
+    One-Hot,
+    Two-Hot,
+    Binary,
+    },
+    xtick=data,
+    % the following x label positioning does work here.
+    every axis y label/.style= {at={( 0.1, 1.1)}, anchor=north},
+    ylabel={Bytes},
+    x=3cm,
+    ytick={7216, 35632, 161728},
+    % X ticks configurations
+    x tick label style={anchor=north},
+    /pgf/bar width=20pt,
+    % Y ticks configurations
+    y tick label style={/pgf/number format/.cd,%
+      scaled y ticks = false,
+      set thousands separator={,},
+      fixed},] 
+
+    \addplot[ybar,fill=myBlue] coordinates {
+        % Ordering does not effect.
+        (One-Hot, 161728)
+        (Two-Hot, 35632)
+        (Binary,  7216)
+    };
+\end{axis}
+\end{tikzpicture}

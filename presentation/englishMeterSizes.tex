@@ -1,0 +1,30 @@
+\begin{tikzpicture}[scale=0.8]
+\begin{axis}[
+    symbolic x coords={
+   Iambic,
+   Trochaic,
+   Anapaestic,
+   Dactyl,
+    },
+    xtick=data,
+    % the following x label positioning does work here.
+    every axis y label/.style= {at={( 0.1, 1.1)}, anchor=north},
+    %ylabel style={font=\footnotesize},
+    xticklabel style = {font=\footnotesize},
+    ylabel={Class size},
+    x=1.4cm,
+/pgf/bar width=10pt,
+    x tick label style={rotate=60, anchor=east}, 
+    % Y ticks configurations
+    y tick label style={/pgf/number format/.cd,%
+      scaled y ticks = false,
+      set thousands separator={,},
+      fixed},]
+    \addplot[ybar,fill=myBlue] coordinates {
+        (Iambic, 5550)
+        (Trochaic,  5422)
+        (Anapaestic, 5380)
+        (Dactyl,     1397)
+    };
+\end{axis}
+\end{tikzpicture}

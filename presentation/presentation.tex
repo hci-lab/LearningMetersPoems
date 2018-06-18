@@ -377,7 +377,14 @@ Binary Classification; Metric or Free-Verse:
 \end{frame}
 
 \begin{frame}[fragile]{RNN, Architectures}
-Bi-direction unit.
+Unidirectional \& Bidirectional RNN:
+\begin{center}
+\includegraphics[scale=0.3]{uni_rnn}
+\end{center}
+
+\begin{center}
+\includegraphics[scale=0.3]{bi}
+\end{center}
 \end{frame}
 
 \begin{frame}[fragile]{Data Representation}
@@ -443,12 +450,6 @@ $n = \ceil*{\log_2 l}$ $l \in \{181, 28\}$
     \end{center}
 \end{frame}
 
-%\begin{frame}[fragile]{Arabic Patterns}
-%ello
-%\end{frame}
-
-
-
 
 
 
@@ -457,6 +458,110 @@ $n = \ceil*{\log_2 l}$ $l \in \{181, 28\}$
 
 
 \section{Results}  
+
+\begin{frame}[fragile]{Arabi Results}
+\begin{center}
+ \begin{tabular}{c c c c c c c}
+     %\hline
+     \toprule
+     \small{\#                    }& 
+     \small{data size    }& 
+     \small{encoding     }&
+     \small{diacritic    }&
+     \small{archit.      }&
+     \small{f1           }     \\
+     %\hline
+     \midrule
+    % NOTE: make the expressions full data, eliminated, .. so clear and link them
+    % to the model section.
+
+% NOTE:  +1 add to the layer number
+% NOTE:  see a way to add the architecture details for each model.
+
+   % NOTE: f1 = 91.4% if test on no diacritic test data.
+   % relearn_drop_2_Exp_6_full_data_matrix_with_tashkeel_two_hot_encoding_Bidirectional_LSTM_6_50_0
+   \small{1} & \small{full data} & \small{two-hot} & \small{Yes} & \small{7L, 50U, 0} &\small{95.79\%}\\ 
+   % relearn_drop_2_Exp_5_full_data_matrix_without_tashkeel_two_hot_encoding_Bidirectional_LSTM_6_50_0
+   \small{2} & \small{full data} & \small{two-hot} & \small{No} & \small{7L, 50U, 0} & \small{95.43\%}\\ 
+   % relearn_drop_2_Exp_7_full_data_matrix_with_tashkeel_8bitsEncoding_Bidirectional_LSTM_6_81_0
+   \small{3} & \small{full data} & \small{binary} & \small{Yes} & \small{7L, 81U, 0} & \small{95.51\%}\\ 
+   % relearn_drop_2_Exp_7_full_data_matrix_without_tashkeel_8bitsEncoding_Bidirectional_LSTM_9_30_0
+   \small{4} & \small{full data} & \small{binary} & \small{No} & \small{10L, 30U, 0} & \small{93.2\%}\\ 
+   % relearn_drop_2_Exp_6_full_data_matrix_with_tashkeel_one_hot_encoding_Bidirectional_LSTM_6_50_1
+   \small{5} & \small{full data} & \small{one-hot} & \small{Yes} & \small{7L, 50U, 1} & \small{95.32\%}\\ 
+   % relearn_drop_2_Exp_1_full_data_matrix_without_tashkeel_one_hot_encoding_Bidirectional_LSTM_3_50_0
+   \small{6} & \small{full data} & \small{one-hot} & \small{No}  &\small{7L, 82U, 0} & \small{93.94\%}\\ 
+   % relearn_drop_2_Exp_6_eliminated_data_matrix_with_tashkeel_two_hot_encoding_Bidirectional_LSTM_6_50_0
+   \small{7} & \small{eliminated} & \small{two-hot} & \small{Yes} & \small{7L, 81U, 1} & \small{95.88\%}\\
+   % Exp_2_eliminated_data_matrix_without_tashkeel_two_hot_encoding_Bidirectional_LSTM_3_50_1
+   \small{8} & \small{eliminated} & \small{two-hot} & \small{No}  &\small{4L, 50U, 1} & \small{96.29\%}\\ 
+   % relearn_drop_2_Exp_8_eliminated_data_matrix_with_tashkeel_8bitsEncoding_Bidirectional_LSTM_6_81_1/
+   \small{9} & \small{eliminated} & \small{binary} & \small{Yes} & \small{7L, 81U, 1} & \small{94.87\%}\\ 
+   % Exp_3_eliminated_data_matrix_without_tashkeel_8bitsEncoding_Bidirectional_LSTM_3_82_0
+   \small{10} & \small{eliminated} & \small{binary} & \small{No} & \small{4L, 82U, 0} & \small{96.38\%}\\ 
+   % relearn_drop_2_Exp_7_eliminated_data_matrix_with_tashkeel_one_hot_encoding_Bidirectional_LSTM_6_75_0
+   \small{11} & \small{eliminated} & \small{one-hot} & \small{Yes} & \small{7L, 75U, 0} & \small{95.65\%}\\ 
+   % relearn_drop_2_Exp_5_eliminated_data_matrix_without_tashkeel_one_hot_encoding_Bidirectional_LSTM_6_50_0
+   \small{12} & \small{eliminated} & \small{one-hot} & \small{No} & \small{7L, 50U, 0} & \small{95.04\%}\\ 
+
+
+     %\hline
+     \bottomrule
+ \end{tabular}
+\end{center}
+
+\end{frame}
+
+\begin{frame}[fragile]{English Results}
+\begin{center}
+ \begin{tabular}{c c c c} 
+     %\hline
+     \toprule
+     \textbf{id} & \textbf{encoding } & \textbf{cell type} & \textbf{f1 test}\\
+     %\hline
+     \midrule
+     1 & one-hot & GRU  & 81.35\%\\ % exp69
+%     2 & one-hot & GRU  & 79.49\%\\ % exp45
+     2 & one-hot & LSTM & 80.34\%\\ % exp88
+%     4 & binary  & GRU  & 73.52\%\\ % exp89
+     3 & binary  & LSTM & 75.43\%\\ % exp46
+     4 & binary  & GRU  & 75.04\%\\ % exp90
+
+     %\hline
+     \bottomrule
+ \end{tabular}
+\end{center}
+
+\end{frame}
+
+
+
+
+\begin{frame}[fragile]{Encoding Effect}
+    \begin{center}
+        \input{threeEncodingEffectOnLearning.tex}
+    \end{center}
+\end{frame}
+
+
+
+
+\begin{frame}[fragile]{Binary Encoding Problem}
+    \begin{center}
+    \input{commonFeatures.tex}
+    \end{center}
+\end{frame}
+
+
+
+
+
+
+{\setbeamercolor{palette primary}{fg=black, bg=yellow}
+\begin{frame}[standout]
+  Questions?
+\end{frame}
+}
 
 
 
