@@ -6,9 +6,14 @@
 \usepackage[scale=2]{ccicons}
 \usepackage{pgfplots}
 \usepgfplotslibrary{dateplot}
+\usepackage{mathtools}
+\DeclarePairedDelimiter{\ceil}{\lceil}{\rceil}
 \usepackage{xspace}
 \usepackage{amsmath}
 \newcommand{\themename}{\textbf{\textsc{metropolis}}\xspace}
+
+\usefonttheme{professionalfonts} % using non standard fonts for beamer
+\usefonttheme{serif} % default family is serif
 
 \usepackage{tipa}
 \usepackage{xcolor}
@@ -18,6 +23,7 @@
 \definecolor{myBlue2}{HTML}{4169AA}
 \definecolor{myGreen2}{HTML}{38AE40}
 
+\usetikzlibrary{arrows} % For arrows :"D
 
 
 
@@ -57,6 +63,8 @@ Faulty of Computers and Information, Helwan University}
 %}
 
 \begin{document}
+\setbeamertemplate{caption}{\raggedright\insertcaption\par}
+
 
 \maketitle
 
@@ -329,20 +337,115 @@ Binary Classification; Metric or Free-Verse:
 
 
 \section{Methodology}
-\begin{frame}[fragile]{Which Network}
-\textbf{}
+\begin{frame}[fragile]{Which Network!}
+
+
+\begin{columns}
+
+
+\begin{column}{0.7\textwidth}
+\begin{itemize}
+    \item[--] \textbf{Pattern}: is a sequance of characters.
+    \item  Unlike feedforward neural networks, RNNs can use their internal state (memory) to process sequences of inputs.
+\end{itemize}
+
+\end{column}
+
+
+
+\begin{column}{0.5\textwidth}  %%<--- here
+    \begin{figure}
+        \begin{center}
+         \includegraphics[width=0.5\textwidth]{rolledRNN.png}
+         \caption{Rolled Rnn unit}
+         \end{center}
+    \end{figure}
+\end{column}
+\end{columns}
 \end{frame}
 
 
 
+\begin{frame}[fragile]{RNN, Architectures}
+
+\begin{center}
+    \input{fig1}
+\end{center}
+\begin{itemize}
+    \item Two variants of unidirectional \textit{recurrent units}.
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{RNN, Architectures}
+Bi-direction unit.
+\end{frame}
+
+\begin{frame}[fragile]{Data Representation}
+An Issue:
+\begin{itemize}
+    \item Diacritics are standalone characters!
+    \begin{itemize}
+        \item \texttt{len} \textarabic{مرحبا} $\neq$ \texttt{len} \textarabic{مَرْحَبَاً}
+        \item We have represented the letter and its diacritic as a \alert{one
+character}.
+    \end{itemize}
+\end{itemize}
+\textbf{Benefits}:
+\begin{enumerate}
+    \item Verse's length is fixed, regardless the diacritic states.
+    \item Saving more space, by shorten the length of full diacritic verses. 
+    \item Models can be tested on both diacritic or non-diacritic data.
+\end{enumerate}
+\end{frame}
+
+\begin{frame}[fragile]{Encoding Techniques}
+\begin{enumerate}
+    \item One-Hot
+    \item Binary
+    \item \alert{Two-Hot} (new technique)
+
+\end{enumerate}
+\end{frame}
+
+\begin{frame}[fragile]{One-Hot}
+    \begin{center}
+        \input{oldOneHot}
+    \end{center}
+181 is the number of all combination between letters and diacritics.\\
+$181 = 36 + 36 \times 4 + 1$
+\end{frame}
+
+\begin{frame}[fragile]{One-Hot, example}
+    \begin{center}
+        \input{subfigureOneHot}
+    \end{center}
+\end{frame}
+
+\begin{frame}[fragile]{Binary}
+Let $n$ be the vector length.\\
+$n = \ceil*{\log_2 l}$ $l \in \{181, 28\}$
+    \begin{center}
+        \input{subfigureBinary}
+    \end{center}
+\end{frame}
+
+\begin{frame}[fragile]{Two-Hot}
+    \begin{center}
+        \input{lolo}
+    \end{center}
+\end{frame}
 
 
 
+\begin{frame}[fragile]{Space Comparison}
+    \begin{center}
+        \input{MemorySizesEncoding.tex}
+    \end{center}
+\end{frame}
 
-
-%begin{frame}[fragile]{Arabic Patterns}
+%\begin{frame}[fragile]{Arabic Patterns}
 %ello
-%end{frame}
+%\end{frame}
 
 
 
