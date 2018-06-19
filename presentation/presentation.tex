@@ -576,11 +576,6 @@ But, memory is well consumed.
 \end{frame}
 
 
-\begin{frame}[fragile]{Space Comparison}
-    \begin{center}
-        \input{MemorySizesEncoding.tex}
-\end{center}
-\end{frame}
 
 
 
@@ -643,61 +638,143 @@ But, memory is well consumed.
 
 
 
-
-\section{Results}  
-
 \begin{frame}[fragile]{Arabi Results}
+
+
+
+\begin{columns}
+%Right side
+\begin{column}{0.7\textwidth}
+
+\begin{itemize}
+    \item Bi-LSTM models always outperform LSTM models.\\[1cm]
+    \item It means that models can't learn the pattern from one direction, it
+should be two directions together.
+\end{itemize}
+
+\end{column}
+% Left side
+\begin{column}{0.5\textwidth}
+
+\includegraphics[scale=0.1]{fig3.png}
+
+\end{column}
+\end{columns}
+
 \begin{center}
- \begin{tabular}{c c c c c c c}
-     %\hline
-     \toprule
-     \small{\#                    }& 
-     \small{data size    }& 
-     \small{encoding     }&
-     \small{diacritic    }&
-     \small{archit.      }&
-     \small{f1           }     \\
-     %\hline
-     \midrule
-    % NOTE: make the expressions full data, eliminated, .. so clear and link them
-    % to the model section.
-
-% NOTE:  +1 add to the layer number
-% NOTE:  see a way to add the architecture details for each model.
-
-   % NOTE: f1 = 91.4% if test on no diacritic test data.
-   % relearn_drop_2_Exp_6_full_data_matrix_with_tashkeel_two_hot_encoding_Bidirectional_LSTM_6_50_0
-   \small{1} & \small{full data} & \small{two-hot} & \small{Yes} & \small{7L, 50U, 0} &\small{95.79\%}\\ 
-   % relearn_drop_2_Exp_5_full_data_matrix_without_tashkeel_two_hot_encoding_Bidirectional_LSTM_6_50_0
-   \small{2} & \small{full data} & \small{two-hot} & \small{No} & \small{7L, 50U, 0} & \small{95.43\%}\\ 
-   % relearn_drop_2_Exp_7_full_data_matrix_with_tashkeel_8bitsEncoding_Bidirectional_LSTM_6_81_0
-   \small{3} & \small{full data} & \small{binary} & \small{Yes} & \small{7L, 81U, 0} & \small{95.51\%}\\ 
-   % relearn_drop_2_Exp_7_full_data_matrix_without_tashkeel_8bitsEncoding_Bidirectional_LSTM_9_30_0
-   \small{4} & \small{full data} & \small{binary} & \small{No} & \small{10L, 30U, 0} & \small{93.2\%}\\ 
-   % relearn_drop_2_Exp_6_full_data_matrix_with_tashkeel_one_hot_encoding_Bidirectional_LSTM_6_50_1
-   \small{5} & \small{full data} & \small{one-hot} & \small{Yes} & \small{7L, 50U, 1} & \small{95.32\%}\\ 
-   % relearn_drop_2_Exp_1_full_data_matrix_without_tashkeel_one_hot_encoding_Bidirectional_LSTM_3_50_0
-   \small{6} & \small{full data} & \small{one-hot} & \small{No}  &\small{7L, 82U, 0} & \small{93.94\%}\\ 
-   % relearn_drop_2_Exp_6_eliminated_data_matrix_with_tashkeel_two_hot_encoding_Bidirectional_LSTM_6_50_0
-   \small{7} & \small{eliminated} & \small{two-hot} & \small{Yes} & \small{7L, 81U, 1} & \small{95.88\%}\\
-   % Exp_2_eliminated_data_matrix_without_tashkeel_two_hot_encoding_Bidirectional_LSTM_3_50_1
-   \small{8} & \small{eliminated} & \small{two-hot} & \small{No}  &\small{4L, 50U, 1} & \small{96.29\%}\\ 
-   % relearn_drop_2_Exp_8_eliminated_data_matrix_with_tashkeel_8bitsEncoding_Bidirectional_LSTM_6_81_1/
-   \small{9} & \small{eliminated} & \small{binary} & \small{Yes} & \small{7L, 81U, 1} & \small{94.87\%}\\ 
-   % Exp_3_eliminated_data_matrix_without_tashkeel_8bitsEncoding_Bidirectional_LSTM_3_82_0
-   \small{10} & \small{eliminated} & \small{binary} & \small{No} & \small{4L, 82U, 0} & \small{96.38\%}\\ 
-   % relearn_drop_2_Exp_7_eliminated_data_matrix_with_tashkeel_one_hot_encoding_Bidirectional_LSTM_6_75_0
-   \small{11} & \small{eliminated} & \small{one-hot} & \small{Yes} & \small{7L, 75U, 0} & \small{95.65\%}\\ 
-   % relearn_drop_2_Exp_5_eliminated_data_matrix_without_tashkeel_one_hot_encoding_Bidirectional_LSTM_6_50_0
-   \small{12} & \small{eliminated} & \small{one-hot} & \small{No} & \small{7L, 50U, 0} & \small{95.04\%}\\ 
-
-
-     %\hline
-     \bottomrule
- \end{tabular}
+    
+\includegraphics[scale=0.15]{fig4.png}
 \end{center}
 
+
+
 \end{frame}
+
+
+\begin{frame}[fragile]{Arabi Results}
+\begin{columns}
+%Right side
+\begin{column}{0.7\textwidth}
+\begin{itemize}
+    \item Model 1 is the best model \textbf{with } diacritics.
+    \item Model 2 is the best model \textbf{without} diacritics.
+    \item Both models are \textbf{Two-Hot}.
+    \item Law accuracy for the last 4 meters, because the data-points of their
+classes are very small.
+\end{itemize}
+\end{column}
+% Left side
+\begin{column}{0.5\textwidth}
+\includegraphics[scale=0.4]{fig5.png}
+\end{column}
+\end{columns}
+\end{frame}
+
+
+\begin{frame}[fragile]{Encoding Effect}
+\begin{columns}
+%Right side
+\begin{column}{0.5\textwidth}
+\begin{itemize}
+    \item In fact, the three encoding achieve the same results but with
+different architecture in case of data with \textbf{diacritics}.
+    \item But in case of data without \textbf{diacritics} the Two-Hot is the best.
+    \item Binary encoding needs \textbf{deeper} architecture to achieve high results.
+\end{itemize}
+\end{column}
+% Left side
+\begin{column}{0.5\textwidth}
+\includegraphics[scale=0.4]{fig6.png}
+\end{column}
+\end{columns}
+\end{frame}
+
+
+
+
+
+
+\begin{frame}[fragile]{Encoding Effect}
+
+\begin{itemize}
+    \item When applying the same architecture but changing one factor only, \textbf{Encoding}.
+    \item \textbf{Two-Hot} is the best.
+    \item \textbf{One-Hot} is very close to \textbf{Two-Hot}.
+\end{itemize}
+
+\begin{center}
+\input{threeEncodingEffectOnLearning}
+\end{center}
+\end{frame}
+
+
+
+
+\begin{frame}[fragile]{Diacritics effect}
+\begin{columns}
+%Right side
+\begin{column}{0.7\textwidth}
+\begin{itemize}
+    \item On average, \textbf{two-hot} models achieve the same results regardless the \textbf{diacritic } state.
+    \item \textbf{Binary} and \textbf{One-Hot} achieve hiegher results in case of diacritics data than without diacritics.
+    \item Diacritics incleases \textbf{Binary} and \textbf{One-Hot} learning
+accuracy. But it does not matter in case of \textbf{Two-Hot}.
+\end{itemize}
+\end{column}
+% Left side
+\begin{column}{0.5\textwidth}
+\includegraphics[scale=0.2]{fig7.jpg}
+\end{column}
+\end{columns}
+\end{frame}
+
+
+\begin{frame}[fragile]{Diacritics effect}
+\begin{center}
+\includegraphics[scale=0.2]{fig8.png}
+    
+\end{center}
+
+\begin{itemize}
+    \item Model 1 assigned \textarabic{الكامل}  to this verse by 99.26\%.
+    \item Model 1 achieves F1=91.62\% with the same test set but without diacritics.
+\end{itemize}
+\end{frame}
+
+
+\begin{frame}[fragile]{Diacritics effect}
+\begin{center}
+\includegraphics[scale=0.2]{fig9.png}
+\end{center}
+
+\begin{itemize}
+    \item Model 1 assigned \textarabic{الكامل}  to this verse by 98.18\%.
+    \item Model 1 achieve F1=91.62\% with the same test set but without diacritics.
+\end{itemize}
+\end{frame}
+
+
+
 
 \begin{frame}[fragile]{English Results}
 \begin{center}
@@ -724,23 +801,6 @@ But, memory is well consumed.
 
 
 
-\begin{frame}[fragile]{Encoding Effect}
-    \begin{center}
-        \input{threeEncodingEffectOnLearning.tex}
-    \end{center}
-\end{frame}
-
-
-
-
-\begin{frame}[fragile]{Binary Encoding Problem}
-    \begin{center}
-    \input{commonFeatures.tex}
-    \end{center}
-\end{frame}
-
-
-
 
 
 
@@ -749,13 +809,6 @@ But, memory is well consumed.
   Questions?
 \end{frame}
 }
-
-
-
-
-
-
-
 
 
 \end{document}
