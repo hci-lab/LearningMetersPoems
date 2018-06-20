@@ -6,9 +6,14 @@
 \usepackage[scale=2]{ccicons}
 \usepackage{pgfplots}
 \usepgfplotslibrary{dateplot}
+\usepackage{mathtools}
+\DeclarePairedDelimiter{\ceil}{\lceil}{\rceil}
 \usepackage{xspace}
 \usepackage{amsmath}
 \newcommand{\themename}{\textbf{\textsc{metropolis}}\xspace}
+
+\usefonttheme{professionalfonts} % using non standard fonts for beamer
+\usefonttheme{serif} % default family is serif
 
 \usepackage{tipa}
 \usepackage{xcolor}
@@ -18,6 +23,7 @@
 \definecolor{myBlue2}{HTML}{4169AA}
 \definecolor{myGreen2}{HTML}{38AE40}
 
+\usetikzlibrary{arrows} % For arrows :"D
 
 
 
@@ -57,6 +63,8 @@ Faulty of Computers and Information, Helwan University}
 %}
 
 \begin{document}
+\setbeamertemplate{caption}{\raggedright\insertcaption\par}
+
 
 \maketitle
 
@@ -106,14 +114,27 @@ To detect poems' meters, we need to learn those \alert{\textbf{Patterns}}.
 
 
 \begin{frame}[fragile]{Arabic Prosody \textarabic{العَرُوض}}
+    \begin{Arabic}
+    ودعْ عنك آراءَ الرجالِ وقولَهم\hspace{1em}  فقولُ رسولِ الله أزكى وأشرحُ
+    \end{Arabic}
 
+% Half 1
+\begin{columns}
+\begin{column}{0.7\textwidth}
+
+% ◌
 \begin{itemize}
-  \item \textbf{Foot} \textarabic{التفعيلة}: is a sequence of vowels and consonants.
+  \item A \textbf{poem } is a collection of verses.
+  \item \textbf{Vowels}  carry one of \textarabic{◌َ  ◌ُ  ◌ِ}.
+  \item \textbf{Consonants} carry \textarabic{◌ْ}.
+  \item A \textbf{foot} \textarabic{التفعيلة}: is an \textbf{ordered} sequence of vowels and consonants.
 \end{itemize}
 
+\end{column}
 
 
-
+% half 2
+\begin{column}{0.5\textwidth}
 \begin{center}
   \begin{tabular}{|c|c|} \hline
     \textbf{Feet} & \textbf{Scansion} \\
@@ -129,7 +150,8 @@ To detect poems' meters, we need to learn those \alert{\textbf{Patterns}}.
     \hline
   \end{tabular}
 \end{center}
-
+\end{column}
+\end{columns}
 \end{frame}
 
 
@@ -138,33 +160,12 @@ To detect poems' meters, we need to learn those \alert{\textbf{Patterns}}.
 
 \begin{frame}[fragile]{Arabic Prosody \textarabic{العَرُوض}}
 
-Arabic Patterns/Meters \textarabic{بحور الشعر}:
 \begin{itemize}
-  \item \textbf{Meter} \textarabic{البحر}: is a sequence of \alert{feet}. 
+  \item \textbf{Meter} \textarabic{البحر}: is an \textbf{ordered} sequence of \alert{feet}. 
 \end{itemize}
 
-\begin{center}
-  \begin{tabular}[h!]{|c|c|} 
-    \hline
-    \textbf{Meter Name} & \textbf{Meter} \small{\textit{feet combination}} \\ 
-    \hline
-   \textit{al-Wafeer}    & \textarabic{مُفَاعَلَتُن مُفَاعَلَتُن فَعُولُن} \\ %
-   \textit{al-Taweel}    & \textarabic{فَعُوْلُنْ مَفَاْعِيْلُنْ فَعُوْلُنْ مَفَاْعِلُنْ} \\ %
-   \vdots                &  \vdots\\
-   \textit{al-Moktadib}  & \textarabic{مَفْعُوْلاتُ مُسْتَفْعِلُنْ مُسْتَفْعِلُن} \\
-   \textit{al-Modar'e}   & \textarabic{مَفَاْعِيْلُنْ فَاْعِلاتُنْ مَفَاْعِيْلُنْ} \\
-    \hline
-  \end{tabular}
-\end{center}
-
-\end{frame}
 
 
-
-
-\begin{frame}[fragile]{Arabic Prosody, example!}
-
-\textbf{From \textarabic{بحر الوافر}}:
 \begin{center}
   \textarabic{ويسْأل فىْ الْحواْدث ذوْ صواْبٍ}\\
   \textarabic{ويسأل فل \hspace{0.4cm}
@@ -179,7 +180,25 @@ Arabic Patterns/Meters \textarabic{بحور الشعر}:
     فعوْلنْ}
 \end{center}
 
+
+\begin{center}
+  \begin{tabular}[h!]{|c|c|} 
+    \hline
+    \textbf{Meter Name} & \textbf{Meter} \small{\textit{feet combination}} \\ 
+    \hline
+   \textit{al-Wafeer}    & \textarabic{مُفَاعَلَتُن مُفَاعَلَتُن فَعُولُن} \\ %
+   \textit{al-Taweel}    & \textarabic{فَعُوْلُنْ مَفَاْعِيْلُنْ فَعُوْلُنْ مَفَاْعِلُنْ} \\ %
+   \vdots                &  \vdots\\
+   \textit{al-Moktadib}  & \textarabic{مَفْعُوْلاتُ مُسْتَفْعِلُنْ مُسْتَفْعِلُن} \\
+   \textit{al-Modar'e}   & \textarabic{مَفَاْعِيْلُنْ فَاْعِلاتُنْ مَفَاْعِيْلُنْ} \\
+    \hline
+  \end{tabular}
+\end{center}
+%%%%
 \end{frame}
+
+
+
 
 
 
@@ -190,11 +209,11 @@ Arabic Patterns/Meters \textarabic{بحور الشعر}:
 
 \textbf{English Meters Building Blocks}:
 \begin{itemize}
-  \item Syllables: \textipa{\sffamily /"wO:t@/} = \textipa{\sffamily /"wO:/}  $+$ \textipa{\sffamily /t@(r)/}.
+  \item \textbf{Syllables}: \textipa{\sffamily /"wO:t@/} = \textipa{\sffamily /"wO:/}  $+$ \textipa{\sffamily /t@(r)/}.
     \begin{itemize}
          \item \textcolor{myGreen2}{\textbf{stressed}} $+$ unstressed.
     \end{itemize}
-  \item Foot: is a combination of stressed and unstressed syllables. 
+  \item \textbf{Foot}: is a combination of stressed and unstressed syllables. 
 
 \end{itemize}
 
@@ -226,42 +245,558 @@ Arabic Patterns/Meters \textarabic{بحور الشعر}:
 
 \begin{frame}[fragile]{English Patterns}
 
-Iambic pentameter verse:
+\textit{Iambic pentameter} verse:
 \begin{center}
 $\underbrace{\text{That \textcolor{myGreen2}{\textbf{time}}}
-}_\text{Iambic Foot}$
+}_\text{Iambic Foot}$\hspace{0.2cm}
 %
 $\overbrace{\text{of \textcolor{myGreen2}{\textbf{year}}}
-}^\text{2nd}$
+}^\text{2nd}$\hspace{0.2cm}
 %
 $\overbrace{\text{thou \textcolor{myGreen2}{\textbf{mayst}}}
-}^\text{3rd}$
+}^\text{3rd}$\hspace{0.2cm}
 %
 $\overbrace{\text{in \textcolor{myGreen2}{\textbf{me}}}
-}^\text{4th}$
+}^\text{4th}$\hspace{0.2cm}
 %
-$\overbrace{\text{be\textcolor{myGreen2}{\textbf{hold}}}
-}^\text{5th}$
+$\overbrace{\text{be\textcolor{myGreen2}{\textbf{hold}}.}
+}^\text{5th}$\hspace{0.2cm}
 \end{center}
 \end{frame}
 
 
-%\begin{frame}[fragile]{Arabic Patterns}
-%Hello
-%\end{frame}
 
 
 
 
-
-
-
-
-
-
+% Literature 
 \section{Literature Review}
-\section{Technical Details}
-\section{Results}  
+\begin{frame}[fragile]{Detecting Arabic poems' Meters}
+
+\textbf{Abuata and Al-Omari}:
+    \begin{itemize}
+        \item Five-step Algorithm
+            \begin{enumerate}
+                \item Getting the input, carrying full diacritics.
+                \item Metrical scansion rules are applied to the Arud writing. 0/0/..
+                \item Grouping zero and ones to feet \textarabic{تفعيلات}.
+                \item A class is assigned  to the input.
+            \end{enumerate}
+        \item \textbf{\alert{Results}}: 82.2\% of 417 verses.
+    \end{itemize}
+\textbf{Alnagdawi et al}, similar approach;  Context-Free Grammar; 75\% correctly
+classed from 128.
+\end{frame}
+
+\begin{frame}[fragile]{example!}
+
+\begin{itemize}
+    \item Probabilistic operation 
+\end{itemize}
+
+\begin{center}
+  \textarabic{ويسْأل فىْ الْحواْدث ذوْ صواْبٍ}\\
+  \textarabic{ويسأل فل \hspace{0.4cm}
+    حوادث ذو\hspace{0.4cm}
+    صوابن}\\
+  \texttt{0/0//     \hspace{0.3cm}
+          0///0//   \hspace{0.3cm}
+          0///0//}\\
+
+  \textarabic{مفاْعلتنْ\hspace{0.7cm} 
+    مفاْعلتنْ          \hspace{0.7cm}
+    فعوْلنْ}
+\end{center}
+
+\end{frame}
+
+\begin{frame}[fragile]{Abuata and Al-Omari \& Alnagdawi et al; Problems}
+Issues;
+    \begin{itemize}
+       \item A huge constrain. \alert{Diacritics} are a must.
+        % A source of randomness.
+       \item Converting the text into pronounced text is \alert{probabilistic}.
+            \begin{itemize}
+                % الرحمن لكن هذا إله السموات
+                \item \textarabic{اثبات الحروف المحذوفة خطاً}
+                \item \textarabic{التصرف فى التقاء الساكنين}
+            \end{itemize}
+    \end{itemize}
+\end{frame}
+
+
+
+
+\begin{frame}[fragile]{Tanasescu et al. \&  Tizhoosh and Dara \& Almuhareb et al.}
+\textbf{Metric} or \textbf{Free-Verse}: 
+        \begin{itemize}
+            \item Verses are represented as vectors of \alert{statistical features}.
+            \begin{itemize}
+                \item[--] Average number of feet per line.
+                \item[--] Longest run of a single foot.
+                \item[--] Percentage of foot changes.
+            \end{itemize}
+            \item He has used an stress-annotated dataset, which means that the pattern is already detected!
+            \item A couples of tries for detecting poem inside documents depending on visual features, for both Arabic and English.
+            \begin{itemize}
+                \item[--] Averge of line legth.
+                \item[--] Averge number of block.
+                \item[--] etc ...
+            \end{itemize}
+        \end{itemize}
+\end{frame}
+
+
+
+
+\begin{frame}[fragile]{Our point of departure}
+% Insulting
+\begin{itemize}
+    \item Detecting poems inside documents by its visual feature represent the majority of the research related to poetry.
+    \item For detecting meters, all models are so naive and primitive. They do no have any clue about the real pattern.
+\end{itemize}
+
+\end{frame}
+
+
+
+
+\section{Datasets}
+\begin{frame}[fragile]{Datasets}
+\textbf{Arabic Dataset}:
+\begin{itemize}
+    \item Our dataset consists of  1,722,321 data points labeled by\\ the 16 meters.
+    \item Verses are for 3701 poets from 11 ages.
+\end{itemize}
+\begin{center}
+\input{MeterSizesBarChart}
+\end{center}
+\end{frame}
+
+\begin{frame}[fragile]{Datasets}
+\textbf{English Dataset}:
+\begin{itemize}
+    \item Our dataset consists of 17,744 verses only, labeled by 4 meters.
+    \item This is what we have found after an extensive search.
+\end{itemize}
+\begin{center}
+\input{englishMeterSizes.tex}
+\end{center}
+\end{frame}
+
+
+
+\begin{frame}[fragile]{Motivation}
+\begin{itemize}
+    \item The effect of the diacritics over the learning curve.
+    \item The effect of the dataset size over the learning curve.
+    \item Best technique to represent character-level text. 
+\end{itemize}
+
+\end{frame}
+
+
+\section{Methodology}
+\begin{frame}[fragile]{Which Network!}
+
+
+\begin{columns}
+
+
+\begin{column}{0.7\textwidth}
+\begin{itemize}
+    \item[--] \textbf{Pattern}: is a sequence of characters.
+    \item  Unlike feedforward neural networks, RNNs can use their internal state (memory) to process sequences of inputs.
+\end{itemize}
+
+\end{column}
+
+
+
+\begin{column}{0.5\textwidth}  %%<--- here
+    \begin{figure}
+        \begin{center}
+         \includegraphics[width=0.5\textwidth]{rolledRNN.png}
+         \caption{Rolled Rnn unit}
+         \end{center}
+    \end{figure}
+\end{column}
+\end{columns}
+\end{frame}
+
+
+
+\begin{frame}[fragile]{RNN, Architectures}
+
+\begin{center}
+    \input{fig1}
+\end{center}
+\begin{itemize}
+    \item Two variants of \textit{recurrent units}.
+    \item LSTM and GRU are designed for the same reason, to avoid vanishing problem and long term dependency problem .
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{RNN, Architectures}
+\begin{figure}
+\centering
+\includegraphics[scale=0.3]{uni_rnn}
+\caption{Unidirectional RNN}
+\end{figure}
+
+\begin{figure}
+\centering
+\includegraphics[scale=0.3]{bi}
+\caption{Bidirectional RNN}
+\end{figure}
+\end{frame}
+
+\begin{frame}[fragile]{Data Representation}
+An Issue:
+\begin{itemize}
+    \item Diacritics are standalone characters!
+    \begin{itemize}
+        \item \texttt{len} \textarabic{مرحبا} $\neq$ \texttt{len} \textarabic{مَرْحَبَاً}
+        \item We have represented the letter and its diacritic as a \alert{one character}.
+    \end{itemize}
+\end{itemize}
+\textbf{Benefits}:
+\begin{enumerate}
+    \item Verse's length is fixed, regardless the diacritic states.
+    \item Saving more space, by shorten the length of full diacritic verses. 
+    \item Models can be tested on both diacritic or non-diacritic data.
+\end{enumerate}
+\end{frame}
+
+\begin{frame}[fragile]{Encoding Techniques}
+\begin{enumerate}
+    \item One-Hot
+    \item Binary
+    \item \alert{Two-Hot} (new technique)
+
+\end{enumerate}
+\end{frame}
+
+\begin{frame}[fragile]{One-Hot}
+    \begin{center}
+        %\input{oldOneHot}
+        \includegraphics[scale=0.3]{fig2.png}
+    \end{center}
+181 is the number of all combination between letters and diacritics.\\
+$181 = 36 + 36 \times 4 + 1$
+\end{frame}
+
+\begin{frame}[fragile]{One-Hot, example}
+    \begin{center}
+        \input{subfigureOneHot}
+    \end{center}
+For English, vector length is 28. 
+\end{frame}
+
+\begin{frame}[fragile]{Binary}
+Let $n$ be the vector length.\\
+$n = \ceil*{\log_2 l}$ $l \in \{181, 28\}$ for Arabic and English alphabet, respectively.   
+    \begin{center}
+        \input{subfigureBinary}
+    \end{center}
+\end{frame}
+
+
+
+\begin{frame}[fragile]{Pros and Cons}
+
+
+\begin{columns}
+%Right side
+\begin{column}{0.7\textwidth}
+\textbf{One-Hot}:
+\begin{itemize}
+    \item $181 \times 1$ too long vector.
+    \item Wast of memory, compared towith Binary.
+\end{itemize}
+But it's very informative and easy to learn.\\[0.7cm]
+
+\textbf{Binary}:
+\begin{itemize}
+    \item The problem of a common feature, the optimizer updates weights of this two common features to reduce the error of one character of them it will affect the rest characters that have the same feature.
+\end{itemize}
+But, memory is well consumed.
+\end{column}
+% Left side
+\begin{column}{0.35\textwidth}
+\begin{tikzpicture}[scale=0.5]
+\begin{axis}[
+    symbolic x coords={
+    % the x ordering.
+    One-Hot,
+    Binary,
+    },
+    xtick=data,
+    % the following x label positioning does work here.
+    every axis y label/.style= {at={( 0.1, 1.1)}, anchor=north},
+    ylabel={Bytes},
+    x=3.5cm,
+    ytick={7216, 161728},
+    % X ticks configurations
+    x tick label style={anchor=north},
+    /pgf/bar width=10pt,
+    % Y ticks configurations
+    y tick label style={/pgf/number format/.cd,%
+      scaled y ticks = false,
+      set thousands separator={,},
+      fixed},] 
+
+    \addplot[ybar,fill=myBlue] coordinates {
+        % Ordering does not effect.
+        (One-Hot, 161728)
+        (Binary,  7216)
+    };
+\end{axis}
+\end{tikzpicture}
+\begin{center}
+\input{commonFeatures}
+\end{center}
+\end{column}
+\end{columns}
+\end{frame}
+
+
+\begin{frame}[fragile]{Feeding verse to model}
+  \begin{center}
+\begin{tikzpicture}
+
+\node[inner sep=0pt] (russell) at (5, 3)
+    {\includegraphics[width=\textwidth]{taha}};
+%\draw[step=0.5, gray, very thin] (0,0) grid (10, 7);
+
+\node at (8, 6.3) {\textarabic{البحر البسيط}};
+\node at (1.8, 6) {\textarabic{إِنْنَ البسيط لديه يُبسَطُ الأملُ}};
+\end{tikzpicture}
+    \end{center}
+\end{frame}
+
+
+
+
+
+\begin{frame}[fragile]{Two-Hot Encoding}
+
+\begin{columns}
+%Right side
+\begin{column}{0.77\textwidth}
+\input{lolo.tex}
+\end{column}
+% Left side
+\begin{column}{0.5\textwidth}
+
+%%%%%%
+\begin{tikzpicture}[scale=0.45]
+\begin{axis}[
+    symbolic x coords={
+    % the x ordering.
+    One-Hot,
+    Two-Hot,
+    Binary,
+    },
+    xtick=data,
+    % the following x label positioning does work here.
+    every axis y label/.style= {at={( 0.1, 1.1)}, anchor=north},
+    ylabel={Bytes},
+    x=3cm,
+    ytick={7216, 35632, 161728},
+    % X ticks configurations
+    x tick label style={anchor=north},
+    /pgf/bar width=20pt,
+    % Y ticks configurations
+    y tick label style={/pgf/number format/.cd,%
+      scaled y ticks = false,
+      set thousands separator={,},
+      fixed},] 
+
+    \addplot[ybar,fill=myBlue] coordinates {
+        % Ordering does not effect.
+        (One-Hot, 161728)
+        (Two-Hot, 35632)
+        (Binary,  7216)
+    };
+\end{axis}
+\end{tikzpicture}
+
+
+
+\end{column}
+\end{columns}
+
+\begin{itemize}
+    \item Memory is well consumed.
+    \item Have only one common feature.
+    \item For Arabic only.
+\end{itemize}
+
+\end{frame}
+
+
+
+
+\begin{frame}[fragile]{Arabi Results}
+
+
+
+\begin{columns}
+%Right side
+\begin{column}{0.7\textwidth}
+
+\begin{itemize}
+    \item Bi-LSTM models always outperform LSTM models.\\[1cm]
+    \item It means that models can't learn the pattern from one direction, it
+should be two directions together.
+\end{itemize}
+
+\end{column}
+% Left side
+\begin{column}{0.5\textwidth}
+
+\includegraphics[scale=0.1]{fig3.png}
+
+\end{column}
+\end{columns}
+
+\begin{center}
+    
+\includegraphics[scale=0.15]{fig4.png}
+\end{center}
+
+
+
+\end{frame}
+
+
+\begin{frame}[fragile]{Arabi Results}
+\begin{columns}
+%Right side
+\begin{column}{0.7\textwidth}
+\begin{itemize}
+    \item Model 1 is the best model \textbf{with } diacritics.
+    \item Model 2 is the best model \textbf{without} diacritics.
+    \item Both models are \textbf{Two-Hot}.
+    \item Law accuracy for the last 4 meters, because the data-points of their
+classes are very small.
+\end{itemize}
+\end{column}
+% Left side
+\begin{column}{0.5\textwidth}
+\includegraphics[scale=0.4]{fig5.png}
+\end{column}
+\end{columns}
+\end{frame}
+
+
+\begin{frame}[fragile]{Encoding Effect}
+\begin{columns}
+%Right side
+\begin{column}{0.5\textwidth}
+\begin{itemize}
+    \item In fact, the three encoding achieve the same results but with
+different architecture in case of data with \textbf{diacritics}.
+    \item But in case of data without \textbf{diacritics} the Two-Hot is the best.
+    \item Binary encoding needs \textbf{deeper} architecture to achieve high results.
+\end{itemize}
+\end{column}
+% Left side
+\begin{column}{0.5\textwidth}
+\includegraphics[scale=0.4]{fig6.png}
+\end{column}
+\end{columns}
+\end{frame}
+
+
+
+
+
+
+\begin{frame}[fragile]{Encoding Effect}
+
+\begin{itemize}
+    \item When applying the same architecture but changing one factor only, \textbf{Encoding}.
+    \item \textbf{Two-Hot} is the best.
+    \item \textbf{One-Hot} is very close to \textbf{Two-Hot}.
+\end{itemize}
+
+\begin{center}
+\input{threeEncodingEffectOnLearning}
+\end{center}
+\end{frame}
+
+
+
+
+\begin{frame}[fragile]{Diacritics effect}
+\begin{columns}
+%Right side
+\begin{column}{0.7\textwidth}
+\begin{itemize}
+    \item On average, \textbf{two-hot} models achieve the same results regardless the \textbf{diacritic } state.
+    \item \textbf{Binary} and \textbf{One-Hot} achieve hiegher results in case of diacritics data than without diacritics.
+    \item Diacritics incleases \textbf{Binary} and \textbf{One-Hot} learning
+accuracy. But it does not matter in case of \textbf{Two-Hot}.
+\end{itemize}
+\end{column}
+% Left side
+\begin{column}{0.5\textwidth}
+\includegraphics[scale=0.2]{fig7.jpg}
+\end{column}
+\end{columns}
+\end{frame}
+
+
+\begin{frame}[fragile]{Diacritics effect}
+\begin{center}
+\includegraphics[scale=0.2]{fig8.png}
+    
+\end{center}
+
+\begin{itemize}
+    \item Model 1 assigned \textarabic{الكامل}  to this verse by 99.26\%.
+    \item Model 1 achieves F1=91.62\% with the same test set but without diacritics.
+\end{itemize}
+\end{frame}
+
+
+\begin{frame}[fragile]{Diacritics effect}
+\begin{center}
+\includegraphics[scale=0.2]{fig9.png}
+\end{center}
+
+\begin{itemize}
+    \item Model 1 assigned \textarabic{الكامل}  to this verse by 98.18\%.
+    \item Model 1 achieve F1=91.62\% with the same test set but without diacritics.
+\end{itemize}
+\end{frame}
+
+
+
+
+\begin{frame}[fragile]{English Results}
+\begin{center}
+ \begin{tabular}{c c c c} 
+     %\hline
+     \toprule
+     \textbf{id} & \textbf{encoding } & \textbf{cell type} & \textbf{f1 test}\\
+     %\hline
+     \midrule
+     1 & one-hot & GRU  & 81.35\%\\ % exp69
+%     2 & one-hot & GRU  & 79.49\%\\ % exp45
+     2 & one-hot & LSTM & 80.34\%\\ % exp88
+%     4 & binary  & GRU  & 73.52\%\\ % exp89
+     3 & binary  & LSTM & 75.43\%\\ % exp46
+     4 & binary  & GRU  & 75.04\%\\ % exp90
+
+     %\hline
+     \bottomrule
+ \end{tabular}
+\end{center}
+
+\end{frame}
 
 
 
@@ -269,6 +804,11 @@ $\overbrace{\text{be\textcolor{myGreen2}{\textbf{hold}}}
 
 
 
+{\setbeamercolor{palette primary}{fg=black, bg=yellow}
+\begin{frame}[standout]
+  Questions?
+\end{frame}
+}
 
 
 \end{document}
