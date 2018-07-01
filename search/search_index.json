@@ -1,0 +1,14 @@
+{
+    "docs": [
+        {
+            "location": "/",
+            "text": "Arabic Poems Dataset\n\n\nWe have scrapped the Arabic dataset from two big poetry websites: \n\n\u0627\u0644\u0645\u0648\u0633\u0648\u0639\u0629 \u0627\u0644\u0634\u0639\u0631 \u064a\u0629\n\nand \n\n \u0627\u0644\u062f\u064a\u0648\u0627\u0646\n.\nBoth are merged into one large dataset. \n\n\nThe total number\nof verses is 1,862,046 poetic verses; each verse is labeled by its meter, the\npoet who wrote it, and the age which it was written in. There are 22 meters, 3701\npoets and 11 ages; and they are Pre-Islamic, Islamic, Umayyad, Mamluk, Abbasid,\nAyyubid, Ottoman, Andalusian, era between Umayyad and Abbasid, Fatimid and\nmodern. We are only interested in the 16 classic meters which are attributed to\nAl-Farahidi, and they are the majority of the dataset with a total number of\n1,722,321 verses.\n\n\nIt is important to note that the verses\u2019 diacritic states are not consistent, this means that a\nverse can carry full, semi diacritics or it can carry nothing. \n\n\nDownload",
+            "title": "Home"
+        },
+        {
+            "location": "/#arabic-poems-dataset",
+            "text": "We have scrapped the Arabic dataset from two big poetry websites:  \u0627\u0644\u0645\u0648\u0633\u0648\u0639\u0629 \u0627\u0644\u0634\u0639\u0631 \u064a\u0629 \nand   \u0627\u0644\u062f\u064a\u0648\u0627\u0646 .\nBoth are merged into one large dataset.   The total number\nof verses is 1,862,046 poetic verses; each verse is labeled by its meter, the\npoet who wrote it, and the age which it was written in. There are 22 meters, 3701\npoets and 11 ages; and they are Pre-Islamic, Islamic, Umayyad, Mamluk, Abbasid,\nAyyubid, Ottoman, Andalusian, era between Umayyad and Abbasid, Fatimid and\nmodern. We are only interested in the 16 classic meters which are attributed to\nAl-Farahidi, and they are the majority of the dataset with a total number of\n1,722,321 verses.  It is important to note that the verses\u2019 diacritic states are not consistent, this means that a\nverse can carry full, semi diacritics or it can carry nothing.   Download",
+            "title": "Arabic Poems Dataset"
+        }
+    ]
+}
