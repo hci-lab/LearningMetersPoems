@@ -1,0 +1,36 @@
+(TeX-add-style-hook
+ "publications"
+ (lambda ()
+   (LaTeX-add-bibitems
+    "Abandah2015"
+    "Anderson2017"
+    "Aslett2015"
+    "Belinkov2015"
+    "Cho2014"
+    "Eldesouki"
+    "Ficler2017"
+    "Ghosh2015"
+    "Graves2013"
+    "Greydanus2017"
+    "HendySusanto"
+    "Hopkins2017"
+    "Hwang2017"
+    "Kim2015"
+    "Kowsari2017"
+    "Lai2015"
+    "Lee2016"
+    "Lee2017"
+    "Lewis2016"
+    "Liu2016"
+    "Lopyrev2015"
+    "Martens2011"
+    "Prieto2017"
+    "Tizhoosh2008"
+    "Wu2013"
+    "Xie"
+    "Xu2016"
+    "Yan2016"
+    "Yogatama2017"
+    "Zhou2015"))
+ :bibtex)
+
