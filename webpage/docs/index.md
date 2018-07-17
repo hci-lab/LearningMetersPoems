@@ -22,16 +22,10 @@ means that a verse can carry full, semi diacritics or it can carry nothing.
 Cite APCD as the following _BibTeX_ entry.
 ```
 @MISC {APCD2018,
-author = "
- Waleed A. Yousef and
- Omar M. Ibrahime and 
- Taha M. Madbouly and
- Moustafa A. Mahmoud and 
- Ali H. El-Kassas and 
- Ali O. Hassan and 
- Abdallah R. Albohy",
-title  = "Arabic Poem Comprehensive Dataset",
-year   = "2018"
+author = {Waleed A. Yousef and Omar M. Ibrahime and Taha M. Madbouly and Moustafa A. Mahmoud and Ali H. El-Kassas and Ali O. Hassan and Abdallah R. Albohy},
+year   = 2018,
+title  = {{Arabic Poem Comprehensive Dataset}},
+url   = {https://hci-lab.github.io/ArabicPoetry-1-Private/#APCD}
 }
 ```
 
@@ -63,16 +57,10 @@ verses.
 Cite EPD as the following _BibTeX_ entry.
 ```
 @MISC {EPD2018,
-author = "
- Waleed A. Yousef and
- Omar M. Ibrahime and 
- Taha M. Madbouly and
- Moustafa A. Mahmoud and 
- Ali H. El-Kassas and 
- Ali O. Hassan and 
- Abdallah R. Albohy",
-title  = "English Poems Dataset",
-year   = "2018"
+author = {Waleed A. Yousef and Omar M. Ibrahime and Taha M. Madbouly and Moustafa A. Mahmoud and Ali H. El-Kassas and Ali O. Hassan and Abdallah R. Albohy},
+year   = 2018,
+title  = {{English Poems Dataset}},
+url   = {https://hci-lab.github.io/ArabicPoetry-1-Private/#EPD}
 }
 ```
 <!--TODO;
