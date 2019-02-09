@@ -29,7 +29,7 @@ url   = {https://hci-lab.github.io/ArabicPoetry-1-Private/#APCD}
 }
 ```
 
-- [Download](https://drive.google.com/open?id=1yqD7EbMemIZAcX13RiVdUO-gIx6VZOQL)
+- [Download](https://drive.google.com/file/d/1vOyw1TpiwOe_Oi0k0yP31ZGmz510Jcgm/view?usp=sharing)
 
 
 <br>
