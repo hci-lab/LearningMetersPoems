@@ -33,3 +33,4 @@ Arabic_Poetry_RNN/src/*.ipynb
 *.synctex*
 *.bbl
 *.blg
+.idea/
