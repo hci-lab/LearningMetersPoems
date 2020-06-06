@@ -2,16 +2,16 @@
 # -*- coding: utf-8 -*-
 # =============================================================================
 
-#os.chdir("m://Learning/Master/CombinedWorkspace/Python/DeepLearningMaster/ArabicPoetry
+# os.chdir("m://Learning/Master/CombinedWorkspace/Python/DeepLearningMaster/ArabicPoetry
 # /ArabicPoetry-1/Arabic_Poetry_RNN/src/")
-#os.chdir("/media/mostafaalaa/Main_Hard/Learning/Master/CombinedWorkspace/Python
+# os.chdir("/media/mostafaalaa/Main_Hard/Learning/Master/CombinedWorkspace/Python
 # /DeepLearningMaster/ArabicPoetry/ArabicPoetry-1/Arabic_Poetry_RNN/src")
 # =============================================================================
 
 
 # Multi_GPU_Flag
 MULTI_GPU_FLAG = False
-use_CPU = False
+USE_CPU = False
 import os
 import sys
 
@@ -28,11 +28,12 @@ if len(sys.argv) == 2 and sys.argv[1] == '--multgpu':
     MULTI_GPU_FLAG = True
 
 from sys import path
+
 # Relative path to this modul's location in PyQuran.
 searchingPath = 'lib'
 
 # The current path of the current module.
-current_path  = os.path.dirname(os.path.abspath(__file__))
+current_path = os.path.dirname(os.path.abspath(__file__))
 # Joining this module's path with the relative path of the corpus
 path_ = os.path.join(current_path, searchingPath)
 path.append(path_)
@@ -54,6 +55,7 @@ print("Imports Done")
 
 # ===================Tensorflow Config and Gpu settings=========================
 import tensorflow as tf
+
 tf.reset_default_graph()
 with tf.Graph().as_default():
     set_random_seed(123456)
@@ -75,16 +77,18 @@ numberOfUniqueChars = len(arabic_alphabet)
 
 
 # =======================Program Parameters====================================
+# @TODO: Create json file with parameters or from program param
 # =============================================================================
+##########################################################
 layers_type = ["Bidirectional_LSTM", "LSTM"]
-num_layers_hidden = ["3","6"]
-weighted_loss_flag = ["0","1"]
-n_units = ["50","82"]
-encoded_X_paths = ["../data/Encoded/8bits/WithoutTashkeel/Eliminated/eliminated_data_matrix_without_tashkeel_8bitsEncoding.h5",
-                   "../data/Encoded/8bits/WithoutTashkeel/Full_Data/full_data_matrix_without_tashkeel_8bitsEncoding.h5",
-                   "../data/Encoded/8bits/WithTashkeel/Eliminated/eliminated_data_matrix_with_tashkeel_8bitsEncoding.h5",
-                   "../data/Encoded/8bits/WithTashkeel/Full_Data/full_data_matrix_with_tashkeel_8bitsEncoding.h5"]
-
+num_layers_hidden = ["3", "6"]
+weighted_loss_flag = ["0", "1"]
+n_units = ["50", "82"]
+encoded_X_paths = [
+    "../data/Encoded/8bits/WithoutTashkeel/Eliminated/eliminated_data_matrix_without_tashkeel_8bitsEncoding.h5",
+    "../data/Encoded/8bits/WithoutTashkeel/Full_Data/full_data_matrix_without_tashkeel_8bitsEncoding.h5",
+    "../data/Encoded/8bits/WithTashkeel/Eliminated/eliminated_data_matrix_with_tashkeel_8bitsEncoding.h5",
+    "../data/Encoded/8bits/WithTashkeel/Full_Data/full_data_matrix_with_tashkeel_8bitsEncoding.h5"]
 
 encoded_Y_paths = ["../data/Encoded/8bits/WithoutTashkeel/Eliminated/Eliminated_data_Y_Meters.h5",
                    "../data/Encoded/8bits/WithoutTashkeel/Full_Data/full_data_Y_Meters.h5",
@@ -100,36 +104,35 @@ batch_size_param = 2048
 
 activation_output_function = 'softmax'
 # umar -> not used
-#new_encoding_flag = 1
+# new_encoding_flag = 1
 earlystopping_patience = -1
 # umar -> not used
-#required_data_col = [0, 2, 3, 5]
+# required_data_col = [0, 2, 3, 5]
 test_size_param = 0.1
 validation_split_param = 0.1
 
 # 0-> last wait | 1 max val_acc
 last_or_max_val_acc = 1
 load_weights_flag = 0
+##########################################################
 
 # =============================================================================
 
 # =============================================================================
 ## in case testing un comment the below and comment the above block
-#layers_type = ["Bidirectional_LSTM"]
-#num_layers_hidden = ["3"]
-#weighted_loss_flag = ["1"]
-#n_units = ["50"]
-#batch_size_param = 512
-#encoded_X_paths = ["../data/Encoded/8bits/WithTashkeel/Full_Data/full_data_matrix_with_tashkeel_8bitsEncoding.h5"]
-#encoded_Y_paths = ["../data/Encoded/8bits/WithTashkeel/Full_Data/full_data_Y_Meters.h5"]
-#epochs_param = 20
+# layers_type = ["Bidirectional_LSTM"]
+# num_layers_hidden = ["3"]
+# weighted_loss_flag = ["1"]
+# n_units = ["50"]
+# batch_size_param = 512
+# encoded_X_paths = ["../data/Encoded/8bits/WithTashkeel/Full_Data/full_data_matrix_with_tashkeel_8bitsEncoding.h5"]
+# encoded_Y_paths = ["../data/Encoded/8bits/WithTashkeel/Full_Data/full_data_Y_Meters.h5"]
+# epochs_param = 20
 
 # =============================================================================
 
 
-#input_data_path = "./data/Almoso3a_Alshe3rya/cleaned_data/All_clean_data.csv"
-
-
+# input_data_path = "./data/Almoso3a_Alshe3rya/cleaned_data/All_clean_data.csv"
 
 
 # Remove the mess
@@ -137,12 +140,13 @@ def removeTestingFiles():
     rmCommand = 'rm -rf'
     rmCommand += ' lib/test_folders/*'
     rmCommand += ' log.txt'
-#    rmCommand += ' All_Experiments_Results.txt'
+    #    rmCommand += ' All_Experiments_Results.txt'
     # Executing the command:
     if os.system(rmCommand) == 0:
         print('old testing files are removed!')
     else:
         print('there is no testing files to remove!')
+
 
 # Command line arguemnt option; --test
 '''
@@ -164,15 +168,15 @@ if len(sys.argv) == 2 and sys.argv[1] == '--test':
     weighted_loss_flag = ["1"]
     n_units = ["1"]
     encoded_X_paths = [
-    "lib/data_testing/Encoded/8bits/WithoutTashkeel/Eliminated/eliminated_data_matrix_without_tashkeel_8bitsEncoding.h5",
-    "lib/data_testing/Encoded/8bits/WithoutTashkeel/Full_Data/full_data_matrix_without_tashkeel_8bitsEncoding.h5",
-    "lib/data_testing/Encoded/8bits/WithTashkeel/Eliminated/eliminated_data_matrix_with_tashkeel_8bitsEncoding.h5",
-    "lib/data_testing/Encoded/8bits/WithTashkeel/Full_Data/full_data_matrix_with_tashkeel_8bitsEncoding.h5"]
+        "lib/data_testing/Encoded/8bits/WithoutTashkeel/Eliminated/eliminated_data_matrix_without_tashkeel_8bitsEncoding.h5",
+        "lib/data_testing/Encoded/8bits/WithoutTashkeel/Full_Data/full_data_matrix_without_tashkeel_8bitsEncoding.h5",
+        "lib/data_testing/Encoded/8bits/WithTashkeel/Eliminated/eliminated_data_matrix_with_tashkeel_8bitsEncoding.h5",
+        "lib/data_testing/Encoded/8bits/WithTashkeel/Full_Data/full_data_matrix_with_tashkeel_8bitsEncoding.h5"]
     encoded_Y_paths = [
-    "lib/data_testing/Encoded/8bits/WithoutTashkeel/Eliminated/Eliminated_data_Y_Meters.h5",
-    "lib/data_testing/Encoded/8bits/WithoutTashkeel/Full_Data/full_data_Y_Meters.h5",
-    "lib/data_testing/Encoded/8bits/WithTashkeel/Eliminated/Eliminated_data_Y_Meters.h5",
-    "lib/data_testing/Encoded/8bits/WithTashkeel/Full_Data/full_data_Y_Meters.h5"]
+        "lib/data_testing/Encoded/8bits/WithoutTashkeel/Eliminated/Eliminated_data_Y_Meters.h5",
+        "lib/data_testing/Encoded/8bits/WithoutTashkeel/Full_Data/full_data_Y_Meters.h5",
+        "lib/data_testing/Encoded/8bits/WithTashkeel/Eliminated/Eliminated_data_Y_Meters.h5",
+        "lib/data_testing/Encoded/8bits/WithTashkeel/Full_Data/full_data_Y_Meters.h5"]
     epochs_param = 1
     batch_size_param = 1024
     last_or_max_val_acc = 1
@@ -185,41 +189,39 @@ if len(sys.argv) == 2 and sys.argv[1] == '--test':
     eliminated_classes_encoder_path = "lib/data_testing/encoders_eliminated_data.pickle"
 
 
-
-
 def checking_experiment_run(exp_name):
-    '''
+    """
     this function is responsible for continue experiments running if running
-    stop for any reson. 
+    stop for any reason.
     it will make file start from experiment that cut off.
-    '''
+    """
     try:
-        file = open('log.txt','r+')
+        file = open('log.txt', 'r+')
     except:
-        file = open('log.txt','w+')
+        file = open('log.txt', 'w+')
     lines = {}
     line = file.readline()
     while line:
         parts = line.split(",")
-        exp_n , exp_state = parts[0] , parts[1]
+        exp_n, exp_state = parts[0], parts[1]
         lines[exp_n] = exp_state
         line = file.readline()
     if exp_name not in lines.keys():
-        file.write(exp_name+","+"running@0\n")
+        file.write(exp_name + "," + "running@0\n")
         file.close()
-        return "added",0
+        return "added", 0
     else:
-        state, last_epoch = lines[exp_name].split('@')[0] , lines[exp_name].split('@')[1] 
-        return state , int(last_epoch.split('\n')[0])
+        state, last_epoch = lines[exp_name].split('@')[0], lines[exp_name].split('@')[1]
+        return state, int(last_epoch.split('\n')[0])
 
-    
-#save name of previous experiment
+
+# save name of previous experiment
 previous_experiment_name = ""
 
 # ===============================Concatinated Variables ========================
 counter = 0
 for X, Y in zip(encoded_X_paths, encoded_Y_paths):
-    file_name = X.split("/")[7 -1].split(".")[0]
+    file_name = X.split("/")[7 - 1].split(".")[0]
     # print(file_name)
     for l_type in layers_type:
         exp_l_type = file_name + "_" + l_type
@@ -236,20 +238,20 @@ for X, Y in zip(encoded_X_paths, encoded_Y_paths):
                     counter += 1
                     Experiement_Name = "Exp_" + str(counter) + "_" + exp_w_flag
                     print(Experiement_Name)
-                    exp_state,last_epoch = checking_experiment_run(Experiement_Name)
-                    #check if this not exp finished
+                    exp_state, last_epoch = checking_experiment_run(Experiement_Name)
+                    # check if this not exp finished
                     if exp_state != 'done':
-                        #check if exp exisit but not finished
+                        # check if exp exisit but not finished
                         if exp_state == 'running':
-                           print("contnue expriment :: ",Experiement_Name,"  from epoch : ",last_epoch)
-                           # to load modle  
-                           new_load_weights_flag = 1
-                           # to load last epoch wights
-                           new_last_or_max_val_acc = 0
-                           #claculate remain epoch num
-                           new_epochs_param = new_epochs_param - last_epoch
-                           if last_epoch == 0:
-                               new_load_weights_flag = 0
+                            print("contnue expriment :: ", Experiement_Name, "  from epoch : ", last_epoch)
+                            # to load modle
+                            new_load_weights_flag = 1
+                            # to load last epoch wights
+                            new_last_or_max_val_acc = 0
+                            # claculate remain epoch num
+                            new_epochs_param = new_epochs_param - last_epoch
+                            if last_epoch == 0:
+                                new_load_weights_flag = 0
                         runner(X,
                                Y,
                                test_size_param,
@@ -272,15 +274,14 @@ for X, Y in zip(encoded_X_paths, encoded_Y_paths):
                                test,
                                use_CPU)
 
-                        #update experiment_state to done 
-                        helpers.update_log_file(Experiement_Name,"done@0", False)
-                        
-                    print(Experiement_Name,"   Done !!")
+                        # update experiment_state to done
+                        helpers.update_log_file(Experiement_Name, "done@0", False)
+
+                    print(Experiement_Name, "   Done !!")
                     print("=" * 80)
 
 if len(sys.argv) == 2 and sys.argv[1] == '--test':
-
-    print('End Testing '*20)
+    print('End Testing ' * 20)
     os.system('clear')
     print(comparing_.check_results())
     removeTestingFiles()
