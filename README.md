@@ -39,11 +39,15 @@
   this present repo.
 
 # Resources
-- The project's [main manuscript](https://arxiv.org/abs/1905.05700)<a name="paper"></a>
-- The project's [dataset](https://hci-lab.github.io/LearningMetersPoems/)<a name="data"></a>
+- **The project's main manuscript**: Yousef, W. A., Ibrahime, O. M., Madbouly, T. M., & Mahmoud, M.
+A. (2019), "Learning meters of arabic and english poems with recurrent neural networks: a step
+forward for language understanding and synthesis", [arXiv preprint
+arXiv:1905.05700](https://arxiv.org/abs/1905.05700)
+
+- **The project's dataset**
+  [https://hci-lab.github.io/LearningMetersPoems/](https://hci-lab.github.io/LearningMetersPoems/)
 
 # Folder Structure
-
 ```
 .
 ├── Arabic_Poetry
@@ -51,4 +55,18 @@
 ├── Poems_Scaping_Scripts
 ├── RNN_Implementation
 └── Webpage
+```
+
+# Citation #
+Please, cite this work as:
+```
+@Article{Yousef2019LearningMetersArabicEnglish-arxiv,
+  author =       {Yousef, Waleed A. and Ibrahime, Omar M. and Madbouly, Taha M. and Mahmoud,
+                  Moustafa A.},
+  title =        {Learning Meters of Arabic and English Poems With Recurrent Neural Networks: a Step
+                  Forward for Language Understanding and Synthesis},
+  journal =      {arXiv preprint arXiv:1905.05700},
+  year =         2019,
+  url =          {https://github.com/hci-lab/LearningMetersPoems}
+}
 ```
