@@ -16,7 +16,7 @@ def save(nameOfFile, nameOfDataset, dataVar):
 def get_data_matrix(dataset_csv, tashkeel_flag=False):
     """
         dataset_csv: data set file name
-        tashkeel: Flase without tashkeel
+        tashkeel: False without tashkeel
                   True  with    taskeel
     """
 
