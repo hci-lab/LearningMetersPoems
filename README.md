@@ -21,7 +21,7 @@
 
 * **2018, Jun.** The graduation project was defended before the official committee of FCIH.
 
-* **2018, Jul.** The [dataset](https://hci-lab.github.io/ArabicPoetry-1-Private) of this research
+* **2018, Jul.** The [first dataset](https://hci-lab.github.io/ArabicPoetry-1-Private) of this research
   project was published on the `gh-pages` of the [private
   repo](https://github.com/hci-lab/ArabicPoetry-1-Private) of the project, but available with a
   shared link.
@@ -44,7 +44,7 @@ A. (2019), "Learning meters of arabic and english poems with recurrent neural ne
 forward for language understanding and synthesis", [arXiv preprint
 arXiv:1905.05700](https://arxiv.org/abs/1905.05700)
 
-- **The project's dataset**
+- **The final and current project's dataset**
   [https://hci-lab.github.io/LearningMetersPoems/](https://hci-lab.github.io/LearningMetersPoems/)
 
 # Folder Structure
