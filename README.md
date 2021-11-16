@@ -58,7 +58,7 @@ arXiv:1905.05700](https://arxiv.org/abs/1905.05700)
 ```
 
 # Citation #
-Please, cite this work as:
+Please, cite this work (either the paper or the dataset) as:
 ```
 @Article{Yousef2019LearningMetersArabicEnglish-arxiv,
   author =       {Yousef, Waleed A. and Ibrahime, Omar M. and Madbouly, Taha M. and Mahmoud,
